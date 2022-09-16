@@ -205,6 +205,35 @@ public class Matrix {
     }
 
     /**
+     * Mengecek apakah dua matriks memiliki kolom yang sama. Digunakan untuk
+     * mengecek jika dua matriks bisa dikalikan
+     * <p>
+     * I.S. dua buah matriks terdefinisi.
+     * <p>
+     * F.S. dikembalikan apakah kedua matriks memiliki kolom yang sama.
+     * 
+     * @param matriks1 matriks pertama yang ingin dicek
+     * @param matriks1 matriks kedua yang ingin dicek
+     */
+    public static boolean isColumnSame(Matrix matriks1, Matrix matriks2) {
+        return matriks1.getNCol() == matriks2.getNCol();
+    }
+
+    /**
+     * Mengecek apakah dua matriks memiliki baris yang sama.
+     * <p>
+     * I.S. dua buah matriks terdefinisi.
+     * <p>
+     * F.S. dikembalikan apakah kedua matriks memiliki baris yang sama.
+     * 
+     * @param matriks1 matriks pertama yang ingin dicek
+     * @param matriks1 matriks kedua yang ingin dicek
+     */
+    public static boolean isRowSame(Matrix matriks1, Matrix matriks2) {
+        return matriks1.getNRow() == matriks2.getNRow();
+    }
+
+    /**
      * Mengecek apakah dua matriks memiliki dimensi yang sama
      * <p>
      * I.S. dua buah matriks terdefinisi.
@@ -216,23 +245,7 @@ public class Matrix {
      * @param matriks1 matriks kedua yang ingin dicek
      */
     public static boolean isDimensionSame(Matrix matriks1, Matrix matriks2) {
-        return matriks1.getNRow() == matriks2.getNRow() && matriks1.getNCol() == matriks2.getNCol();
-    }
-
-    /**
-     * Mengecek apakah dua matriks memiliki kolom yang sama. Digunakan untuk
-     * mengecek jika dua matriks bisa dikalikan
-     * <p>
-     * I.S. dua buah matriks terdefinisi.
-     * Fungsi akan throw error jika kondisi tidak terpenuhi
-     * <p>
-     * F.S. dikembalikan apakah kedua matriks memiliki kolom yang sama.
-     * 
-     * @param matriks1 matriks pertama yang ingin dicek
-     * @param matriks1 matriks kedua yang ingin dicek
-     */
-    public static boolean isColumnSame(Matrix matriks1, Matrix matriks2) {
-        return matriks1.getNCol() == matriks2.getNCol();
+        return isRowSame(matriks1, matriks2) && isColumnSame(matriks1, matriks2);
     }
 
     /**
@@ -307,6 +320,7 @@ public class Matrix {
      * I.S. dua buah matriks yang ingin dioperasikan terdefinisi. matriks pertama
      * harus
      * punya jumlah kolom dan baris sejumlah baris matriks kedua
+     * Fungsi akan throw error jika kondisi tidak terpenuhi
      * <p>
      * F.S. dikembalikan sebuah matriks baru yang merupakan hasil pengurangan
      * matriks pertama oleh matriks kedua
