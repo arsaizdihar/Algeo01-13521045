@@ -84,7 +84,7 @@ public class Matrix {
      * @param colIdx indeks kolom yang ingin diubah
      * @param val    nilai baru
      */
-    public void setElmt(int rowIdx, int colIdx, int val) {
+    public void setElmt(int rowIdx, int colIdx, double val) {
         contents[rowIdx][colIdx] = val;
     }
 
@@ -202,5 +202,92 @@ public class Matrix {
         for (int i = 0; i < getNRow(); i++) {
             multiplyRowScalar(i, scalar);
         }
+    }
+
+    /**
+     * Mengalikan 2 buah matriks
+     * <p>
+     * I.S. dua buah matriks yang ingin dikalikan terdefinisi. matriks pertama harus
+     * punya jumlah kolom sejumlah baris matriks kedua
+     * <p>
+     * F.S. dikembalikan sebuah matriks baru yang merupakan hasil perkalian dua buah
+     * matriks
+     * 
+     * @param matriks1 matriks pertama yang ingin dikalikan
+     * @param matriks1 matriks kedua yang ingin dikalikan
+     */
+    public static Matrix multiply(Matrix matriks1, Matrix matriks2) {
+        // ALGORITMA
+
+        // if () {
+        // throw();
+        // }
+        Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
+
+        for (int i = 0; i < hasilMatrix.getNRow(); i++) {
+            for (int j = 0; j < hasilMatrix.getNCol(); j++) {
+                // double[] multipliedRow = matriks1.getRow(i);
+                // double[] multipliedColumn = matriks2.getCol(j);
+                double hasilCell = 0;
+                for (int k = 0; k < matriks1.getNCol(); k++) {
+                    hasilCell = hasilCell + matriks1.getElmt(i, k) * matriks2.getElmt(k, j);
+                }
+                hasilMatrix.setElmt(i, j, hasilCell);
+            }
+        }
+        return hasilMatrix;
+    }
+
+    /**
+     * Menjumlahkan 2 buah matriks
+     * <p>
+     * I.S. dua buah matriks yang ingin dijumlahkan terdefinisi. matriks pertama
+     * harus
+     * punya jumlah kolom dan baris sejumlah baris matriks kedua
+     * <p>
+     * F.S. dikembalikan sebuah matriks baru yang merupakan hasil penjumlahan dua
+     * buah
+     * matriks
+     * 
+     * @param matriks1 matriks pertama yang ingin dijumlahkan
+     * @param matriks1 matriks kedua yang ingin dijumlahkan
+     */
+    public static Matrix add(Matrix matriks1, Matrix matriks2) {
+        // ALGORITMA
+        Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
+
+        for (int i = 0; i < hasilMatrix.getNRow(); i++) {
+            for (int j = 0; j < hasilMatrix.getNCol(); j++) {
+                double hasilCell = matriks1.getElmt(i, j) + matriks2.getElmt(i, j);
+                hasilMatrix.setElmt(i, j, hasilCell);
+            }
+        }
+        return hasilMatrix;
+    }
+
+    /**
+     * Menjumlahkan 2 buah matriks
+     * <p>
+     * I.S. dua buah matriks yang ingin dioperasikan terdefinisi. matriks pertama
+     * harus
+     * punya jumlah kolom dan baris sejumlah baris matriks kedua
+     * <p>
+     * F.S. dikembalikan sebuah matriks baru yang merupakan hasil pengurangan
+     * matriks pertama oleh matriks kedua
+     * 
+     * @param matriks1 matriks pertama yang ingin dikurangkan
+     * @param matriks1 matriks kedua yang akan mengurangkan
+     */
+    public static Matrix subtract(Matrix matriks1, Matrix matriks2) {
+        // ALGORITMA
+        Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
+
+        for (int i = 0; i < hasilMatrix.getNRow(); i++) {
+            for (int j = 0; j < hasilMatrix.getNCol(); j++) {
+                double hasilCell = matriks1.getElmt(i, j) - matriks2.getElmt(i, j);
+                hasilMatrix.setElmt(i, j, hasilCell);
+            }
+        }
+        return hasilMatrix;
     }
 }
