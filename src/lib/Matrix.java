@@ -205,6 +205,36 @@ public class Matrix {
     }
 
     /**
+     * Mengecek apakah dua matriks memiliki dimensi yang sama
+     * <p>
+     * I.S. dua buah matriks terdefinisi.
+     * <p>
+     * F.S. dikembalikan apakah kedua matriks memiliki dimensi yang sama.
+     * matriks
+     * 
+     * @param matriks1 matriks pertama yang ingin dicek
+     * @param matriks1 matriks kedua yang ingin dicek
+     */
+    public static boolean isDimensionSame(Matrix matriks1, Matrix matriks2) {
+        return matriks1.getNRow() != matriks2.getNRow() && matriks1.getNCol() != matriks2.getNCol();
+    }
+
+    /**
+     * Mengecek apakah dua matriks memiliki kolom yang sama. Digunakan untuk
+     * mengecek jika dua matriks bisa dikalikan
+     * <p>
+     * I.S. dua buah matriks terdefinisi.
+     * <p>
+     * F.S. dikembalikan apakah kedua matriks memiliki kolom yang sama.
+     * 
+     * @param matriks1 matriks pertama yang ingin dicek
+     * @param matriks1 matriks kedua yang ingin dicek
+     */
+    public static boolean isColumnSame(Matrix matriks1, Matrix matriks2) {
+        return matriks1.getNCol() != matriks2.getNCol();
+    }
+
+    /**
      * Mengalikan 2 buah matriks
      * <p>
      * I.S. dua buah matriks yang ingin dikalikan terdefinisi. matriks pertama harus
@@ -216,8 +246,11 @@ public class Matrix {
      * @param matriks1 matriks pertama yang ingin dikalikan
      * @param matriks1 matriks kedua yang ingin dikalikan
      */
-    public static Matrix multiply(Matrix matriks1, Matrix matriks2) {
+    public static Matrix multiply(Matrix matriks1, Matrix matriks2) throws Exception {
         // ALGORITMA
+        if (!isColumnSame(matriks1, matriks2)) {
+            throw new Exception("Kolom kedua matriks tidak sama.");
+        }
         Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
 
         for (int i = 0; i < hasilMatrix.getNRow(); i++) {
@@ -246,8 +279,12 @@ public class Matrix {
      * @param matriks1 matriks pertama yang ingin dijumlahkan
      * @param matriks1 matriks kedua yang ingin dijumlahkan
      */
-    public static Matrix add(Matrix matriks1, Matrix matriks2) {
+    public static Matrix add(Matrix matriks1, Matrix matriks2) throws Exception {
         // ALGORITMA
+        if (!isDimensionSame(matriks1, matriks2)) {
+            throw new Exception("Dimensi kedua matriks tidak sama.");
+        }
+
         Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
 
         for (int i = 0; i < hasilMatrix.getNRow(); i++) {
@@ -272,8 +309,12 @@ public class Matrix {
      * @param matriks1 matriks pertama yang ingin dikurangkan
      * @param matriks1 matriks kedua yang akan mengurangkan
      */
-    public static Matrix subtract(Matrix matriks1, Matrix matriks2) {
+    public static Matrix subtract(Matrix matriks1, Matrix matriks2) throws Exception {
         // ALGORITMA
+        if (!isDimensionSame(matriks1, matriks2)) {
+            throw new Exception("Dimensi kedua matriks tidak sama.");
+        }
+
         Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
 
         for (int i = 0; i < hasilMatrix.getNRow(); i++) {
