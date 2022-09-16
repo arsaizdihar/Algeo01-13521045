@@ -1,6 +1,7 @@
 package lib;
 
 import lib.Errors.DifferentColumnSize;
+import lib.Errors.DifferentMatrixDimension;
 import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
 import lib.Errors.NoSolutionException;
@@ -490,7 +491,7 @@ public class Matrix {
      * @param matriks1 matriks pertama yang ingin dijumlahkan
      * @param matriks1 matriks kedua yang ingin dijumlahkan
      */
-    public static Matrix add(Matrix matriks1, Matrix matriks2) throws Exception {
+    public static Matrix add(Matrix matriks1, Matrix matriks2) throws DifferentMatrixDimension {
         // ALGORITMA
         if (!isDimensionSame(matriks1, matriks2)) {
             throw new Errors.DifferentMatrixDimension();
@@ -522,7 +523,7 @@ public class Matrix {
      * @param matriks1 matriks pertama yang ingin dikurangkan
      * @param matriks1 matriks kedua yang akan mengurangkan
      */
-    public static Matrix subtract(Matrix matriks1, Matrix matriks2) throws Exception {
+    public static Matrix subtract(Matrix matriks1, Matrix matriks2) throws DifferentMatrixDimension {
         // ALGORITMA
         if (!isDimensionSame(matriks1, matriks2)) {
             throw new Errors.DifferentMatrixDimension();
