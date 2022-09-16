@@ -400,29 +400,22 @@ public class Matrix {
     }
 
     /**
-     * Mengecek apakah dua matriks memiliki kolom yang sama. Digunakan untuk
-     * mengecek jika dua matriks bisa dikalikan
-     * <p>
-     * I.S. dua buah matriks terdefinisi.
-     * <p>
-     * F.S. dikembalikan apakah kedua matriks memiliki kolom yang sama.
+     * Mengecek apakah dua matriks memiliki jumlah kolom yang sama
      * 
      * @param matriks1 matriks pertama yang ingin dicek
      * @param matriks1 matriks kedua yang ingin dicek
+     * @return apakah kedua matriks memiliki jumlah kolom yang sama.
      */
     public static boolean isNColumnSame(Matrix matriks1, Matrix matriks2) {
         return matriks1.getNCol() == matriks2.getNCol();
     }
 
     /**
-     * Mengecek apakah dua matriks memiliki baris yang sama.
-     * <p>
-     * I.S. dua buah matriks terdefinisi.
-     * <p>
-     * F.S. dikembalikan apakah kedua matriks memiliki baris yang sama.
+     * Mengecek apakah dua matriks memiliki jumlah baris yang sama.
      * 
      * @param matriks1 matriks pertama yang ingin dicek
      * @param matriks1 matriks kedua yang ingin dicek
+     * @return apakah kedua matriks memiliki jumlah baris yang sama.
      */
     public static boolean isNRowSame(Matrix matriks1, Matrix matriks2) {
         return matriks1.getNRow() == matriks2.getNRow();
@@ -430,14 +423,10 @@ public class Matrix {
 
     /**
      * Mengecek apakah dua matriks memiliki dimensi yang sama
-     * <p>
-     * I.S. dua buah matriks terdefinisi.
-     * <p>
-     * F.S. dikembalikan apakah kedua matriks memiliki dimensi yang sama.
-     * matriks
      * 
      * @param matriks1 matriks pertama yang ingin dicek
      * @param matriks1 matriks kedua yang ingin dicek
+     * @return apakah kedua matriks memiliki dimensi yang sama.
      */
     public static boolean isDimensionSame(Matrix matriks1, Matrix matriks2) {
         return isNRowSame(matriks1, matriks2) && isNColumnSame(matriks1, matriks2);
@@ -445,16 +434,14 @@ public class Matrix {
 
     /**
      * Mengalikan 2 buah matriks
-     * <p>
-     * I.S. dua buah matriks yang ingin dikalikan terdefinisi. matriks pertama harus
-     * punya jumlah kolom sejumlah baris matriks kedua.
-     * Fungsi akan throw error jika kondisi tidak terpenuhi
-     * <p>
-     * F.S. dikembalikan sebuah matriks baru yang merupakan hasil perkalian dua buah
-     * matriks
+     * Fungsi akan throw error jika matriks yang diberikan tidak memiliki jumlah
+     * kolom yang sama
      * 
      * @param matriks1 matriks pertama yang ingin dikalikan
      * @param matriks1 matriks kedua yang ingin dikalikan
+     * @return matriks baru yang merupakan hasil perkalian kedua matriks yang
+     *         diberikan
+     * @throws DifferentColumnSize
      */
     public static Matrix multiply(Matrix matriks1, Matrix matriks2) throws DifferentColumnSize {
         // ALGORITMA
@@ -479,17 +466,15 @@ public class Matrix {
 
     /**
      * Menjumlahkan 2 buah matriks
-     * <p>
-     * I.S. dua buah matriks yang ingin dijumlahkan terdefinisi. matriks pertama
-     * harus punya jumlah kolom dan baris sejumlah baris matriks kedua
-     * Fungsi akan throw error jika kondisi tidak terpenuhi
-     * <p>
-     * F.S. dikembalikan sebuah matriks baru yang merupakan hasil penjumlahan dua
-     * buah
-     * matriks
+     * Fungsi akan throw error jika matriks yang diberikan tidak memiliki dimensi
+     * yang sama
+     * 
      * 
      * @param matriks1 matriks pertama yang ingin dijumlahkan
      * @param matriks1 matriks kedua yang ingin dijumlahkan
+     * @return matriks baru yang merupakan hasil penjumlahan dua buah matriks
+     * @throws DifferentMatrixDimension
+     * 
      */
     public static Matrix add(Matrix matriks1, Matrix matriks2) throws DifferentMatrixDimension {
         // ALGORITMA
@@ -510,18 +495,16 @@ public class Matrix {
     }
 
     /**
-     * Menjumlahkan 2 buah matriks
-     * <p>
-     * I.S. dua buah matriks yang ingin dioperasikan terdefinisi. matriks pertama
-     * harus
-     * punya jumlah kolom dan baris sejumlah baris matriks kedua
-     * Fungsi akan throw error jika kondisi tidak terpenuhi
-     * <p>
-     * F.S. dikembalikan sebuah matriks baru yang merupakan hasil pengurangan
-     * matriks pertama oleh matriks kedua
+     * Mengurangkan 2 buah matriks. Matriks pertama dikurangi matriks kedua.
+     * Fungsi akan throw error jika matriks yang diberikan tidak memiliki dimensi
+     * yang sama
      * 
      * @param matriks1 matriks pertama yang ingin dikurangkan
      * @param matriks1 matriks kedua yang akan mengurangkan
+     * @return matriks baru yang merupakan hasil pengurangan matriks pertama oleh
+     *         matriks kedua
+     * @throws DifferentMatrixDimension
+     * 
      */
     public static Matrix subtract(Matrix matriks1, Matrix matriks2) throws DifferentMatrixDimension {
         // ALGORITMA
