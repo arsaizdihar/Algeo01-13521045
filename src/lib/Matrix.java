@@ -224,6 +224,7 @@ public class Matrix {
      * mengecek jika dua matriks bisa dikalikan
      * <p>
      * I.S. dua buah matriks terdefinisi.
+     * Fungsi akan throw error jika kondisi tidak terpenuhi
      * <p>
      * F.S. dikembalikan apakah kedua matriks memiliki kolom yang sama.
      * 
@@ -238,7 +239,8 @@ public class Matrix {
      * Mengalikan 2 buah matriks
      * <p>
      * I.S. dua buah matriks yang ingin dikalikan terdefinisi. matriks pertama harus
-     * punya jumlah kolom sejumlah baris matriks kedua
+     * punya jumlah kolom sejumlah baris matriks kedua.
+     * Fungsi akan throw error jika kondisi tidak terpenuhi
      * <p>
      * F.S. dikembalikan sebuah matriks baru yang merupakan hasil perkalian dua buah
      * matriks
@@ -271,8 +273,8 @@ public class Matrix {
      * Menjumlahkan 2 buah matriks
      * <p>
      * I.S. dua buah matriks yang ingin dijumlahkan terdefinisi. matriks pertama
-     * harus
-     * punya jumlah kolom dan baris sejumlah baris matriks kedua
+     * harus punya jumlah kolom dan baris sejumlah baris matriks kedua
+     * Fungsi akan throw error jika kondisi tidak terpenuhi
      * <p>
      * F.S. dikembalikan sebuah matriks baru yang merupakan hasil penjumlahan dua
      * buah
