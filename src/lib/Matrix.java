@@ -1,5 +1,9 @@
 package lib;
 
+import lib.Errors.InvalidMatrixSizeException;
+import lib.Errors.InvalidMatrixSquareException;
+import lib.Errors.NoSolutionException;
+
 public class Matrix {
     private double[][] contents;
 
@@ -244,21 +248,18 @@ public class Matrix {
     /*** OPERATOR LAINNYA ***/
 
     /**
-     * Mendapatkan kofaktor entri pada indeks (rowIdx, colIdx)
      * 
      * @param rowIdx
      * @param colIdx
      * @return matriks dengan baris ke rowIdx dan kolom ke colIdx dihilangkan
      */
-    public Matrix getCofactorEntry(int rowIdx, int colIdx) {
+    public Matrix getDeletedRowCol(int rowIdx, int colIdx) {
         // KAMUS LOKAL
         Matrix res;
-        double multiplier;
         int iRes, jRes;
 
         // ALGORITMA
         res = new Matrix(getNRow() - 1, getNCol() - 1);
-        multiplier = Math.pow(-1, rowIdx + colIdx);
 
         for (int i = 0; i < getNRow(); i++) {
             for (int j = 0; j < getNCol(); j++) {
@@ -267,7 +268,7 @@ public class Matrix {
                     iRes = i < rowIdx ? i : i - 1;
                     jRes = j < colIdx ? j : j - 1;
 
-                    res.setElmt(iRes, jRes, getElmt(i, j) * multiplier);
+                    res.setElmt(iRes, jRes, getElmt(i, j));
                 }
             }
         }
@@ -306,22 +307,29 @@ public class Matrix {
     }
 
     /**
-     * Mencari determinan matriks dengan metode kofaktor
+     * Mencari determinan matriks dengan metode kofaktor, throw error jika bukan
+     * matriks persegi
      * 
      * @return determinan matriks
+     * @throws InvalidMatrixSquareException
      */
-    public double getDeterminantCofactor() {
+    public double getDeterminantCofactor() throws InvalidMatrixSquareException {
         // KAMUS LOKAL
         double res;
+        double multiplier;
 
         // ALGORITMA
         // basis, matriks 1x1
+        if (!isSquare()) {
+            throw new Errors.InvalidMatrixSquareException();
+        }
         if (getNRow() == 1) {
             return getElmt(0, 0);
         } else {
             res = 0;
             for (int i = 0; i < getNCol(); i++) {
-                res += getElmt(0, i) * getCofactorEntry(0, i).getDeterminantCofactor();
+                multiplier = i % 2 == 0 ? 1 : -1;
+                res += getElmt(0, i) * multiplier * getDeletedRowCol(0, i).getDeterminantCofactor();
             }
             return res;
         }
@@ -331,20 +339,47 @@ public class Matrix {
      * Mencari solusi SPL dengan metode cramer
      * 
      * @return matriks solusi SPL (kolom berjumlah 1)
+     * @throws InvalidMatrixSizeException
+     * @throws NoSolutionException
      */
-    public Matrix getSolCramer() {
+    public Matrix getSolCramer() throws Errors.NoSolutionException, InvalidMatrixSizeException {
         // KAMUS LOKAL
-        Matrix res, temp;
+        Matrix res, temp, square;
         double det;
 
         // ALGORITMA
+        if (!isSPL()) {
+            throw new Errors.NoSolutionException();
+        }
+
+        if (getNRow() >= getNCol()) {
+            throw new Errors.InvalidMatrixSizeException();
+        }
+
+        // ALGORITMA
         res = new Matrix(getNCol() - 1, 1);
-        det = getDeterminantCofactor();
+        square = new Matrix(getNRow(), getNRow());
+
+        for (int i = 0; i < getNRow(); i++) {
+            for (int j = 0; j < getNRow(); j++) {
+                square.setElmt(i, j, getElmt(i, j));
+            }
+        }
+
+        try {
+            det = square.getDeterminantCofactor();
+        } catch (InvalidMatrixSquareException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (det == 0) {
+            throw new Errors.NoSolutionException();
+        }
 
         for (int i = 0; i < getNCol() - 1; i++) {
-            temp = new Matrix(getNRow(), getNCol());
+            temp = new Matrix(getNRow(), getNRow());
             for (int j = 0; j < getNRow(); j++) {
-                for (int k = 0; k < getNCol(); k++) {
+                for (int k = 0; k < getNCol() - 1; k++) {
                     if (k == i) {
                         temp.setElmt(j, k, getElmt(j, getNCol() - 1));
                     } else {
@@ -352,7 +387,11 @@ public class Matrix {
                     }
                 }
             }
-            res.setElmt(i, 0, temp.getDeterminantCofactor() / det);
+            try {
+                res.setElmt(i, 0, temp.getDeterminantCofactor() / det);
+            } catch (InvalidMatrixSquareException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         return res;
