@@ -215,7 +215,7 @@ public class Matrix {
      * @param matriks1 matriks pertama yang ingin dicek
      * @param matriks1 matriks kedua yang ingin dicek
      */
-    public static boolean isColumnSame(Matrix matriks1, Matrix matriks2) {
+    public static boolean isNColumnSame(Matrix matriks1, Matrix matriks2) {
         return matriks1.getNCol() == matriks2.getNCol();
     }
 
@@ -229,7 +229,7 @@ public class Matrix {
      * @param matriks1 matriks pertama yang ingin dicek
      * @param matriks1 matriks kedua yang ingin dicek
      */
-    public static boolean isRowSame(Matrix matriks1, Matrix matriks2) {
+    public static boolean isNRowSame(Matrix matriks1, Matrix matriks2) {
         return matriks1.getNRow() == matriks2.getNRow();
     }
 
@@ -245,7 +245,7 @@ public class Matrix {
      * @param matriks1 matriks kedua yang ingin dicek
      */
     public static boolean isDimensionSame(Matrix matriks1, Matrix matriks2) {
-        return isRowSame(matriks1, matriks2) && isColumnSame(matriks1, matriks2);
+        return isNRowSame(matriks1, matriks2) && isNColumnSame(matriks1, matriks2);
     }
 
     /**
@@ -263,7 +263,7 @@ public class Matrix {
      */
     public static Matrix multiply(Matrix matriks1, Matrix matriks2) throws Exception {
         // ALGORITMA
-        if (!isColumnSame(matriks1, matriks2)) {
+        if (!isNColumnSame(matriks1, matriks2)) {
             throw new Exception("Kolom kedua matriks tidak berjumlah sama.");
         } else {
 
