@@ -126,4 +126,81 @@ public class Matrix {
         }
         return isEmpty;
     }
+
+    /*** OPERATOR PADA DIRI SENDIRI ***/
+
+    /**
+     * Menukar baris ke-idx1 dengan baris ke-idx2
+     * <p>
+     * I.S. matriks terdefinisi, idx1 dan idx2 merupakan indeks yang valid
+     * <p>
+     * F.S. baris ke-idx1 menjadi baris ke-idx2 dan sebaliknya
+     * 
+     * @param idx1 indeks baris pertama yang ingin ditukar
+     * @param idx2 indeks baris kedua yang ingin ditukar
+     */
+    public void swapRow(int idx1, int idx2) {
+        // KAMUS LOKAL
+        double[] temp;
+
+        // ALGORITMA
+        temp = contents[idx1];
+        contents[idx1] = contents[idx2];
+        contents[idx2] = temp;
+    }
+
+    /**
+     * Mentranspose matriks
+     * <p>
+     * I.S. matriks terdefinisi
+     * <p>
+     * F.S. matriks menjadi transpose dari matriks sebelumnya (a[i][j] menjadi
+     * a[j][i])
+     */
+    public void transpose() {
+        // KAMUS LOKAL
+        double[][] temp;
+
+        // ALGORITMA
+        temp = new double[getNCol()][getNRow()];
+        for (int i = 0; i < getNRow(); i++) {
+            for (int j = 0; j < getNCol(); j++) {
+                temp[j][i] = contents[i][j];
+            }
+        }
+        contents = temp;
+    }
+
+    /**
+     * Mengalikan baris ke-rowIdx dengan skalar
+     * <p>
+     * I.S. matriks terdefinisi, rowIdx merupakan indeks yang valid
+     * <p>
+     * F.S. baris ke-rowIdx menjadi baris ke-rowIdx dikali skalar
+     * 
+     * @param rowIdx indeks baris yang ingin dikalikan
+     * @param scalar skalar yang akan mengali baris
+     */
+    public void multiplyRowScalar(int rowIdx, double scalar) {
+        // ALGORITMA
+        for (int i = 0; i < getNCol(); i++) {
+            contents[rowIdx][i] *= scalar;
+        }
+    }
+
+    /**
+     * Mengalikan matriks dengan skalar
+     * <p>
+     * I.S. matriks terdefinisi
+     * <p>
+     * F.S. semua elemen pada matriks dikalikan dengan skalar
+     * 
+     * @param scalar skalar yang akan mengali matriks
+     */
+    public void multiplyScalar(double scalar) {
+        // ALGORITMA
+        for (int i = 0; i < getNRow(); i++) {
+            multiplyRowScalar(i, scalar);
+        }
+    }
 }
