@@ -1,7 +1,13 @@
 package lib;
 
+import lib.Errors.InvalidMatrixSizeException;
+import lib.Errors.InvalidMatrixSquareException;
+import lib.Errors.NoSolutionException;
+
 public class Matrix {
     private double[][] contents;
+
+    /*** KONSTRUKTOR ***/
 
     /**
      * Matriks konstruktor. Menginisiasi matriks dengan ukuran baris x kolom.
@@ -46,6 +52,20 @@ public class Matrix {
     }
 
     /**
+     * Mengubah baris indeks ke-rowIdx dengan baris baru
+     * <p>
+     * I.S. matriks terdefinisi
+     * <p>
+     * F.S. baris indeks ke-rowIdx diubah dengan baris baru
+     * 
+     * @param rowIdx indeks baris yang akan diubah
+     * @param row    baris baru
+     */
+    public void setRow(int rowIdx, double[] row) {
+        contents[rowIdx] = row;
+    }
+
+    /**
      * 
      * @param colIdx indeks kolom yang ingin diakses
      * @return kolom indeks ke-colIdx
@@ -60,6 +80,27 @@ public class Matrix {
             col[i] = contents[i][colIdx];
         }
         return col;
+    }
+
+    /**
+     * 
+     * @return konten matriks
+     */
+    public double[][] getContents() {
+        return contents;
+    }
+
+    /**
+     * Mengubah keseluruhan matriks
+     * <p>
+     * I.S. matriks terdefinisi
+     * <p>
+     * F.S. matriks berubah sesuai dengan contents
+     * 
+     * @param contents isi konten matriks baru
+     */
+    public void setContents(double[][] contents) {
+        this.contents = contents;
     }
 
     /**
@@ -90,14 +131,14 @@ public class Matrix {
 
     /*** PENGECEKAN MATRIKS ***/
     /**
-     * Mengecek apakah matriks merupakan matriks SPL yang valid (berukuran n x
-     * (n+1))
+     * Mengecek apakah matriks merupakan matriks SPL yang valid (minimal baris
+     * sejumlah kolom - 1)
      * 
      * @return true jika matriks merupakan matriks SPL yang valid, false jika tidak
      */
     public boolean isSPL() {
         // ALGORITMA
-        return getNCol() == getNRow() + 1;
+        return getNRow() >= getNCol() - 1;
     }
 
     /**
@@ -202,6 +243,158 @@ public class Matrix {
         for (int i = 0; i < getNRow(); i++) {
             multiplyRowScalar(i, scalar);
         }
+    }
+
+    /*** OPERATOR LAINNYA ***/
+
+    /**
+     * 
+     * @param rowIdx
+     * @param colIdx
+     * @return matriks dengan baris ke rowIdx dan kolom ke colIdx dihilangkan
+     */
+    public Matrix getDeletedRowCol(int rowIdx, int colIdx) {
+        // KAMUS LOKAL
+        Matrix res;
+        int iRes, jRes;
+
+        // ALGORITMA
+        res = new Matrix(getNRow() - 1, getNCol() - 1);
+
+        for (int i = 0; i < getNRow(); i++) {
+            for (int j = 0; j < getNCol(); j++) {
+                if (i != rowIdx && j != colIdx) {
+                    // menentukan indeks baru
+                    iRes = i < rowIdx ? i : i - 1;
+                    jRes = j < colIdx ? j : j - 1;
+
+                    res.setElmt(iRes, jRes, getElmt(i, j));
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
+     * Mengubah matriks menjadi matriks SPL yang valid dengan membuat baris baru
+     * dengan elemen 0 hingga jumlah baris sama dengan jumlah kolom - 1
+     * <p>
+     * I.S. matriks terdefinisi
+     * <p>
+     * F.S. matriks merupakan matriks SPL yang valid
+     */
+    public void toValidSPL() {
+        // KAMUS LOKAL
+        Matrix temp;
+
+        // ALGORITMA
+        if (isSPL()) {
+            return;
+        }
+
+        temp = new Matrix(getNCol() - 1, getNCol());
+        for (int i = 0; i < getNRow(); i++) {
+            if (i < getNRow()) {
+                temp.setRow(i, getRow(i));
+            } else {
+                for (int j = 0; j < getNCol(); j++) {
+                    temp.setElmt(i, j, 0);
+                }
+            }
+        }
+
+        setContents(temp.getContents());
+    }
+
+    /**
+     * Mencari determinan matriks dengan metode kofaktor, throw error jika bukan
+     * matriks persegi
+     * 
+     * @return determinan matriks
+     * @throws InvalidMatrixSquareException
+     */
+    public double getDeterminantCofactor() throws InvalidMatrixSquareException {
+        // KAMUS LOKAL
+        double res;
+        double multiplier;
+
+        // ALGORITMA
+        // basis, matriks 1x1
+        if (!isSquare()) {
+            throw new Errors.InvalidMatrixSquareException();
+        }
+        if (getNRow() == 1) {
+            return getElmt(0, 0);
+        } else {
+            res = 0;
+            for (int i = 0; i < getNCol(); i++) {
+                multiplier = i % 2 == 0 ? 1 : -1;
+                res += getElmt(0, i) * multiplier * getDeletedRowCol(0, i).getDeterminantCofactor();
+            }
+            return res;
+        }
+    }
+
+    /**
+     * Mencari solusi SPL dengan metode cramer
+     * 
+     * @return matriks solusi SPL (kolom berjumlah 1)
+     * @throws InvalidMatrixSizeException
+     * @throws NoSolutionException
+     */
+    public Matrix getSolCramer() throws Errors.NoSolutionException, InvalidMatrixSizeException {
+        // KAMUS LOKAL
+        Matrix res, temp, square;
+        double det;
+
+        // ALGORITMA
+        if (!isSPL()) {
+            throw new Errors.NoSolutionException();
+        }
+
+        if (getNRow() >= getNCol()) {
+            throw new Errors.InvalidMatrixSizeException();
+        }
+
+        // ALGORITMA
+        res = new Matrix(getNCol() - 1, 1);
+        square = new Matrix(getNRow(), getNRow());
+
+        for (int i = 0; i < getNRow(); i++) {
+            for (int j = 0; j < getNRow(); j++) {
+                square.setElmt(i, j, getElmt(i, j));
+            }
+        }
+
+        try {
+            det = square.getDeterminantCofactor();
+        } catch (InvalidMatrixSquareException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (det == 0) {
+            throw new Errors.NoSolutionException();
+        }
+
+        for (int i = 0; i < getNCol() - 1; i++) {
+            temp = new Matrix(getNRow(), getNRow());
+            for (int j = 0; j < getNRow(); j++) {
+                for (int k = 0; k < getNCol() - 1; k++) {
+                    if (k == i) {
+                        temp.setElmt(j, k, getElmt(j, getNCol() - 1));
+                    } else {
+                        temp.setElmt(j, k, getElmt(j, k));
+                    }
+                }
+            }
+            try {
+                res.setElmt(i, 0, temp.getDeterminantCofactor() / det);
+            } catch (InvalidMatrixSquareException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        return res;
     }
 
     /**
