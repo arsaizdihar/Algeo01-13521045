@@ -216,7 +216,7 @@ public class Matrix {
      * @param matriks1 matriks kedua yang ingin dicek
      */
     public static boolean isDimensionSame(Matrix matriks1, Matrix matriks2) {
-        return matriks1.getNRow() != matriks2.getNRow() && matriks1.getNCol() != matriks2.getNCol();
+        return matriks1.getNRow() == matriks2.getNRow() && matriks1.getNCol() == matriks2.getNCol();
     }
 
     /**
@@ -231,7 +231,7 @@ public class Matrix {
      * @param matriks1 matriks kedua yang ingin dicek
      */
     public static boolean isColumnSame(Matrix matriks1, Matrix matriks2) {
-        return matriks1.getNCol() != matriks2.getNCol();
+        return matriks1.getNCol() == matriks2.getNCol();
     }
 
     /**
@@ -249,20 +249,22 @@ public class Matrix {
     public static Matrix multiply(Matrix matriks1, Matrix matriks2) throws Exception {
         // ALGORITMA
         if (!isColumnSame(matriks1, matriks2)) {
-            throw new Exception("Kolom kedua matriks tidak sama.");
-        }
-        Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
+            throw new Exception("Kolom kedua matriks tidak berjumlah sama.");
+        } else {
 
-        for (int i = 0; i < hasilMatrix.getNRow(); i++) {
-            for (int j = 0; j < hasilMatrix.getNCol(); j++) {
-                double hasilCell = 0;
-                for (int k = 0; k < matriks1.getNCol(); k++) {
-                    hasilCell = hasilCell + matriks1.getElmt(i, k) * matriks2.getElmt(k, j);
+            Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
+
+            for (int i = 0; i < hasilMatrix.getNRow(); i++) {
+                for (int j = 0; j < hasilMatrix.getNCol(); j++) {
+                    double hasilCell = 0;
+                    for (int k = 0; k < matriks1.getNCol(); k++) {
+                        hasilCell = hasilCell + matriks1.getElmt(i, k) * matriks2.getElmt(k, j);
+                    }
+                    hasilMatrix.setElmt(i, j, hasilCell);
                 }
-                hasilMatrix.setElmt(i, j, hasilCell);
             }
+            return hasilMatrix;
         }
-        return hasilMatrix;
     }
 
     /**
@@ -283,17 +285,18 @@ public class Matrix {
         // ALGORITMA
         if (!isDimensionSame(matriks1, matriks2)) {
             throw new Exception("Dimensi kedua matriks tidak sama.");
-        }
+        } else {
+            Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
 
-        Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
-
-        for (int i = 0; i < hasilMatrix.getNRow(); i++) {
-            for (int j = 0; j < hasilMatrix.getNCol(); j++) {
-                double hasilCell = matriks1.getElmt(i, j) + matriks2.getElmt(i, j);
-                hasilMatrix.setElmt(i, j, hasilCell);
+            for (int i = 0; i < hasilMatrix.getNRow(); i++) {
+                for (int j = 0; j < hasilMatrix.getNCol(); j++) {
+                    double hasilCell = matriks1.getElmt(i, j) + matriks2.getElmt(i, j);
+                    hasilMatrix.setElmt(i, j, hasilCell);
+                }
             }
+            return hasilMatrix;
         }
-        return hasilMatrix;
+
     }
 
     /**
@@ -313,16 +316,17 @@ public class Matrix {
         // ALGORITMA
         if (!isDimensionSame(matriks1, matriks2)) {
             throw new Exception("Dimensi kedua matriks tidak sama.");
-        }
+        } else {
+            Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
 
-        Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
-
-        for (int i = 0; i < hasilMatrix.getNRow(); i++) {
-            for (int j = 0; j < hasilMatrix.getNCol(); j++) {
-                double hasilCell = matriks1.getElmt(i, j) - matriks2.getElmt(i, j);
-                hasilMatrix.setElmt(i, j, hasilCell);
+            for (int i = 0; i < hasilMatrix.getNRow(); i++) {
+                for (int j = 0; j < hasilMatrix.getNCol(); j++) {
+                    double hasilCell = matriks1.getElmt(i, j) - matriks2.getElmt(i, j);
+                    hasilMatrix.setElmt(i, j, hasilCell);
+                }
             }
+            return hasilMatrix;
         }
-        return hasilMatrix;
+
     }
 }
