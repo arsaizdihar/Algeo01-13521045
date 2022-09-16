@@ -87,4 +87,43 @@ public class Matrix {
     public void setElmt(int rowIdx, int colIdx, int val) {
         contents[rowIdx][colIdx] = val;
     }
+
+    /*** PENGECEKAN MATRIKS ***/
+    /**
+     * Mengecek apakah matriks merupakan matriks SPL yang valid (berukuran n x
+     * (n+1))
+     * 
+     * @return true jika matriks merupakan matriks SPL yang valid, false jika tidak
+     */
+    public boolean isSPL() {
+        // ALGORITMA
+        return getNCol() == getNRow() + 1;
+    }
+
+    /**
+     * 
+     * @return true jika matriks merupakan matriks persegi, false jika tidak
+     */
+    public boolean isSquare() {
+        return getNRow() == getNCol();
+    }
+
+    /**
+     * 
+     * @param rowIdx indeks baris yang ingin dicek
+     * @return true jika semua elemen pada baris ke-rowIdx bernilai 0, false jika
+     */
+    public boolean isRowEmpty(int rowIdx) {
+        // KAMUS LOKAL
+        boolean isEmpty;
+
+        // ALGORITMA
+        isEmpty = true;
+        for (int i = 0; i < getNCol() && isEmpty; i++) {
+            if (getElmt(rowIdx, i) != 0) {
+                isEmpty = false;
+            }
+        }
+        return isEmpty;
+    }
 }
