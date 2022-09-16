@@ -218,16 +218,10 @@ public class Matrix {
      */
     public static Matrix multiply(Matrix matriks1, Matrix matriks2) {
         // ALGORITMA
-
-        // if () {
-        // throw();
-        // }
         Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
 
         for (int i = 0; i < hasilMatrix.getNRow(); i++) {
             for (int j = 0; j < hasilMatrix.getNCol(); j++) {
-                // double[] multipliedRow = matriks1.getRow(i);
-                // double[] multipliedColumn = matriks2.getCol(j);
                 double hasilCell = 0;
                 for (int k = 0; k < matriks1.getNCol(); k++) {
                     hasilCell = hasilCell + matriks1.getElmt(i, k) * matriks2.getElmt(k, j);
