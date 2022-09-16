@@ -1,5 +1,6 @@
 package lib;
 
+import lib.Errors.DifferentColumnSize;
 import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
 import lib.Errors.NoSolutionException;
@@ -454,10 +455,10 @@ public class Matrix {
      * @param matriks1 matriks pertama yang ingin dikalikan
      * @param matriks1 matriks kedua yang ingin dikalikan
      */
-    public static Matrix multiply(Matrix matriks1, Matrix matriks2) throws Exception {
+    public static Matrix multiply(Matrix matriks1, Matrix matriks2) throws DifferentColumnSize {
         // ALGORITMA
         if (!isNColumnSame(matriks1, matriks2)) {
-            throw new Exception("Kolom kedua matriks tidak berjumlah sama.");
+            throw new Errors.DifferentColumnSize();
         } else {
 
             Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
@@ -492,7 +493,7 @@ public class Matrix {
     public static Matrix add(Matrix matriks1, Matrix matriks2) throws Exception {
         // ALGORITMA
         if (!isDimensionSame(matriks1, matriks2)) {
-            throw new Exception("Dimensi kedua matriks tidak sama.");
+            throw new Errors.DifferentMatrixDimension();
         } else {
             Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
 
@@ -524,7 +525,7 @@ public class Matrix {
     public static Matrix subtract(Matrix matriks1, Matrix matriks2) throws Exception {
         // ALGORITMA
         if (!isDimensionSame(matriks1, matriks2)) {
-            throw new Exception("Dimensi kedua matriks tidak sama.");
+            throw new Errors.DifferentMatrixDimension();
         } else {
             Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
 
