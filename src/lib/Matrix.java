@@ -1,7 +1,7 @@
 package lib;
 
 public class Matrix {
-    private int[][] contents;
+    private double[][] contents;
 
     /**
      * Matriks konstruktor. Menginisiasi matriks dengan ukuran baris x kolom.
@@ -12,7 +12,7 @@ public class Matrix {
      */
     public Matrix(int nRow, int nCol) {
         // ALGORITMA
-        this.contents = new int[nRow][nCol];
+        this.contents = new double[nRow][nCol];
     }
 
     /*** SELEKTOR ***/
@@ -41,7 +41,7 @@ public class Matrix {
      * @param rowIdx indeks baris yang ingin diakses
      * @return baris indeks ke-rowIdx
      */
-    public int[] getRow(int rowIdx) {
+    public double[] getRow(int rowIdx) {
         return contents[rowIdx];
     }
 
@@ -50,12 +50,12 @@ public class Matrix {
      * @param colIdx indeks kolom yang ingin diakses
      * @return kolom indeks ke-colIdx
      */
-    public int[] getCol(int colIdx) {
+    public double[] getCol(int colIdx) {
         // KAMUS LOKAL
-        int[] col;
+        double[] col;
 
         // ALGORITMA
-        col = new int[getNRow()];
+        col = new double[getNRow()];
         for (int i = 0; i < getNRow(); i++) {
             col[i] = contents[i][colIdx];
         }
@@ -68,7 +68,7 @@ public class Matrix {
      * @param colIdx indeks kolom yang ingin diakses
      * @return elemen matriks pada indeks (rowIdx, colIdx)
      */
-    public int getElmt(int rowIdx, int colIdx) {
+    public double getElmt(int rowIdx, int colIdx) {
         // ALGORITMA
         return contents[rowIdx][colIdx];
     }
