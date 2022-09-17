@@ -1,6 +1,5 @@
 package lib;
 
-import lib.Errors.DifferentMatrixDimension;
 import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
 import lib.Errors.NoSolutionException;
@@ -483,13 +482,13 @@ public class Matrix {
      * @param matriks1 matriks pertama yang ingin dijumlahkan
      * @param matriks1 matriks kedua yang ingin dijumlahkan
      * @return matriks baru yang merupakan hasil penjumlahan dua buah matriks
-     * @throws DifferentMatrixDimension
+     * @throws InvalidMatrixSizeException
      * 
      */
-    public static Matrix add(Matrix matriks1, Matrix matriks2) throws DifferentMatrixDimension {
+    public static Matrix add(Matrix matriks1, Matrix matriks2) throws InvalidMatrixSizeException {
         // ALGORITMA
         if (!isDimensionSame(matriks1, matriks2)) {
-            throw new Errors.DifferentMatrixDimension();
+            throw new Errors.InvalidMatrixSizeException();
         } else {
             Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
 
@@ -513,13 +512,13 @@ public class Matrix {
      * @param matriks1 matriks kedua yang akan mengurangkan
      * @return matriks baru yang merupakan hasil pengurangan matriks pertama oleh
      *         matriks kedua
-     * @throws DifferentMatrixDimension
+     * @throws InvalidMatrixSizeException
      * 
      */
-    public static Matrix subtract(Matrix matriks1, Matrix matriks2) throws DifferentMatrixDimension {
+    public static Matrix subtract(Matrix matriks1, Matrix matriks2) throws InvalidMatrixSizeException {
         // ALGORITMA
         if (!isDimensionSame(matriks1, matriks2)) {
-            throw new Errors.DifferentMatrixDimension();
+            throw new Errors.InvalidMatrixSizeException();
         } else {
             Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
 
