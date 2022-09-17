@@ -25,16 +25,4 @@ public class Errors {
     }
   }
 
-  static public class DifferentMatrixDimension extends Exception {
-    public DifferentMatrixDimension() {
-      super("Matrix dimension is not the same");
-    }
-  }
-
-  static public class DifferentColumnSize extends Exception {
-    public DifferentColumnSize() {
-      super("Matrix column is not the same");
-    }
-  }
-
 }

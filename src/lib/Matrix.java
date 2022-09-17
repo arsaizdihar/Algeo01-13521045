@@ -1,7 +1,5 @@
 package lib;
 
-import lib.Errors.DifferentColumnSize;
-import lib.Errors.DifferentMatrixDimension;
 import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
 import lib.Errors.NoSolutionException;
@@ -433,6 +431,17 @@ public class Matrix {
     }
 
     /**
+     * Mengecek apakah dua matriks dapat dikalikan
+     * 
+     * @param matriks1 matriks pertama yang ingin dicek
+     * @param matriks1 matriks kedua yang ingin dicek
+     * @return apakah matriks pertama punya jumlah kolom sebanyak matriks kedua.
+     */
+    public static boolean isMultipliable(Matrix matriks1, Matrix matriks2) {
+        return matriks1.getNCol() == matriks2.getNRow();
+    }
+
+    /**
      * Mengalikan 2 buah matriks
      * Fungsi akan throw error jika matriks yang diberikan tidak memiliki jumlah
      * kolom yang sama
@@ -441,12 +450,12 @@ public class Matrix {
      * @param matriks1 matriks kedua yang ingin dikalikan
      * @return matriks baru yang merupakan hasil perkalian kedua matriks yang
      *         diberikan
-     * @throws DifferentColumnSize
+     * @throws InvalidMatrixSizeException
      */
-    public static Matrix multiply(Matrix matriks1, Matrix matriks2) throws DifferentColumnSize {
+    public static Matrix multiply(Matrix matriks1, Matrix matriks2) throws InvalidMatrixSizeException {
         // ALGORITMA
-        if (!isNColumnSame(matriks1, matriks2)) {
-            throw new Errors.DifferentColumnSize();
+        if (!isMultipliable(matriks1, matriks2)) {
+            throw new Errors.InvalidMatrixSizeException();
         } else {
 
             Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
@@ -473,13 +482,13 @@ public class Matrix {
      * @param matriks1 matriks pertama yang ingin dijumlahkan
      * @param matriks1 matriks kedua yang ingin dijumlahkan
      * @return matriks baru yang merupakan hasil penjumlahan dua buah matriks
-     * @throws DifferentMatrixDimension
+     * @throws InvalidMatrixSizeException
      * 
      */
-    public static Matrix add(Matrix matriks1, Matrix matriks2) throws DifferentMatrixDimension {
+    public static Matrix add(Matrix matriks1, Matrix matriks2) throws InvalidMatrixSizeException {
         // ALGORITMA
         if (!isDimensionSame(matriks1, matriks2)) {
-            throw new Errors.DifferentMatrixDimension();
+            throw new Errors.InvalidMatrixSizeException();
         } else {
             Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
 
@@ -503,13 +512,13 @@ public class Matrix {
      * @param matriks1 matriks kedua yang akan mengurangkan
      * @return matriks baru yang merupakan hasil pengurangan matriks pertama oleh
      *         matriks kedua
-     * @throws DifferentMatrixDimension
+     * @throws InvalidMatrixSizeException
      * 
      */
-    public static Matrix subtract(Matrix matriks1, Matrix matriks2) throws DifferentMatrixDimension {
+    public static Matrix subtract(Matrix matriks1, Matrix matriks2) throws InvalidMatrixSizeException {
         // ALGORITMA
         if (!isDimensionSame(matriks1, matriks2)) {
-            throw new Errors.DifferentMatrixDimension();
+            throw new Errors.InvalidMatrixSizeException();
         } else {
             Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
 
