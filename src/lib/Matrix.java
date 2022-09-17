@@ -255,7 +255,7 @@ public class Matrix {
      * @param colIdx
      * @return matriks dengan baris ke rowIdx dan kolom ke colIdx dihilangkan
      */
-    public Matrix getDeletedRowCol(int rowIdx, int colIdx) {
+    public Matrix getMinor(int rowIdx, int colIdx) {
         // KAMUS LOKAL
         Matrix res;
         int iRes, jRes;
@@ -331,7 +331,7 @@ public class Matrix {
             res = 0;
             for (int i = 0; i < getNCol(); i++) {
                 multiplier = i % 2 == 0 ? 1 : -1;
-                res += getElmt(0, i) * multiplier * getDeletedRowCol(0, i).getDeterminantCofactor();
+                res += getElmt(0, i) * multiplier * getMinor(0, i).getDeterminantCofactor();
             }
             return res;
         }
