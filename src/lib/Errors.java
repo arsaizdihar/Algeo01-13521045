@@ -31,10 +31,4 @@ public class Errors {
     }
   }
 
-  static public class DifferentColumnSize extends Exception {
-    public DifferentColumnSize() {
-      super("Matrix column is not the same");
-    }
-  }
-
 }

@@ -1,6 +1,5 @@
 package lib;
 
-import lib.Errors.DifferentColumnSize;
 import lib.Errors.DifferentMatrixDimension;
 import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
@@ -452,12 +451,12 @@ public class Matrix {
      * @param matriks1 matriks kedua yang ingin dikalikan
      * @return matriks baru yang merupakan hasil perkalian kedua matriks yang
      *         diberikan
-     * @throws DifferentColumnSize
+     * @throws InvalidMatrixSizeException
      */
-    public static Matrix multiply(Matrix matriks1, Matrix matriks2) throws DifferentColumnSize {
+    public static Matrix multiply(Matrix matriks1, Matrix matriks2) throws InvalidMatrixSizeException {
         // ALGORITMA
         if (!isMultipliable(matriks1, matriks2)) {
-            throw new Errors.DifferentColumnSize();
+            throw new Errors.InvalidMatrixSizeException();
         } else {
 
             Matrix hasilMatrix = new Matrix(matriks1.getNRow(), matriks2.getNCol());
