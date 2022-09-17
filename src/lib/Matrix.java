@@ -433,6 +433,17 @@ public class Matrix {
     }
 
     /**
+     * Mengecek apakah dua matriks dapat dikalikan
+     * 
+     * @param matriks1 matriks pertama yang ingin dicek
+     * @param matriks1 matriks kedua yang ingin dicek
+     * @return apakah matriks pertama punya jumlah kolom sebanyak matriks kedua.
+     */
+    public static boolean isMultipliable(Matrix matriks1, Matrix matriks2) {
+        return matriks1.getNCol() == matriks2.getNRow();
+    }
+
+    /**
      * Mengalikan 2 buah matriks
      * Fungsi akan throw error jika matriks yang diberikan tidak memiliki jumlah
      * kolom yang sama
@@ -445,7 +456,7 @@ public class Matrix {
      */
     public static Matrix multiply(Matrix matriks1, Matrix matriks2) throws DifferentColumnSize {
         // ALGORITMA
-        if (!isNColumnSame(matriks1, matriks2)) {
+        if (!isMultipliable(matriks1, matriks2)) {
             throw new Errors.DifferentColumnSize();
         } else {
 
