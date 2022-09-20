@@ -263,7 +263,7 @@ public class Matrix {
         resultMatrix = new Matrix(getNRow(), endColIdx - startColIdx + 1);
         for (int rowIdx = 0; rowIdx <= getNRow() - 1; rowIdx++) {
             for (int colIdx = startColIdx; colIdx <= endColIdx; colIdx++) {
-                resultMatrix.setElmt(rowIdx, colIdx, getElmt(rowIdx, colIdx));
+                resultMatrix.setElmt(rowIdx, colIdx - startColIdx, getElmt(rowIdx, colIdx));
             }
         }
 
@@ -369,8 +369,8 @@ public class Matrix {
         return hasil;
     }
     /**
-     * 
-     * @return mengembalikan matriks yang telah di augmentasi dengan matriks identitas (Masih salah)
+     * prekondisi: matriks merupakan maktriks square
+     * @return mengembalikan matriks yang telah di augmentasi dengan matriks identitas
      * 
      */
     public Matrix getAugmentedMatrixByIdentity() {
@@ -406,6 +406,7 @@ public class Matrix {
         augmentedMatrix = getAugmentedMatrixByIdentity();
         reducedMatrix = augmentedMatrix.getReducedForm(0, getNRow() - 1);
         inversedMatrix = reducedMatrix.getCopyMatrixByColumn(getNRow(), 2 * getNRow() - 1);
+        
 
         return inversedMatrix;
     }
