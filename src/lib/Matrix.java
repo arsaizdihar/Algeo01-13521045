@@ -250,8 +250,8 @@ public class Matrix {
 
     /**
      * 
-     * @param startColIdx
-     * @param endColIdx
+     * @param startColIdx indeks kolom awal yang ingin di salin
+     * @param endColIdx indeks kolom akhir yang ingin di salin
      * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
      */
     public Matrix getCopyMatrixByColumn(int startColIdx, int endColIdx) {
@@ -309,11 +309,12 @@ public class Matrix {
      */
     public void makeColumnZero (int leadingOneRowIdx, int startRowIdx, int endRowIdx, int mainColIdx) {
         // KAMUS LOKAL
-
+        double anchorElmt;
         // ALGORITMA
         for(int rowIdx = startRowIdx; rowIdx <= endRowIdx; rowIdx++) {
-            for (int colIdx = 0; colIdx <= getNRow() - 1; colIdx++) {
-                setElmt(rowIdx, colIdx, getElmt(rowIdx, colIdx) - getElmt(rowIdx, mainColIdx) * getElmt(leadingOneRowIdx, colIdx));
+            anchorElmt = getElmt(rowIdx, mainColIdx);
+            for (int colIdx = 0; colIdx <= getNCol() - 1; colIdx++) {
+                setElmt(rowIdx, colIdx, getElmt(rowIdx, colIdx) - anchorElmt * getElmt(leadingOneRowIdx, colIdx));
             }
         }
     }
@@ -335,7 +336,7 @@ public class Matrix {
         rowIdx = 0;
         multiplier = 1;
         for(int colIdx = startColIdx; colIdx <= endColIdx; colIdx++) {
-            rowNonZeroIdx = getNonZeroRowIdx(rowIdx, hasil.getNRow() - 1, colIdx);
+            rowNonZeroIdx = hasil.getNonZeroRowIdx(rowIdx, hasil.getNRow() - 1, colIdx);
             if (rowNonZeroIdx == -1) {
                 continue;
             } else {
@@ -355,10 +356,9 @@ public class Matrix {
 
         // ALGORITMA
         hasil = getEchelonForm(startColIdx, endColIdx);
-        
         rowIdx = 0;
         for(int colIdx = startColIdx; colIdx <= endColIdx; colIdx++) {
-            rowNonZeroIdx = getNonZeroRowIdx(rowIdx, hasil.getNRow() - 1, colIdx);
+            rowNonZeroIdx = hasil.getNonZeroRowIdx(rowIdx, hasil.getNRow() - 1, colIdx);
             if (rowNonZeroIdx == -1) {
                 continue;
             } else {
