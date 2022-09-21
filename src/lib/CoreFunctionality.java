@@ -14,7 +14,7 @@ public class CoreFunctionality {
             Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.SPL()
                     : FromKeyboard.SPL();
             Matrix solution = matrix.getSolGJ();
-            ToKeyboard.SPLSolution.print(solution);
+            IOLib.SPLSolution.print(solution);
         }
 
         /**
@@ -25,7 +25,7 @@ public class CoreFunctionality {
             Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.SPL()
                     : FromKeyboard.SPL();
             Matrix solution = matrix.getSolG();
-            ToKeyboard.SPLSolution.print(solution);
+            IOLib.SPLSolution.print(solution);
         }
 
         /**
@@ -36,7 +36,7 @@ public class CoreFunctionality {
             Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.SPL()
                     : FromKeyboard.SPL(); // Get solution inverse
             // Matrix solution = matrix.getSol();
-            // ToKeyboard.SPLSolution.print(solution);
+            // IOLib.SPLSolution.print(solution);
 
         }
 
@@ -49,13 +49,13 @@ public class CoreFunctionality {
                     : FromKeyboard.SPL();
             try {
                 Matrix solution = matrix.getSolCramer();
-                ToKeyboard.SPLSolution.print(solution);
+                IOLib.SPLSolution.print(solution);
             } catch (InvalidMatrixSizeException e) {
             } catch (NoSolutionException e) {
                 ToKeyboard.printMessage(
                         "Solusi SPL tidak unik. Tidak bisa diselesaikan dengan kaidah cramer! Berikut solusinya dengan eliminasi Gauss-Jordan :");
                 Matrix solution = matrix.getSolGJ();
-                ToKeyboard.SPLSolution.print(solution);
+                IOLib.SPLSolution.print(solution);
             }
         }
     }
