@@ -73,18 +73,29 @@ public class FromKeyboard {
         Scanner inputReceiver = new Scanner(System.in);
         double[] rowArrayTest = new double[0];
         boolean rowInputValid = false;
-        boolean inputNotANumber = false;
-        boolean inputNotNRow = false;
         while (!rowInputValid) {
+            boolean inputContainsWhitespace = false;
+            boolean inputNotNRow = false;
+            boolean inputNotANumber = false;
+
             String errorMessage = "";
             System.out.printf("");
             String rowString = inputReceiver.nextLine();
-            String[] rowArrayRaw = rowString.split(" ");
+            String[] rowArrayRaw = (rowString.split(" "));
             inputNotNRow = rowArrayRaw.length != nCol;
+
+            int i;
+            for (i = 0; i < rowArrayRaw.length; i++) {
+                if (rowArrayRaw[i].length() == 0 || rowArrayRaw[i].substring(0, 1) == " ") {
+                    inputContainsWhitespace = true;
+                }
+            }
+
             try {
                 rowArrayTest = Arrays.stream(rowArrayRaw).mapToDouble(Double::parseDouble).toArray();
-            } catch (NumberFormatException e) {
                 inputNotANumber = false;
+            } catch (NumberFormatException e) {
+                inputNotANumber = true;
             }
 
             if (inputNotNRow) {
@@ -95,7 +106,11 @@ public class FromKeyboard {
                 errorMessage = "Baris mengandung angka yang tidak valid.";
             }
 
-            rowInputValid = !inputNotANumber && !inputNotNRow;
+            if (inputContainsWhitespace) {
+                errorMessage = "Baris kelebihan spasi.";
+            }
+
+            rowInputValid = !inputNotANumber && !inputNotNRow && !inputContainsWhitespace;
 
             if (!rowInputValid) {
                 System.out.printf("%s Tolong coba lagi%n", errorMessage);
