@@ -1,5 +1,7 @@
 package lib;
 
+import java.util.Arrays;
+
 import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
 import lib.Errors.NoSolutionException;
@@ -212,6 +214,15 @@ public class Matrix {
         contents = temp;
     }
 
+    public void fillZero() {
+        // TODO make documentation
+        for (int i = 0; i < getNRow(); i++) {
+            for (int j = 0; j < getNCol(); j++) {
+                setElmt(i, j, 0);
+            }
+        }
+    }
+
     /**
      * Mengalikan baris ke-rowIdx dengan skalar
      * <p>
@@ -324,7 +335,7 @@ public class Matrix {
      * @param startRowIdx index baris awal yang ingin dibat sebagai leading one
      * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
      */
-    public Matrix getEchelonForm (int startColIdx, int endColIdx) {
+    public MatrixDoublePair getEchelonForm (int startColIdx, int endColIdx) {
         // KAMUS LOKAL
         Matrix hasil;
         int rowIdx, rowNonZeroIdx;
@@ -347,7 +358,7 @@ public class Matrix {
                 rowIdx++;
             }
         }
-        return hasil;
+        return new MatrixDoublePair(hasil, multiplier);
     }
     public Matrix getReducedForm (int startColIdx, int endColIdx) {
         // KAMUS LOKAL
@@ -355,7 +366,7 @@ public class Matrix {
         int rowIdx, rowNonZeroIdx;
 
         // ALGORITMA
-        hasil = getEchelonForm(startColIdx, endColIdx);
+        hasil = getEchelonForm(startColIdx, endColIdx).first;
         rowIdx = 0;
         for(int colIdx = startColIdx; colIdx <= endColIdx; colIdx++) {
             rowNonZeroIdx = hasil.getNonZeroRowIdx(rowIdx, hasil.getNRow() - 1, colIdx);
@@ -367,6 +378,130 @@ public class Matrix {
             }
         }
         return hasil;
+    }
+
+    /**
+     * 
+     * @return matriks dengan matriks format solusi yang dapat ditampilkan, termasuk dengan variabel parametrik
+      */
+    public Matrix getSolG() {
+        Matrix hasil = getEchelonForm(0, getNCol() - 2).first;
+        Matrix solusi = new Matrix(getNCol() - 1, getNCol());
+
+        // isi semua elemen solusi dengan 0
+        solusi.fillZero();
+
+        /* 
+         * membuat matriks solusi menjadi bentuk x1 = ax2 + bx3 + ... + C dst.
+         * Misal: hasil  matriks eselon:
+         * 1 2 3 1 5
+         * 0 1 4 0 2
+         * 0 0 1 1 0
+         * 0 0 0 0 0
+         * 
+         * Setelah proses loop di bawah: matriks solusi akan menjadi
+         * 0 -2 -3 1 5
+         * 0 0 -4 0 2
+         * 0 0 0 1 0
+         * 0 0 0 0 0
+         * 
+         * yaitu
+         * x1 = -2*x2 - 3*x3 + x4 + 5
+         * x2 = -4*x3 + 2
+         * x3 = 1
+         * x4 = t (parameter)
+         */
+        for (int i = 0; i < hasil.getNRow(); i++) {
+            int leadingOneIdx = -1;
+            for (int j = i; j < hasil.getNCol() - 1; j++){
+                if (hasil.getElmt(i, j) == 1.0) {
+                    leadingOneIdx = j;
+                }
+            }
+
+            if (leadingOneIdx == -1) break;
+
+            // mengisi variable
+            for (int j = leadingOneIdx + 1; j < hasil.getNCol(); j++) {
+                double el = hasil.getElmt(i, j);
+                if (j != hasil.getNCol() -1) el *= -1;
+                solusi.setElmt(leadingOneIdx, j, el);
+            }
+        }
+
+
+        /* 
+         * SUBSTITUSI nilai variable lain (kecuali jika variabel tersebut dijadikan parameter)
+         * Berdasarkan contoh sebelumnya, hasil solusi akan menjadi
+         * x1 = t + 6
+         * x2 = -2
+         * x3 = 1
+         * x4 = t
+         */
+        for (int i = 0; i < hasil.getNRow() - 1; i++) {
+            for (int j = i + 1; j < hasil.getNCol() - 1; j++) {
+                double variableConstant = solusi.getElmt(i, j);
+                if (variableConstant == 0) continue;
+                boolean isAllZero = true;
+
+                for (int k = j + 1; k < hasil.getNCol(); k++) {
+                    double el = solusi.getElmt(j, k);
+                    if (el != 0) isAllZero = false;
+                    solusi.setElmt(i, k, solusi.getElmt(i, k) + variableConstant * el);
+                }
+                if (!isAllZero){
+                    solusi.setElmt(i, j, 0);
+                }
+            }
+        }
+        return solusi;
+    }
+
+    public Matrix getSolGJ() {
+        Matrix hasil = getReducedForm(0, getNCol() - 2);
+        Matrix solusi = new Matrix(getNCol() - 1, getNCol());
+
+        // isi semua elemen solusi dengan 0
+        solusi.fillZero();
+
+        /* 
+         * membuat matriks solusi menjadi bentuk x1 = ax2 + bx3 + ... + C dst.
+         * Misal: hasil  matriks eselon tereduksi:
+         * 1 0 0 1 5
+         * 0 1 0 0 2
+         * 0 0 1 3 1
+         * 0 0 0 0 0
+         * 
+         * Setelah proses loop di bawah: matriks solusi akan menjadi
+         * 0 0 0 -1 5
+         * 0 0 0 0 2
+         * 0 0 0 -3 1
+         * 0 0 0 0 0
+         * 
+         * yaitu
+         * x1 = -x4 + 5
+         * x2 = 2
+         * x3 = -3*x4 + 1
+         * x4 = t (parameter)
+         */
+        for (int i = 0; i < hasil.getNRow(); i++) {
+            int leadingOneIdx = -1;
+            for (int j = i; j < hasil.getNCol() - 1; j++){
+                if (hasil.getElmt(i, j) == 1.0) {
+                    leadingOneIdx = j;
+                }
+            }
+
+            if (leadingOneIdx == -1) break;
+
+            // mengisi variable
+            for (int j = leadingOneIdx + 1; j < hasil.getNCol(); j++) {
+                double el = hasil.getElmt(i, j);
+                if (j != hasil.getNCol() -1) el *= -1;
+                solusi.setElmt(leadingOneIdx, j, el);
+            }
+        }
+        return solusi;
     }
     /**
      * prekondisi: matriks merupakan maktriks square
@@ -695,5 +830,15 @@ public class Matrix {
             return hasilMatrix;
         }
 
+    }
+}
+
+class MatrixDoublePair {
+    public Matrix first;
+    public double second;
+
+    MatrixDoublePair(Matrix matrix, double num) {
+        this.first = matrix;
+        this.second = num;
     }
 }
