@@ -23,6 +23,11 @@ public class Interface {
             "Kembali ke main menu",
     };
 
+    /**
+     * Mencetak menu yang diberikan beserta nomornya.
+     * 
+     * @param menu array berisi pilihan menu
+     */
     static public void printMenu(String[] menu) {
 
         for (int i = 0; i < menu.length; i++) {
@@ -31,26 +36,46 @@ public class Interface {
         System.out.println("\n");
     }
 
+    /**
+     * Prosedur yang menerima masukan SPL dari pengguna lalu mencetak
+     * solusinya. Solusi didapatkan dari eliminasi Gauss.
+     */
     static public void solveWithGauss() {
         Matrix matrix = FromKeyboard.MatrixSquare();
 
     }
 
+    /**
+     * Prosedur yang menerima masukan SPL dari pengguna lalu mencetak
+     * solusinya. Solusi didapatkan dari eliminasi Gauss-Jordan.
+     */
     static public void solveWithGaussJordan() {
         Matrix matrix = FromKeyboard.MatrixSquare();
 
     }
 
+    /**
+     * Prosedur yang menerima masukan SPL dari pengguna lalu mencetak
+     * solusinya. Solusi didapatkan dari matriks balikan.
+     */
     static public void solveWithInverse() {
         Matrix matrix = FromKeyboard.MatrixSquare();
 
     }
 
+    /**
+     * Prosedur yang menerima masukan SPL dari pengguna lalu mencetak
+     * solusinya. Solusi didapatkan dari kaidah Cramer.
+     */
     static public void solveWithCramer() {
         Matrix matrix = FromKeyboard.MatrixSquare();
 
     }
 
+    /**
+     * Prosedur yang menerima masukan matriks dari pengguna lalu mencetak
+     * determinannya.
+     */
     static public void computeDeterminant() {
         ToKeyboard.printMessage("Memasukkan matriks");
         Matrix matrix = FromKeyboard.MatrixSquare();
@@ -69,6 +94,11 @@ public class Interface {
 
     // This is not functional yet because the determinantFinder doesn't throw an
     // error yet.
+    /**
+     * Prosedur yang menerima masukan matriks dari pengguna lalu mencetak
+     * inverse-nya. Jika matriks singular maka error ditangkap dan dikeluarkan ke
+     * layar bahwa matriks singular.
+     */
     static public void computeInverse() {
         Matrix matrix = FromKeyboard.MatrixSquare();
 
@@ -83,6 +113,11 @@ public class Interface {
         // Take input of matrice and do stuff with it accordingly
     }
 
+    /**
+     * Fungsi yang mewakili subprogram sub menu pemecahan SPL. Menerima input
+     * pilihan submenu pengguna dan menjalankan subprogram yang bersesuaian
+     * 
+     */
     static public void solveSPL() {
         printMenu(subMenuText);
         int userChoiceSubMenu = FromKeyboard.readNumber("pilihan sub menu", 1, 5);
@@ -107,6 +142,12 @@ public class Interface {
         }
     }
 
+    /**
+     * Fungsi yang mewakili main event loop program. Menampilkan menu,
+     * menerima input pilihan menu user,
+     * menjalankan fungsi yang berupa subprogram
+     * 
+     */
     static public void mainEventLoop() {
         String programState = "main";
         int userChoice = 0;
