@@ -5,7 +5,7 @@ import java.util.Scanner; // Import the Scanner class
 
 public class Interface {
 
-    private static String[] mainMenuText = new String[] {
+    private static final String[] mainMenuText = new String[] {
             "Sistem Persamaaan Linier",
             "Determinan",
             "Matriks balikan",
@@ -16,7 +16,7 @@ public class Interface {
     };
 
     // Kemungkinan besar ini bakal ditaruh di dalam fungsi untuk SPL
-    private static String[] subMenuText = new String[] {
+    private static final String[] subMenuText = new String[] {
             "Metode eliminasi Gauss",
             "Metode eliminasi Gauss-Jordan",
             "Metode matriks balikan",

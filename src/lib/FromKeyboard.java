@@ -5,10 +5,10 @@ import java.util.Scanner; // Import the Scanner class
 
 public class FromKeyboard {
 
-    static private Matrix Matrix(int nRow, int nCol) {
+    static private Matrix Matrix(int nRow, int nCol, String message) {
         Scanner inputReceiver = new Scanner(System.in);
         Matrix inputtedMatrix = new Matrix(nRow, nCol);
-        System.out.println("Enter your matrix row by row:");
+        System.out.println(message);
 
         int i;
         for (i = 0; i < nRow; i++) {
@@ -49,7 +49,7 @@ public class FromKeyboard {
 
         }
 
-        inputReceiver.close();
+        // inputReceiver.close();
         return inputtedMatrix;
     }
 
@@ -83,7 +83,7 @@ public class FromKeyboard {
 
         // inputReceiver.close();
 
-        return Matrix(m, n);
+        return Matrix(m, n, "Enter your matrix row by row: ");
 
     }
 
@@ -106,7 +106,26 @@ public class FromKeyboard {
 
         // inputReceiver.close();
 
-        return Matrix(2, 2);
+        return Matrix(2, 2, "Enter your matrix row by row: ");
+    }
+
+    static public Matrix Points() {
+        Scanner inputReceiver = new Scanner(System.in);
+
+        int n = 0;
+        boolean inputNValid = false;
+        while (!inputNValid) {
+            System.out.print("Enter n : ");
+            n = inputReceiver.nextInt();
+            inputNValid = n > 0;
+            if (!inputNValid) {
+                System.out.println("Invalid n, please try again");
+
+            }
+        }
+        inputReceiver.nextLine();
+
+        return Matrix(n, 2, "Enter your points by row with x and y separated by space");
     }
 
 }
