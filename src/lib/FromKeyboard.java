@@ -54,10 +54,10 @@ public class FromKeyboard {
      * @param upperBound batas maksimum angka yang boleh
      * @return angka masukan pengguna yang sudah sesuai dengan keperluan
      */
-    // static private int readNumberWithMaximum(String numberName, int upperBound) {
-    // return readNumber(numberName, Double.MIN_VALUE, upperBound);
+    static private int readNumberWithMaximum(String numberName, int upperBound) {
+        return readNumber(numberName, Double.MIN_VALUE, upperBound);
 
-    // }
+    }
 
     /**
      * Fungsi baca baris generik. Membaca satu baris angka double dengan tiap elemen
