@@ -132,10 +132,6 @@ public class ToKeyboard {
                             addedString = "+" + addedString;
                         }
 
-                        if (variableValuesString.get(i) == "" && addedString != "") {
-                            // addedString = " " + addedString;
-                        }
-
                         String modifiedString = String.format("%s%s", variableValuesString.get(i), addedString);
                         variableValuesString.set(i, modifiedString);
                     }
