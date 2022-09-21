@@ -11,7 +11,8 @@ public class CoreFunctionality {
          * solusinya. Solusi didapatkan dari eliminasi Gauss.
          */
         static public void gauss() {
-            Matrix matrix = FromKeyboard.SPL();
+            Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.SPL()
+                    : FromKeyboard.SPL();
             Matrix solution = matrix.getSolGJ();
             ToKeyboard.SPLSolution.print(solution);
         }
@@ -21,7 +22,8 @@ public class CoreFunctionality {
          * solusinya. Solusi didapatkan dari eliminasi Gauss-Jordan.
          */
         static public void gaussJordan() {
-            Matrix matrix = FromKeyboard.SPL();
+            Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.SPL()
+                    : FromKeyboard.SPL();
             Matrix solution = matrix.getSolG();
             ToKeyboard.SPLSolution.print(solution);
         }
@@ -31,8 +33,8 @@ public class CoreFunctionality {
          * solusinya. Solusi didapatkan dari matriks balikan.
          */
         static public void inverse() {
-            Matrix matrix = FromKeyboard.SPL();
-            // Get solution inverse
+            Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.SPL()
+                    : FromKeyboard.SPL(); // Get solution inverse
             // Matrix solution = matrix.getSol();
             // ToKeyboard.SPLSolution.print(solution);
 
@@ -43,7 +45,8 @@ public class CoreFunctionality {
          * solusinya. Solusi didapatkan dari kaidah Cramer.
          */
         static public void cramer() {
-            Matrix matrix = FromKeyboard.SPL();
+            Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.SPL()
+                    : FromKeyboard.SPL();
             try {
                 Matrix solution = matrix.getSolCramer();
                 ToKeyboard.SPLSolution.print(solution);
@@ -62,8 +65,8 @@ public class CoreFunctionality {
      * determinannya.
      */
     static public void computeDeterminant() {
-        Matrix matrix = FromKeyboard.MatrixSquare();
-
+        Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.matrixToDetermine()
+                : FromKeyboard.MatrixSquare();
         try {
             double determinant = matrix.getDeterminantCofactor();
             ToKeyboard.printNumber(determinant, "Determinan matriksnya adalah : ");
@@ -84,7 +87,7 @@ public class CoreFunctionality {
      * layar bahwa matriks singular.
      */
     static public void computeInverse() {
-        Matrix matrix = FromKeyboard.MatrixSquare();
+        Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.matrixToInvert() : FromKeyboard.MatrixSquare();
 
         try {
             Matrix inverse = matrix.getInverseMatrix();
