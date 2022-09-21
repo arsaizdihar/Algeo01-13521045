@@ -4,7 +4,7 @@ import java.text.NumberFormat;
 
 public class ToKeyboard {
 
-    static public void Matrix(Matrix outputtedMatrix, int digitAfterComma) {
+    static public void printMatrix(Matrix outputtedMatrix, int digitAfterComma) {
         int m = outputtedMatrix.getNRow();
         int n = outputtedMatrix.getNCol();
 
@@ -23,7 +23,8 @@ public class ToKeyboard {
         }
     }
 
-    static public void Matrix(Matrix outputtedMatrix) {
-        Matrix(outputtedMatrix, 2);
+    static public void printMatrix(Matrix outputtedMatrix) {
+        printMatrix(outputtedMatrix, 2);
+    }
     }
 }
