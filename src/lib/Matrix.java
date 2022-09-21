@@ -1,7 +1,5 @@
 package lib;
 
-import java.util.Arrays;
-
 import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
 import lib.Errors.NoSolutionException;
@@ -386,7 +384,7 @@ public class Matrix {
       */
     public Matrix getSolG() {
         Matrix hasil = getEchelonForm(0, getNCol() - 2).first;
-        Matrix solusi = new Matrix(getNCol() - 1, getNCol());
+        Matrix solusi = new Matrix(hasil.getNCol() - 1, hasil.getNCol() + 1);
 
         // isi semua elemen solusi dengan 0
         solusi.fillZero();
@@ -420,7 +418,7 @@ public class Matrix {
             }
 
             if (leadingOneIdx == -1) break;
-
+            solusi.setElmt(leadingOneIdx, solusi.getNCol() - 1, 1);
             // mengisi variable
             for (int j = leadingOneIdx + 1; j < hasil.getNCol(); j++) {
                 double el = hasil.getElmt(i, j);
@@ -441,16 +439,13 @@ public class Matrix {
         for (int i = 0; i < hasil.getNRow() - 1; i++) {
             for (int j = i + 1; j < hasil.getNCol() - 1; j++) {
                 double variableConstant = solusi.getElmt(i, j);
-                if (variableConstant == 0) continue;
-                boolean isAllZero = true;
+                
+                // jika nilai variabel -0 atau variabel merupakan variabel parametrik, tidak perlu melakukan proses
+                if (variableConstant == 0 || solusi.getElmt(i, solusi.getNCol() - 1) == 0) continue;
 
                 for (int k = j + 1; k < hasil.getNCol(); k++) {
                     double el = solusi.getElmt(j, k);
-                    if (el != 0) isAllZero = false;
                     solusi.setElmt(i, k, solusi.getElmt(i, k) + variableConstant * el);
-                }
-                if (!isAllZero){
-                    solusi.setElmt(i, j, 0);
                 }
             }
         }
@@ -459,7 +454,7 @@ public class Matrix {
 
     public Matrix getSolGJ() {
         Matrix hasil = getReducedForm(0, getNCol() - 2);
-        Matrix solusi = new Matrix(getNCol() - 1, getNCol());
+        Matrix solusi = new Matrix(hasil.getNCol() - 1, hasil.getNCol() + 1);
 
         // isi semua elemen solusi dengan 0
         solusi.fillZero();
@@ -473,10 +468,10 @@ public class Matrix {
          * 0 0 0 0 0
          * 
          * Setelah proses loop di bawah: matriks solusi akan menjadi
-         * 0 0 0 -1 5
-         * 0 0 0 0 2
-         * 0 0 0 -3 1
-         * 0 0 0 0 0
+         * 0 0 0 -1 5 1
+         * 0 0 0 0 2 1
+         * 0 0 0 -3 1 1
+         * 0 0 0 0 0 0
          * 
          * yaitu
          * x1 = -x4 + 5
@@ -493,6 +488,7 @@ public class Matrix {
             }
 
             if (leadingOneIdx == -1) break;
+            solusi.setElmt(leadingOneIdx, solusi.getNCol() - 1, 1);
 
             // mengisi variable
             for (int j = leadingOneIdx + 1; j < hasil.getNCol(); j++) {
