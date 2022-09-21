@@ -163,7 +163,11 @@ public class FromKeyboard {
     }
 
     /**
-     * Fungsi baca kumpulan persamaan. Meminta input jumlah persamaan dan jumlah
+     * Fungsi baca kumpulan persamaan linear.
+     * Persamaan memiliki format elemen terakhir dalam satu baris adalah b sementara
+     * elemen sisanya adalah koefisien variabel atau a
+     * Meminta input jumlah persamaan dan
+     * jumlah
      * variabel dari pengguna. Mengulangi kedua input tersebut jika < 1.
      * Mengulangi input salah satu persaman jika elemen yang dimasukkan jumlahnya
      * tidak
@@ -199,6 +203,31 @@ public class FromKeyboard {
 
         return Matrix(m, n,
                 "Masukkan matriks baris per baris dengan tiap elemen dipisahkan spasi");
+
+    }
+
+    /**
+     * Fungsi baca kumpulan data MLR.
+     * Data memiliki format elemen terakhir dalam satu baris adalah f(x1i, ... xni)
+     * sementara
+     * elemen sisanya adalah variabel x1i...xni
+     * Meminta input jumlah sampel dan
+     * jumlah
+     * variabel dari pengguna. Mengulangi kedua input tersebut jika < 1.
+     * Mengulangi input salah satu sampel jika elemen yang dimasukkan jumlahnya
+     * tidak
+     * sesuai atau ada elemen yang bukan angka
+     * 
+     * @return matriks dengan jumlah sampel x (jumlah variabel + 1). Kolom
+     *         terakhir adalah nilai f() sementara kolom lainnya adalah nilai
+     *         variabel
+     */
+    static public Matrix MLR() {
+        int m = readNumberWithMinimum("jumlah sampel", 1);
+        int n = readNumberWithMinimum("jumlah variabel", 1);
+
+        return Matrix(m, n + 1,
+                "Masukkan sampel baris per baris dengan elemen terakhir adalah y dan elemen sisanya adalah variabel x");
 
     }
 }
