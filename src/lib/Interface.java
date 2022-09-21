@@ -41,7 +41,7 @@ public class Interface {
      * solusinya. Solusi didapatkan dari eliminasi Gauss.
      */
     static public void solveWithGauss() {
-        Matrix matrix = FromKeyboard.MatrixSquare();
+        Matrix matrix = FromKeyboard.SPL();
 
     }
 
@@ -50,7 +50,7 @@ public class Interface {
      * solusinya. Solusi didapatkan dari eliminasi Gauss-Jordan.
      */
     static public void solveWithGaussJordan() {
-        Matrix matrix = FromKeyboard.MatrixSquare();
+        Matrix matrix = FromKeyboard.SPL();
 
     }
 
@@ -59,7 +59,7 @@ public class Interface {
      * solusinya. Solusi didapatkan dari matriks balikan.
      */
     static public void solveWithInverse() {
-        Matrix matrix = FromKeyboard.MatrixSquare();
+        Matrix matrix = FromKeyboard.SPL();
 
     }
 
@@ -68,7 +68,7 @@ public class Interface {
      * solusinya. Solusi didapatkan dari kaidah Cramer.
      */
     static public void solveWithCramer() {
-        Matrix matrix = FromKeyboard.MatrixSquare();
+        Matrix matrix = FromKeyboard.SPL();
 
     }
 
