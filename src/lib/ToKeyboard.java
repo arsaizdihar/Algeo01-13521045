@@ -26,5 +26,16 @@ public class ToKeyboard {
     static public void printMatrix(Matrix outputtedMatrix) {
         printMatrix(outputtedMatrix, 2);
     }
+
+    static public void printNumber(double number, String message) {
+        System.out.printf("%s%f%n", message, number);
+    }
+
+    static public void printNumber(double number) {
+        System.out.printf("%f%n", number);
+    }
+
+    static public void printMessage(String message) {
+        System.out.printf("%s%n", message);
     }
 }
