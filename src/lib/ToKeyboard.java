@@ -127,21 +127,33 @@ public class ToKeyboard {
         }
     }
 
+    static private String addWhiteSpace(String string, int amount) {
+        for (int i = 0; i < amount; i++) {
+            string += " ";
+        }
+
+        return string;
+    }
+
     static public void printMatrix(Matrix outputtedMatrix, int digitAfterComma) {
         int m = outputtedMatrix.getNRow();
         int n = outputtedMatrix.getNCol();
 
         NumberFormat numberFormatter = NumberFormat.getInstance();
         numberFormatter.setMaximumFractionDigits(digitAfterComma);
+        int mostDigit = outputtedMatrix.getMostDigit();
         int i;
         for (i = 0; i < m; i++) {
             int j;
             for (j = 0; j < n - 1; j++) {
-                System.out.printf("%s ", numberFormatter.format(outputtedMatrix.getElmt(i, j)));
-                System.out.printf(" ");
-            }
+                String cell = numberFormatter.format(outputtedMatrix.getElmt(i, j));
+                cell = addWhiteSpace(cell, mostDigit - cell.length());
 
-            System.out.printf("%s", numberFormatter.format(outputtedMatrix.getElmt(i, j)));
+                System.out.printf("%s ", cell);
+            }
+            String cell = numberFormatter.format(outputtedMatrix.getElmt(i, j));
+            cell = addWhiteSpace(cell, mostDigit - cell.length());
+            System.out.printf("%s", cell);
             System.out.printf("%n");
         }
     }
