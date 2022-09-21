@@ -246,6 +246,170 @@ public class Matrix {
     }
 
     /*** OPERATOR LAINNYA ***/
+    /*** OPERATOR LAINNYA ***/
+
+    /**
+     * 
+     * @param startColIdx indeks kolom awal yang ingin di salin
+     * @param endColIdx indeks kolom akhir yang ingin di salin
+     * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
+     */
+    public Matrix getCopyMatrixByColumn(int startColIdx, int endColIdx) {
+        // KAMUS LOKAL
+        Matrix resultMatrix;
+        
+
+        // ALGORITMA
+        resultMatrix = new Matrix(getNRow(), endColIdx - startColIdx + 1);
+        for (int rowIdx = 0; rowIdx <= getNRow() - 1; rowIdx++) {
+            for (int colIdx = startColIdx; colIdx <= endColIdx; colIdx++) {
+                resultMatrix.setElmt(rowIdx, colIdx - startColIdx, getElmt(rowIdx, colIdx));
+            }
+        }
+
+        return resultMatrix;
+    }
+
+    /**
+     * 
+     * @param startRowIdx index baris awal yang ingin dicari
+     * @param endRowIdx index baris akhir yang ingin dicari
+     * @param colIdx index kolom ingin dicari
+     * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
+     */
+    public int getNonZeroRowIdx(int startRowIdx, int endRowIdx, int colIdx) {
+        // KAMUS LOKAL
+        boolean isFound;
+        int foundRowIdx, currRowIdx;
+
+
+        // ALGORITMA
+        isFound = false;
+        foundRowIdx = -1;
+        currRowIdx = startRowIdx;
+
+        while (!(isFound) && (currRowIdx <= endRowIdx)) {
+            if (getElmt(currRowIdx, colIdx) != 0) {
+                isFound = true;
+                foundRowIdx = currRowIdx;
+            } else {
+                currRowIdx++;
+            }
+        }
+        return foundRowIdx;
+    }
+    /**
+     * I.S. nilai dari matriks pada index startRowIdx dan rowIdx sudah bernilai 1
+     * <p>
+     * F.S> satu kolom dari matriks dari startRowIdx hingga endRowIdx memiliki nilai nol 
+     * <p>
+     * 
+     * @param startRowIdx index baris awal yang ingin dibat sebagai leading one
+     * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
+     */
+    public void makeColumnZero (int leadingOneRowIdx, int startRowIdx, int endRowIdx, int mainColIdx) {
+        // KAMUS LOKAL
+        double anchorElmt;
+        // ALGORITMA
+        for(int rowIdx = startRowIdx; rowIdx <= endRowIdx; rowIdx++) {
+            anchorElmt = getElmt(rowIdx, mainColIdx);
+            for (int colIdx = 0; colIdx <= getNCol() - 1; colIdx++) {
+                setElmt(rowIdx, colIdx, getElmt(rowIdx, colIdx) - anchorElmt * getElmt(leadingOneRowIdx, colIdx));
+            }
+        }
+    }
+
+    /**
+     * 
+     * @param startRowIdx index baris awal yang ingin dibat sebagai leading one
+     * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
+     */
+    public Matrix getEchelonForm (int startColIdx, int endColIdx) {
+        // KAMUS LOKAL
+        Matrix hasil;
+        int rowIdx, rowNonZeroIdx;
+        double multiplier;
+
+        // ALGORITMA
+        hasil = getCopyMatrixByColumn(0, getNCol() - 1);
+
+        rowIdx = 0;
+        multiplier = 1;
+        for(int colIdx = startColIdx; colIdx <= endColIdx; colIdx++) {
+            rowNonZeroIdx = hasil.getNonZeroRowIdx(rowIdx, hasil.getNRow() - 1, colIdx);
+            if (rowNonZeroIdx == -1) {
+                continue;
+            } else {
+                hasil.swapRow(rowIdx, rowNonZeroIdx);
+                multiplier *= hasil.getElmt(rowIdx, colIdx);
+                hasil.multiplyRowScalar(rowIdx, 1/hasil.getElmt(rowIdx, colIdx));
+                hasil.makeColumnZero(rowIdx, rowIdx + 1, hasil.getNRow() - 1, colIdx);
+                rowIdx++;
+            }
+        }
+        return hasil;
+    }
+    public Matrix getReducedForm (int startColIdx, int endColIdx) {
+        // KAMUS LOKAL
+        Matrix hasil;
+        int rowIdx, rowNonZeroIdx;
+
+        // ALGORITMA
+        hasil = getEchelonForm(startColIdx, endColIdx);
+        rowIdx = 0;
+        for(int colIdx = startColIdx; colIdx <= endColIdx; colIdx++) {
+            rowNonZeroIdx = hasil.getNonZeroRowIdx(rowIdx, hasil.getNRow() - 1, colIdx);
+            if (rowNonZeroIdx == -1) {
+                continue;
+            } else {
+                hasil.makeColumnZero(rowIdx, 0, rowIdx - 1, colIdx);
+                rowIdx++;
+            }
+        }
+        return hasil;
+    }
+    /**
+     * prekondisi: matriks merupakan maktriks square
+     * @return mengembalikan matriks yang telah di augmentasi dengan matriks identitas
+     * 
+     */
+    public Matrix getAugmentedMatrixByIdentity() {
+        // KAMUS LOKAL
+        Matrix augmentedMatrix;
+
+        // ALGORITMA
+        augmentedMatrix = new Matrix(getNRow(), 2 * getNRow());
+        for (int rowIdx = 0; rowIdx <= getNRow() - 1; rowIdx++) {
+            for (int colIdx = 0; colIdx <= getNCol() - 1; colIdx++) {
+                augmentedMatrix.setElmt(rowIdx, colIdx, getElmt(rowIdx, colIdx));
+            }
+            for (int colIdx = getNCol(); colIdx <= 2 * getNCol() - 1; colIdx++) {
+                if (colIdx == getNRow() + rowIdx) {
+                    augmentedMatrix.setElmt(rowIdx, colIdx, 1);
+                } else {
+                    augmentedMatrix.setElmt(rowIdx, colIdx, 0);
+                }
+                
+            }
+        }
+        return augmentedMatrix;
+    }
+     /**
+     * 
+     * @return mengembalikan inverse matriks
+     */
+    public Matrix getInverseMatrix () {
+        // KAMUS LOKAL
+        Matrix reducedMatrix, inversedMatrix, augmentedMatrix;
+
+        // ALGORITMA
+        augmentedMatrix = getAugmentedMatrixByIdentity();
+        reducedMatrix = augmentedMatrix.getReducedForm(0, getNRow() - 1);
+        inversedMatrix = reducedMatrix.getCopyMatrixByColumn(getNRow(), 2 * getNRow() - 1);
+        
+
+        return inversedMatrix;
+    }
 
     /**
      * 
