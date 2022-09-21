@@ -153,11 +153,7 @@ public class Interface {
     static public void solveWithGauss() {
         Matrix matrix = FromKeyboard.SPL();
         Matrix solution = matrix.getSolGJ();
-        ToKeyboard.printMatrix(solution);
-        String[] solutionTexts = writeSolution(solution, "x");
-        for (int i = 0; i < solutionTexts.length; i++) {
-            ToKeyboard.printMessage(solutionTexts[i]);
-        }
+        ToKeyboard.SPLSolution.print(solution);
     }
 
     /**
