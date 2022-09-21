@@ -709,6 +709,12 @@ public class Matrix {
         return res;
     }
 
+    /**
+     * Menghasilkan panjang dari angka paling panjang dalam matriks stelah diformat
+     * 
+     * @param digitAfterComma berapa angka di belakang koma yang diperlukan
+     * @return panjang dari angka paling panjang dalam matriks setelah diformat
+     */
     public int getMostDigit(int digitAfterComma) {
 
         NumberFormat numberFormatter = NumberFormat.getInstance();
@@ -726,6 +732,12 @@ public class Matrix {
         return mostDigit;
     }
 
+    /**
+     * Menghasilkan panjang dari angka paling panjang dalam matriks setelah diformat
+     * 
+     * @return panjang dari angka paling panjang dalam matriks setelah diformat
+     *         dengan 2 angka di belakang komas
+     */
     public int getMostDigit() {
         return getMostDigit(2);
     }

@@ -7,7 +7,14 @@ import java.util.HashMap;
 public class ToKeyboard {
 
     static public class SPLSolution {
-        static public String parameterVariableMaker(int index) {
+        /**
+         * Membentuk variabel yang unik untuk tiap indeksnya dengan penggabungan
+         * karakter yang diperbolehkan di dalam fungsi
+         * 
+         * @param index indeks yang digunakan sebagai seed pembuatan string
+         * @return string unik untuk tiap indeks
+         */
+        static private String parameterVariableMaker(int index) {
             // char[] alphabet = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
             // 'l', 'm', 'n', 'o', 'p', 'q',
             // 'r',
@@ -34,12 +41,32 @@ public class ToKeyboard {
             return createdVariable;
         }
 
+        /**
+         * Mengecek apakah suatu variabel dalam matriks solusi merupakan variabel
+         * parametrik
+         * 
+         * @param solution matriks solusi yang dihasilkan oleh fungsi getSol dan
+         *                 permutasinya
+         * @param i        variabel keberapa yang ingin dicek
+         * @return apakah variabel ke-i parametrik
+         */
         static private boolean isNthVariableParametric(Matrix solution, int i) {
             return solution.getElmt(i, solution.getNCol() - 1) == 0;
         }
 
+        /**
+         * Mengecek apakah suatu variabel dalam matriks solusi nilainya
+         * bergantung pada
+         * variabel parametrik
+         * 
+         * @param solution matriks solusi yang dihasilkan oleh fungsi getSol dan
+         *                 permutasinya
+         * @param i        variabel keberapa yang ingin dicek
+         * @return apakah variabel ke-i nilainya bergantung pada variabel parametrik.
+         *         Jika sendirinya parametrik maka true
+         */
         static private boolean isNthVariableContainParametric(Matrix solution, int i) {
-            boolean containParametric = false;
+            boolean containParametric = isNthVariableParametric(solution, i);
             int j = 0;
             while (j < solution.getNCol() - 2 && !containParametric) {
                 if (solution.getElmt(i, j) != 0) {
@@ -50,6 +77,17 @@ public class ToKeyboard {
             return containParametric;
         }
 
+        /**
+         * Mengubah matriks solusi menjadi array berisi string solusi variabel yang bisa
+         * dibaca manusia
+         * 
+         * @param solution         matriks solusi yang dihasilkan oleh fungsi getSol dan
+         *                         permutasinya
+         * @param variableSymbol   simbol untuk variabel SPL
+         * @param digitsAfterComma sampai koma keberapa hasil diformat
+         * @return array berisi string solusi untuk tiap variabel dengan
+         *         masing-masingnya punya contoh format x1 = -3+6d
+         */
         static private String[] createSolutionTexts(Matrix solution, String variableSymbol, int digitsAfterComma) {
             NumberFormat numberFormatter = NumberFormat.getInstance();
             numberFormatter.setMaximumFractionDigits(digitsAfterComma);
@@ -113,20 +151,58 @@ public class ToKeyboard {
             return outputLines.stream().toArray(String[]::new);
         }
 
+        /**
+         * Mengubah matriks solusi menjadi array berisi string solusi variabel yang bisa
+         * dibaca manusia dengan angka diformat ke 2 angka di belakang koma
+         * 
+         * @param solution       matriks solusi yang dihasilkan oleh fungsi getSol dan
+         *                       permutasinya
+         * @param variableSymbol simbol untuk variabel SPL
+         * @return array berisi string solusi untuk tiap variabel dengan
+         *         masing-masingnya punya contoh format x1 = -3+6d
+         */
         static private String[] createSolutionTexts(Matrix solution, String variableSymbol) {
             return createSolutionTexts(solution, variableSymbol, 2);
         }
 
-        static public void print(Matrix solution) {
-            String[] solutionTexts = createSolutionTexts(solution, "x");
+        /**
+         * Mencetak matriks solusi yang telah diubah menjadi persamaan dan variabel ke
+         * layar
+         * <p>
+         * I.S. matriks solusi terdefinisi, variableSymbol sebuah string
+         * <p>
+         * F.S. tercetak ke layar matriks solusi yang telah diubah menjadi persamaan
+         * dengan variableSymbol sebagai variabelnya
+         */
+        static public void print(Matrix solution, String variableSymbol) {
+            String[] solutionTexts = createSolutionTexts(solution, variableSymbol);
             printMessage(
                     "Solusi matriks adalah seperti di bawah ini. Perlu diingat bahwa variabel (contoh) ab bukanlah a * b melainkan variabel unik tersendiri");
             for (int i = 0; i < solutionTexts.length; i++) {
                 printMessage(solutionTexts[i]);
             }
         }
+
+        /**
+         * Mencetak matriks solusi yang telah diubah menjadi persamaan dan variabel ke
+         * layar
+         * <p>
+         * I.S. matriks solusi terdefinisi
+         * <p>
+         * F.S. tercetak ke layar matriks solusi yang telah diubah menjadi persamaan
+         * dengan x sebagai variabelnya
+         */
+        static public void print(Matrix solution) {
+            print(solution, "x");
+        }
     }
 
+    /**
+     * Menambah whitespace ke bagian belakang string
+     * 
+     * @param string string yang ingin ditambahi whitespace
+     * @return string yang bagian belakangnya sudah ditambahi space sebanyak amount
+     */
     static private String addWhiteSpace(String string, int amount) {
         for (int i = 0; i < amount; i++) {
             string += " ";
@@ -135,6 +211,16 @@ public class ToKeyboard {
         return string;
     }
 
+    /**
+     * Mencetak matriks ke
+     * layar
+     * <p>
+     * I.S. matriks terdefinisi, digitAfterComma integer
+     * <p>
+     * F.S. tercetak ke layar matriks dengan lebar tiap selnya seragam untuk semua
+     * sel dan tiap selnya diformat dengan angka di belakang koma sebanyak
+     * digitAfterComma
+     */
     static public void printMatrix(Matrix outputtedMatrix, int digitAfterComma) {
         int m = outputtedMatrix.getNRow();
         int n = outputtedMatrix.getNCol();
@@ -158,18 +244,49 @@ public class ToKeyboard {
         }
     }
 
+    /**
+     * Mencetak matriks ke
+     * layar
+     * <p>
+     * I.S. matriks terdefinisi
+     * <p>
+     * F.S. tercetak ke layar matriks dengan lebar tiap selnya seragam untuk semua
+     * sel dan tiap selnya diformat dengan angka di belakang koma sebanyak
+     * 2
+     */
     static public void printMatrix(Matrix outputtedMatrix) {
         printMatrix(outputtedMatrix, 2);
     }
 
+    /**
+     * Mencetak angka double bersama sebuah pesan ke layar
+     * <p>
+     * I.S. number double terdefinisi, message terdefinisi
+     * <p>
+     * F.S. tercetak ke layar angka message dan number tanpa dipisahkan spasi
+     */
     static public void printNumber(double number, String message) {
         System.out.printf("%s%f%n", message, number);
     }
 
+    /**
+     * Mencetak angka double
+     * <p>
+     * I.S. number double terdefinisi
+     * <p>
+     * F.S. tercetak ke layar angka
+     */
     static public void printNumber(double number) {
         System.out.printf("%f%n", number);
     }
 
+    /**
+     * Mencetak sebuah string
+     * <p>
+     * I.S. message terdefinisi
+     * <p>
+     * F.S. tercetak ke layar sebuah string
+     */
     static public void printMessage(String message) {
         System.out.printf("%s%n", message);
     }
