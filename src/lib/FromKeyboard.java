@@ -22,7 +22,7 @@ public class FromKeyboard {
                 String rowString = inputReceiver.nextLine();
                 String[] rowArrayRaw = rowString.split(" ");
                 double[] rowArrayTest = new double[0];
-                inputNotNRow = rowArrayRaw.length != nRow;
+                inputNotNRow = rowArrayRaw.length != nCol;
                 try {
                     rowArrayTest = Arrays.stream(rowArrayRaw).mapToDouble(Double::parseDouble).toArray();
                 } catch (NumberFormatException e) {

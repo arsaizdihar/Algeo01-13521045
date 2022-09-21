@@ -6,7 +6,7 @@ public class ToKeyboard {
 
     static public void Matrix(Matrix outputtedMatrix, int digitAfterComma) {
         int m = outputtedMatrix.getNRow();
-        int n = outputtedMatrix.getNRow();
+        int n = outputtedMatrix.getNCol();
 
         NumberFormat numberFormatter = NumberFormat.getInstance();
         numberFormatter.setMaximumFractionDigits(digitAfterComma);
