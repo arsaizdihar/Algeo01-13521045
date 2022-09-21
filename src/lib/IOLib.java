@@ -102,6 +102,23 @@ public class IOLib {
         return willReadFromFile;
     }
 
+    static public boolean chooseToWriteToFile() {
+        boolean inputValid = false;
+        boolean willWriteToFile = false;
+        while (!inputValid) {
+            ToKeyboard
+                    .printMessage("Tekan f untuk mengeluarkan hasil ke file atau k untuk mengeluarkan hasil ke CLI.");
+            String input = FromKeyboard.readString();
+            inputValid = input == "f" || input == "k";
+            if (!inputValid) {
+                ToKeyboard.printMessage("Bukan input yang valid. Masukkan input yang benar!");
+            } else {
+                willWriteToFile = input == "f";
+            }
+        }
+        return willWriteToFile;
+    }
+
     static public class SPLSolution {
         /**
          * Membentuk variabel yang unik untuk tiap indeksnya dengan penggabungan
@@ -125,6 +142,7 @@ public class IOLib {
 
             int iterationCount = 1;
 
+            // Jujur fungsi ini itu over-engineered.
             while (index >= ((int) Math.pow(usedCharacterN, (iterationCount - 1))) | iterationCount == 1) {
                 int addedIndex = (index % (int) ((Math.pow(usedCharacterN, iterationCount))))
                         / ((int) Math.pow(usedCharacterN, (iterationCount - 1)));
