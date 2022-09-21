@@ -1,8 +1,5 @@
 package lib;
 
-import java.util.Arrays;
-import java.util.Scanner; // Import the Scanner class
-
 import lib.Errors.InvalidMatrixSquareException;
 
 public class Interface {
