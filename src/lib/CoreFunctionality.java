@@ -1,6 +1,8 @@
 package lib;
 
+import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
+import lib.Errors.NoSolutionException;
 
 public class CoreFunctionality {
     static public class solveSPL {
@@ -20,8 +22,8 @@ public class CoreFunctionality {
          */
         static public void gaussJordan() {
             Matrix matrix = FromKeyboard.SPL();
-            matrix.getSolG();
-
+            Matrix solution = matrix.getSolG();
+            ToKeyboard.SPLSolution.print(solution);
         }
 
         /**
@@ -30,6 +32,9 @@ public class CoreFunctionality {
          */
         static public void inverse() {
             Matrix matrix = FromKeyboard.SPL();
+            // Get solution inverse
+            // Matrix solution = matrix.getSol();
+            // ToKeyboard.SPLSolution.print(solution);
 
         }
 
@@ -39,7 +44,16 @@ public class CoreFunctionality {
          */
         static public void cramer() {
             Matrix matrix = FromKeyboard.SPL();
-
+            try {
+                Matrix solution = matrix.getSolCramer();
+                ToKeyboard.SPLSolution.print(solution);
+            } catch (InvalidMatrixSizeException e) {
+            } catch (NoSolutionException e) {
+                ToKeyboard.printMessage(
+                        "Solusi SPL tidak unik. Tidak bisa diselesaikan dengan kaidah cramer! Berikut solusinya dengan eliminasi Gauss-Jordan :");
+                Matrix solution = matrix.getSolGJ();
+                ToKeyboard.SPLSolution.print(solution);
+            }
         }
     }
 
@@ -48,7 +62,6 @@ public class CoreFunctionality {
      * determinannya.
      */
     static public void computeDeterminant() {
-        ToKeyboard.printMessage("Memasukkan matriks");
         Matrix matrix = FromKeyboard.MatrixSquare();
 
         try {
@@ -74,7 +87,7 @@ public class CoreFunctionality {
         Matrix matrix = FromKeyboard.MatrixSquare();
 
         try {
-            Matrix inverse = matrix;
+            Matrix inverse = matrix.getInverseMatrix();
             ToKeyboard.printMatrix(inverse);
 
         } catch (Exception e) {
