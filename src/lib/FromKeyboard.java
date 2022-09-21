@@ -15,16 +15,16 @@ public class FromKeyboard {
      * @param upperBound batas maksimum angka yang boleh
      * @return angka masukan pengguna yang sudah sesuai dengan keperluan
      */
-    static private int readNumber(String numberName, double lowerBound, double upperBound) {
+    static public int readNumber(String numberName, double lowerBound, double upperBound) {
         Scanner inputReceiver = new Scanner(System.in);
         int inputtedNumber = 0;
         boolean inputValid = false;
         while (!inputValid) {
-            System.out.format("Enter %s : ", numberName);
+            System.out.format("Masukkan %s : ", numberName);
             inputtedNumber = inputReceiver.nextInt();
             inputValid = inputtedNumber >= lowerBound && inputtedNumber <= upperBound;
             if (!inputValid) {
-                System.out.format("Invalid %s, please try again", numberName);
+                System.out.format("Bukan %s yang valid, tolong coba lagi", numberName);
             }
 
         }
@@ -41,7 +41,7 @@ public class FromKeyboard {
      * @param lowerBound batas minimum angka yang boleh
      * @return angka masukan pengguna yang sudah sesuai dengan keperluan
      */
-    static private int readNumberWithMinimum(String numberName, int lowerBound) {
+    static public int readNumberWithMinimum(String numberName, int lowerBound) {
         return readNumber(numberName, lowerBound, Double.MAX_VALUE);
     }
 
@@ -54,7 +54,7 @@ public class FromKeyboard {
      * @param upperBound batas maksimum angka yang boleh
      * @return angka masukan pengguna yang sudah sesuai dengan keperluan
      */
-    static private int readNumberWithMaximum(String numberName, int upperBound) {
+    static public int readNumberWithMaximum(String numberName, int upperBound) {
         return readNumber(numberName, Double.MIN_VALUE, upperBound);
 
     }
@@ -88,17 +88,17 @@ public class FromKeyboard {
             }
 
             if (inputNotNRow) {
-                errorMessage = "Length of the row is not the number of matrix column.";
+                errorMessage = "Panjang baris tidak sama dengan jumlah kolom.";
             }
 
             if (inputNotANumber) {
-                errorMessage = "The inputted row contains not a valid number.";
+                errorMessage = "Baris mengandung angka yang tidak valid.";
             }
 
             rowInputValid = !inputNotANumber && !inputNotNRow;
 
             if (!rowInputValid) {
-                System.out.printf("%s Please try again%n", errorMessage);
+                System.out.printf("%s Tolong coba lagi%n", errorMessage);
             }
         }
 
@@ -141,7 +141,7 @@ public class FromKeyboard {
      *         pengguna
      */
     static public Matrix MatrixSquare() {
-        int n = readNumberWithMinimum("jumlah baris", 1);
+        int n = readNumberWithMinimum("jumlah baris dan kolom", 1);
 
         return Matrix(n, n, "Masukkan matriks baris per baris dengan tiap elemen dipisahkan spasi");
     }
