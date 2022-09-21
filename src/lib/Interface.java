@@ -188,6 +188,7 @@ public class Interface {
                             // Take input of a set of points and do stuff with it accordingly
                             break;
                         case 7:
+                            ToKeyboard.printMessage("Good luck tubesnya!");
                             programState = "exited";
                             break;
                         default:
