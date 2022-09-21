@@ -3,7 +3,15 @@ package lib;
 import java.util.Arrays;
 import java.util.Scanner; // Import the Scanner class
 
+import lib.IOLib.RowError;
+
 public class FromKeyboard {
+
+    static public String readString() {
+        Scanner inputReceiver = new Scanner(System.in);
+        String input = inputReceiver.nextLine();
+        return input;
+    }
 
     /**
      * Fungsi baca angka generik. Membaca sebuah angka yang dimasukkan user.
@@ -74,46 +82,30 @@ public class FromKeyboard {
         double[] rowArrayTest = new double[0];
         boolean rowInputValid = false;
         while (!rowInputValid) {
-            boolean inputContainsWhitespace = false;
-            boolean inputNotNRow = false;
-            boolean inputNotANumber = false;
 
             String errorMessage = "";
             System.out.printf("");
             String rowString = inputReceiver.nextLine();
-            String[] rowArrayRaw = (rowString.split(" "));
-            inputNotNRow = rowArrayRaw.length != nCol;
+            RowError rowError = IOLib.checkRow(rowString, nCol);
 
-            int i;
-            for (i = 0; i < rowArrayRaw.length; i++) {
-                if (rowArrayRaw[i].length() == 0 || rowArrayRaw[i].substring(0, 1) == " ") {
-                    inputContainsWhitespace = true;
-                }
-            }
-
-            try {
-                rowArrayTest = Arrays.stream(rowArrayRaw).mapToDouble(Double::parseDouble).toArray();
-                inputNotANumber = false;
-            } catch (NumberFormatException e) {
-                inputNotANumber = true;
-            }
-
-            if (inputNotNRow) {
+            if (rowError.isColumnDiscrepancy()) {
                 errorMessage = "Panjang baris tidak sama dengan jumlah kolom.";
             }
 
-            if (inputNotANumber) {
+            if (rowError.isNaN()) {
                 errorMessage = "Baris mengandung angka yang tidak valid.";
             }
 
-            if (inputContainsWhitespace) {
+            if (rowError.isWhitespace()) {
                 errorMessage = "Baris kelebihan spasi.";
             }
 
-            rowInputValid = !inputNotANumber && !inputNotNRow && !inputContainsWhitespace;
+            rowInputValid = !rowError.anyError();
 
             if (!rowInputValid) {
                 System.out.printf("%s Tolong coba lagi%n", errorMessage);
+            } else {
+                rowArrayTest = Arrays.stream(rowString.split(" ")).mapToDouble(Double::parseDouble).toArray();
             }
         }
 
