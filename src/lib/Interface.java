@@ -42,6 +42,7 @@ public class Interface {
      */
     static public void solveWithGauss() {
         Matrix matrix = FromKeyboard.SPL();
+        matrix.getSolG();
 
     }
 
