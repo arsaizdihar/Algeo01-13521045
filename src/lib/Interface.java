@@ -3,6 +3,8 @@ package lib;
 import java.util.Arrays;
 import java.util.Scanner; // Import the Scanner class
 
+import lib.Errors.InvalidMatrixSquareException;
+
 public class Interface {
 
     private static final String[] mainMenuText = new String[] {
@@ -32,10 +34,84 @@ public class Interface {
         System.out.println("\n");
     }
 
-    // static public class
+    static public void solveWithGauss() {
+        Matrix matrix = FromKeyboard.MatrixSquare();
+
+    }
+
+    static public void solveWithGaussJordan() {
+        Matrix matrix = FromKeyboard.MatrixSquare();
+
+    }
+
+    static public void solveWithInverse() {
+        Matrix matrix = FromKeyboard.MatrixSquare();
+
+    }
+
+    static public void solveWithCramer() {
+        Matrix matrix = FromKeyboard.MatrixSquare();
+
+    }
+
+    static public void computeDeterminant() {
+        ToKeyboard.printMessage("Memasukkan matriks");
+        Matrix matrix = FromKeyboard.MatrixSquare();
+
+        try {
+            double determinant = matrix.getDeterminantCofactor();
+            ToKeyboard.printNumber(determinant, "Determinan matriksnya adalah : ");
+            ToKeyboard.printMessage("\n");
+
+        } catch (InvalidMatrixSquareException e) {
+            throw new RuntimeException();
+        }
+
+        // Take input of matrice and do stuff with it accordingly
+    }
+
+    // This is not functional yet because the determinantFinder doesn't throw an
+    // error yet.
+    static public void computeInverse() {
+        Matrix matrix = FromKeyboard.MatrixSquare();
+
+        try {
+            Matrix inverse = matrix;
+            ToKeyboard.printMatrix(inverse);
+
+        } catch (Exception e) {
+            ToKeyboard.printMessage("Matriks adalah singular. Tidak punya inverse");
+        }
+
+        // Take input of matrice and do stuff with it accordingly
+    }
+
+    static public void solveSPL() {
+        printMenu(subMenuText);
+        int userChoiceSubMenu = FromKeyboard.readNumber("pilihan sub menu", 1, 5);
+        switch (userChoiceSubMenu) {
+            case 1:
+                solveWithGauss();
+                // Solve with Gauss and display the result
+                break;
+            case 2:
+                solveWithGaussJordan();
+                // Solve with Gauss Jordan and display the result
+                break;
+            case 3:
+                // Solve with inverted matrix and display the result
+                break;
+            case 4:
+                // Solve with Cramer and display the result
+                break;
+            case 5:
+                break;
+
+        }
+    }
+
     static public void mainEventLoop() {
         String programState = "main";
-        Integer backToMainOption[] = { 1, 2, 3, 4, 5, 6 };
         int userChoice = 0;
         while (programState != "exited") {
             switch (programState) {
@@ -44,20 +120,24 @@ public class Interface {
                     programState = "mainEntering";
                     break;
                 case "mainEntering":
-                    Scanner userChoiceReceiver = new Scanner(System.in);
-                    userChoice = userChoiceReceiver.nextInt();
-                    userChoiceReceiver.close();
+                    userChoice = FromKeyboard.readNumber("pilihan menu", 1, 7);
+                    // ToKeyboard.printMessage("\n");
                     programState = "mainEntered";
                     break;
                 case "mainEntered":
                     switch (userChoice) {
                         case 1:
+                            solveSPL();
+                            programState = "main";
+
                             // Take input of SPL and do stuff with it accordingly
                             break;
                         case 2:
-                            // Take input of matrice and do stuff with it accordingly
+                            computeDeterminant();
+                            programState = "main";
                             break;
                         case 3:
+                            computeInverse();
                             // Take input of matrice and do stuff with it accordingly
                             break;
                         case 4:
@@ -76,10 +156,9 @@ public class Interface {
                             System.out.println("Not a valid input!");
                             programState = "main";
                             break;
+
                     }
-                    if (Arrays.asList(backToMainOption).contains(userChoice)) {
-                        programState = "main";
-                    }
+
                     break;
             }
         }
