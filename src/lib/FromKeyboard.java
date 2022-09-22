@@ -32,7 +32,7 @@ public class FromKeyboard {
             inputtedNumber = inputReceiver.nextInt();
             inputValid = inputtedNumber >= lowerBound && inputtedNumber <= upperBound;
             if (!inputValid) {
-                System.out.format("Bukan %s yang valid, tolong coba lagi", numberName);
+                System.out.format("Bukan %s yang valid, tolong coba lagi%n", numberName);
             }
 
         }
