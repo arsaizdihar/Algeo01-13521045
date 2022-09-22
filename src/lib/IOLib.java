@@ -4,7 +4,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Scanner;
 
 public class IOLib {
     static public class RowError {
@@ -81,9 +80,8 @@ public class IOLib {
             }
         }
 
-        double[] rowArrayTest = new double[0];
         try {
-            rowArrayTest = Arrays.stream(rowArrayRaw).mapToDouble(Double::parseDouble).toArray();
+            Arrays.stream(rowArrayRaw).mapToDouble(Double::parseDouble).toArray();
             rowError.setError("n", false);
         } catch (NumberFormatException e) {
             rowError.setError("n", true);
@@ -312,9 +310,6 @@ public class IOLib {
             for (int i = 0; i < solutionTexts.length; i++) {
                 ToKeyboard.printMessage(solutionTexts[i]);
             }
-        }
-
-        private static void printMessage(String string) {
         }
 
         /**
