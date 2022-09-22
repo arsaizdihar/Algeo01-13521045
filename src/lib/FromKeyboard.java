@@ -113,6 +113,12 @@ public class FromKeyboard {
         return rowArrayTest;
     }
 
+    static public void EnterToContinue() {
+        System.out.printf("Tekan enter untuk kembali ke menu utama ");
+        scanner.nextLine();
+        ToKeyboard.printMessage("");
+    }
+
     /**
      * Fungsi baca matriks generik. Membaca matriks baris per baris dengan elemen
      * antara kolom dipisahkan spasi.
