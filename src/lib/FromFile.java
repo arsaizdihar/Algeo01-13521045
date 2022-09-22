@@ -43,8 +43,12 @@ public class FromFile {
     }
 
     static private RowError isFileContentValid(String[] rowStrings) {
-        int nCol = rowStrings[0].split(" ").length;
         RowError rowError = new RowError();
+        if (rowStrings.length == 0) {
+            rowError.setError("e", true);
+            return rowError;
+        }
+        int nCol = rowStrings[0].split(" ").length;
         int i = 0;
         while (i < rowStrings.length && rowError.anyError()) {
             rowError = IOLib.checkRow(rowStrings[i], nCol);
@@ -85,11 +89,17 @@ public class FromFile {
                 errorMessage = "Terdapat spasi yang berlebih.";
             }
 
+            if (fileContentError.isEmpty()) {
+                errorMessage = "File kosong.";
+            }
+
             errorMessage += " "
                     + "Perbaiki file anda dan coba lagi. Tekan tombol apapun dan enter jika sudah untuk mencoba lagi.";
             ToKeyboard.printMessage(errorMessage);
             FromKeyboard.readString();
             rowStrings = readFile();
+            fileContentError = isFileContentValid(rowStrings);
+
         }
         return rowStringsToMatrix(rowStrings);
     }

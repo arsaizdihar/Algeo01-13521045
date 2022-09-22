@@ -10,15 +10,17 @@ public class IOLib {
         private boolean containWhiteSpace;
         private boolean columnDiscrepancy;
         private boolean containNaN;
+        private boolean empty;
 
         public RowError() {
             this.containWhiteSpace = false;
             this.containNaN = false;
             this.columnDiscrepancy = false;
+            this.empty = false;
         }
 
         public boolean anyError() {
-            return containNaN || containWhiteSpace || columnDiscrepancy;
+            return containNaN || containWhiteSpace || columnDiscrepancy || empty;
         }
 
         public void setError(String errorType, boolean newValue) {
@@ -31,6 +33,9 @@ public class IOLib {
                     break;
                 case "c":
                     columnDiscrepancy = newValue;
+                    break;
+                case "e":
+                    empty = newValue;
                     break;
             }
         }
@@ -47,10 +52,16 @@ public class IOLib {
             return columnDiscrepancy;
         }
 
+        public boolean isEmpty() {
+            return empty;
+        }
+
         public void reset() {
             containWhiteSpace = false;
             containNaN = false;
             columnDiscrepancy = false;
+            empty = false;
+
         }
     }
 
