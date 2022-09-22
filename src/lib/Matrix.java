@@ -557,19 +557,19 @@ public class Matrix {
      */
     public Matrix getInverseMatrix() throws NoInverseException {
         // KAMUS LOKAL
-        int colIdx, rowIdx;
+        int rowIdx;
         boolean isFoundRowEmpty;
         Matrix reducedMatrix, inversedMatrix, augmentedMatrix;
 
         // ALGORITMA
+
         augmentedMatrix = getAugmentedMatrixByIdentity();
         reducedMatrix = augmentedMatrix.getReducedForm(0, getNRow() - 1);
-        inversedMatrix = reducedMatrix.getCopyMatrixByColumn(getNRow(), 2 * getNRow() - 1);
 
         rowIdx = 0;
         isFoundRowEmpty = false;
-        while (!false && (rowIdx <= inversedMatrix.getNRow() - 1)) {
-            if (inversedMatrix.isRowEmpty(rowIdx)) {
+        while (!isFoundRowEmpty && (rowIdx <= reducedMatrix.getNRow() - 1)) {
+            if (reducedMatrix.isRowEmpty(rowIdx)) {
                 isFoundRowEmpty = true;
             } else {
                 rowIdx++;
@@ -579,6 +579,7 @@ public class Matrix {
         if (isFoundRowEmpty) {
             throw new Errors.NoInverseException();
         }
+        inversedMatrix = reducedMatrix.getCopyMatrixByColumn(getNRow(), 2 * getNRow() - 1);
 
         return inversedMatrix;
     }
