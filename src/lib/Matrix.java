@@ -1,6 +1,7 @@
 package lib;
 
 import java.util.Arrays;
+import java.text.NumberFormat;
 
 import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
@@ -454,7 +455,7 @@ public class Matrix {
 
                 // jika nilai variabel -0 atau variabel merupakan variabel parametrik, tidak
                 // perlu melakukan proses
-                if (variableConstant == 0 || solusi.getElmt(j, solusi.getNCol() - 1) == 0)
+                if (variableConstant == 0 || solusi.getElmt(i, solusi.getNCol() - 1) == 0)
                     continue;
 
                 for (int k = j + 1; k < hasil.getNCol(); k++) {
@@ -565,6 +566,7 @@ public class Matrix {
 
         augmentedMatrix = getAugmentedMatrixByIdentity();
         reducedMatrix = augmentedMatrix.getReducedForm(0, getNRow() - 1);
+        inversedMatrix = reducedMatrix.getCopyMatrixByColumn(getNRow(), 2 * getNRow() - 1);
 
         rowIdx = 0;
         isFoundRowEmpty = false;
@@ -732,6 +734,39 @@ public class Matrix {
         }
 
         return res;
+    }
+
+    /**
+     * Menghasilkan panjang dari angka paling panjang dalam matriks stelah diformat
+     * 
+     * @param digitAfterComma berapa angka di belakang koma yang diperlukan
+     * @return panjang dari angka paling panjang dalam matriks setelah diformat
+     */
+    public int getMostDigit(int digitAfterComma) {
+
+        NumberFormat numberFormatter = NumberFormat.getInstance();
+        numberFormatter.setMaximumFractionDigits(digitAfterComma);
+        int mostDigit = 0;
+        for (int i = 0; i < getNRow(); i++) {
+            for (int j = 0; j < getNCol(); j++) {
+                String inspectedCell = numberFormatter.format(getElmt(i, j));
+                if (inspectedCell.length() > mostDigit) {
+                    mostDigit = inspectedCell.length();
+                }
+
+            }
+        }
+        return mostDigit;
+    }
+
+    /**
+     * Menghasilkan panjang dari angka paling panjang dalam matriks setelah diformat
+     * 
+     * @return panjang dari angka paling panjang dalam matriks setelah diformat
+     *         dengan 2 angka di belakang komas
+     */
+    public int getMostDigit() {
+        return getMostDigit(2);
     }
 
     /**
