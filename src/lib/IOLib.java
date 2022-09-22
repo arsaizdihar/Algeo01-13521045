@@ -4,6 +4,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class IOLib {
     static public class RowError {
@@ -101,14 +102,12 @@ public class IOLib {
         boolean willReadFromFile = false;
         while (!inputValid) {
             ToKeyboard
-                    .printMessage("Tekan f untuk menerima input dari file atau k untuk menerima input dari keyboard.");
-            String input = FromKeyboard.readString();
-            inputValid = input == "f" || input == "k";
-            if (!inputValid) {
-                ToKeyboard.printMessage("Bukan input yang valid. Masukkan input yang benar!");
-            } else {
-                willReadFromFile = input == "f";
-            }
+                    .printMessage("Tekan 1 untuk menerima input dari file atau 2 untuk menerima input dari keyboard.");
+            int input = FromKeyboard.readNumber("pilihan anda", 1, 2);
+            System.out.println(input);
+            inputValid = true;
+            willReadFromFile = input == 1;
+
         }
         return willReadFromFile;
     }
@@ -118,14 +117,11 @@ public class IOLib {
         boolean willWriteToFile = false;
         while (!inputValid) {
             ToKeyboard
-                    .printMessage("Tekan f untuk mengeluarkan hasil ke file atau k untuk mengeluarkan hasil ke CLI.");
-            String input = FromKeyboard.readString();
-            inputValid = input == "f" || input == "k";
-            if (!inputValid) {
-                ToKeyboard.printMessage("Bukan input yang valid. Masukkan input yang benar!");
-            } else {
-                willWriteToFile = input == "f";
-            }
+                    .printMessage("Tekan 1 untuk mengeluarkan hasil ke file atau 2 untuk mengeluarkan hasil ke CLI.");
+            int input = FromKeyboard.readNumber("pilihan anda", 1, 2);
+            System.out.println(input);
+            inputValid = true;
+            willWriteToFile = input == 1;
         }
         return willWriteToFile;
     }
@@ -250,7 +246,7 @@ public class IOLib {
                 boolean isParametric = isNthVariableParametric(solution, i);
                 boolean containParametric = isNthVariableContainParametric(solution, i);
                 String valueString = isParametric ? parameter.get(i)
-                        : constant == 0 && containParametric ? "" : numberFormatter.format(constant);
+                        : (constant == 0 && containParametric ? "" : numberFormatter.format(constant));
                 variableValuesString.add(valueString);
             }
 

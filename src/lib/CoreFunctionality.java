@@ -13,8 +13,13 @@ public class CoreFunctionality {
         static public void gauss() {
             Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.SPL()
                     : FromKeyboard.SPL();
-            Matrix solution = matrix.getSolGJ();
-            IOLib.SPLSolution.print(solution);
+            Matrix solution = matrix.getSolG();
+            // ToKeyboard.printMatrix(solution);
+            if (IOLib.chooseToWriteToFile()) {
+                ToFile.SPL(solution);
+            } else {
+                IOLib.SPLSolution.print(solution);
+            }
         }
 
         /**
@@ -24,8 +29,13 @@ public class CoreFunctionality {
         static public void gaussJordan() {
             Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.SPL()
                     : FromKeyboard.SPL();
-            Matrix solution = matrix.getSolG();
-            IOLib.SPLSolution.print(solution);
+            Matrix solution = matrix.getSolGJ();
+            // ToKeyboard.printMatrix(solution);
+            if (IOLib.chooseToWriteToFile()) {
+                ToFile.SPL(solution);
+            } else {
+                IOLib.SPLSolution.print(solution);
+            }
         }
 
         /**
@@ -50,12 +60,21 @@ public class CoreFunctionality {
             try {
                 Matrix solution = matrix.getSolCramer();
                 IOLib.SPLSolution.print(solution);
+                if (IOLib.chooseToWriteToFile()) {
+                    ToFile.SPL(solution);
+                } else {
+                    IOLib.SPLSolution.print(solution);
+                }
             } catch (InvalidMatrixSizeException e) {
             } catch (NoSolutionException e) {
                 ToKeyboard.printMessage(
                         "Solusi SPL tidak unik. Tidak bisa diselesaikan dengan kaidah cramer! Berikut solusinya dengan eliminasi Gauss-Jordan :");
                 Matrix solution = matrix.getSolGJ();
-                IOLib.SPLSolution.print(solution);
+                if (IOLib.chooseToWriteToFile()) {
+                    ToFile.SPL(solution);
+                } else {
+                    IOLib.SPLSolution.print(solution);
+                }
             }
         }
     }
@@ -69,8 +88,12 @@ public class CoreFunctionality {
                 : FromKeyboard.MatrixSquare();
         try {
             double determinant = matrix.getDeterminantCofactor();
-            ToKeyboard.printNumber(determinant, "Determinan matriksnya adalah : ");
-            ToKeyboard.printMessage("\n");
+            if (IOLib.chooseToWriteToFile()) {
+                ToFile.determinant(determinant);
+            } else {
+                ToKeyboard.printNumber(determinant, "Determinan matriksnya adalah : ");
+                ToKeyboard.printMessage("\n");
+            }
 
         } catch (InvalidMatrixSquareException e) {
             throw new RuntimeException();
