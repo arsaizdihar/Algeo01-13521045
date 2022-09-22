@@ -119,6 +119,20 @@ public class IOLib {
         return willWriteToFile;
     }
 
+    /**
+     * Menambah whitespace ke bagian belakang string
+     * 
+     * @param string string yang ingin ditambahi whitespace
+     * @return string yang bagian belakangnya sudah ditambahi space sebanyak amount
+     */
+    static public String addWhiteSpace(String string, int amount) {
+        for (int i = 0; i < amount; i++) {
+            string += " ";
+        }
+
+        return string;
+    }
+
     static public class SPLSolution {
         /**
          * Membentuk variabel yang unik untuk tiap indeksnya dengan penggabungan
@@ -202,7 +216,7 @@ public class IOLib {
          * @return array berisi string solusi untuk tiap variabel dengan
          *         masing-masingnya punya contoh format x1 = -3+6d
          */
-        static private String[] createSolutionTexts(Matrix solution, String variableSymbol, int digitsAfterComma) {
+        static public String[] createSolutionTexts(Matrix solution, String variableSymbol, int digitsAfterComma) {
             NumberFormat numberFormatter = NumberFormat.getInstance();
             numberFormatter.setMaximumFractionDigits(digitsAfterComma);
 
@@ -271,7 +285,7 @@ public class IOLib {
          * @return array berisi string solusi untuk tiap variabel dengan
          *         masing-masingnya punya contoh format x1 = -3+6d
          */
-        static private String[] createSolutionTexts(Matrix solution, String variableSymbol) {
+        static public String[] createSolutionTexts(Matrix solution, String variableSymbol) {
             return createSolutionTexts(solution, variableSymbol, 2);
         }
 

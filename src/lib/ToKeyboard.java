@@ -7,20 +7,6 @@ import java.util.HashMap;
 public class ToKeyboard {
 
     /**
-     * Menambah whitespace ke bagian belakang string
-     * 
-     * @param string string yang ingin ditambahi whitespace
-     * @return string yang bagian belakangnya sudah ditambahi space sebanyak amount
-     */
-    static private String addWhiteSpace(String string, int amount) {
-        for (int i = 0; i < amount; i++) {
-            string += " ";
-        }
-
-        return string;
-    }
-
-    /**
      * Mencetak matriks ke
      * layar
      * <p>
@@ -42,12 +28,12 @@ public class ToKeyboard {
             int j;
             for (j = 0; j < n - 1; j++) {
                 String cell = numberFormatter.format(outputtedMatrix.getElmt(i, j));
-                cell = addWhiteSpace(cell, mostDigit - cell.length());
+                cell = IOLib.addWhiteSpace(cell, mostDigit - cell.length());
 
                 System.out.printf("%s ", cell);
             }
             String cell = numberFormatter.format(outputtedMatrix.getElmt(i, j));
-            cell = addWhiteSpace(cell, mostDigit - cell.length());
+            cell = IOLib.addWhiteSpace(cell, mostDigit - cell.length());
             System.out.printf("%s", cell);
             System.out.printf("%n");
         }
