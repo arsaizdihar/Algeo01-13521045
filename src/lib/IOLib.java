@@ -119,7 +119,6 @@ public class IOLib {
             ToKeyboard
                     .printMessage("Tekan 1 untuk mengeluarkan hasil ke file atau 2 untuk mengeluarkan hasil ke CLI.");
             int input = FromKeyboard.readNumber("pilihan anda", 1, 2);
-            System.out.println(input);
             inputValid = true;
             willWriteToFile = input == 1;
         }

@@ -2,6 +2,7 @@ package lib;
 
 import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
+import lib.Errors.NoInverseException;
 import lib.Errors.NoSolutionException;
 
 public class CoreFunctionality {
@@ -45,7 +46,16 @@ public class CoreFunctionality {
         static public void inverse() {
             Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.SPL()
                     : FromKeyboard.SPL(); // Get solution inverse
-            // Matrix solution = matrix.getSol();
+            try {
+                Matrix inverse = matrix.getInverseMatrix();
+                if (IOLib.chooseToWriteToFile()) {
+                    ToFile.inverse(inverse);
+                } else {
+                    ToKeyboard.printMatrix(inverse);
+                }
+            } catch (NoInverseException e) {
+                ToKeyboard.printMessage("Matriks ini singular. Tidak punya inverse");
+            }
             // IOLib.SPLSolution.print(solution);
 
         }
@@ -114,9 +124,13 @@ public class CoreFunctionality {
 
         try {
             Matrix inverse = matrix.getInverseMatrix();
-            ToKeyboard.printMatrix(inverse);
+            if (IOLib.chooseToWriteToFile()) {
+                ToFile.inverse(inverse);
+            } else {
+                ToKeyboard.printMatrix(inverse);
+            }
 
-        } catch (Exception e) {
+        } catch (NoInverseException e) {
             ToKeyboard.printMessage("Matriks adalah singular. Tidak punya inverse");
         }
 
