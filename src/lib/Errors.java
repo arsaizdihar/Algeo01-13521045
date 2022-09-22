@@ -7,6 +7,12 @@ public class Errors {
     }
   }
 
+  static public class NoInverseException extends Exception {
+    public NoInverseException() {
+      super("Matrix dont have inverse");
+    }
+  }
+
   static public class InvalidMatrixSquareException extends Exception {
     public InvalidMatrixSquareException() {
       super("Matrix is not square");

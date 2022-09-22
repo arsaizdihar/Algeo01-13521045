@@ -1,7 +1,10 @@
 package lib;
 
+import java.util.Arrays;
+
 import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
+import lib.Errors.NoInverseException;
 import lib.Errors.NoSolutionException;
 
 public class Matrix {
@@ -212,6 +215,15 @@ public class Matrix {
         contents = temp;
     }
 
+    public void fillZero() {
+        // TODO make documentation
+        for (int i = 0; i < getNRow(); i++) {
+            for (int j = 0; j < getNCol(); j++) {
+                setElmt(i, j, 0);
+            }
+        }
+    }
+
     /**
      * Mengalikan baris ke-rowIdx dengan skalar
      * <p>
@@ -250,14 +262,14 @@ public class Matrix {
 
     /**
      * 
-     * @param startColIdx
-     * @param endColIdx
-     * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
+     * @param startColIdx indeks kolom awal yang ingin di salin
+     * @param endColIdx   indeks kolom akhir yang ingin di salin
+     * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam
+     *         satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
      */
     public Matrix getCopyMatrixByColumn(int startColIdx, int endColIdx) {
         // KAMUS LOKAL
         Matrix resultMatrix;
-        
 
         // ALGORITMA
         resultMatrix = new Matrix(getNRow(), endColIdx - startColIdx + 1);
@@ -273,15 +285,15 @@ public class Matrix {
     /**
      * 
      * @param startRowIdx index baris awal yang ingin dicari
-     * @param endRowIdx index baris akhir yang ingin dicari
-     * @param colIdx index kolom ingin dicari
-     * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
+     * @param endRowIdx   index baris akhir yang ingin dicari
+     * @param colIdx      index kolom ingin dicari
+     * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam
+     *         satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
      */
     public int getNonZeroRowIdx(int startRowIdx, int endRowIdx, int colIdx) {
         // KAMUS LOKAL
         boolean isFound;
         int foundRowIdx, currRowIdx;
-
 
         // ALGORITMA
         isFound = false;
@@ -298,22 +310,26 @@ public class Matrix {
         }
         return foundRowIdx;
     }
+
     /**
      * I.S. nilai dari matriks pada index startRowIdx dan rowIdx sudah bernilai 1
      * <p>
-     * F.S> satu kolom dari matriks dari startRowIdx hingga endRowIdx memiliki nilai nol 
+     * F.S> satu kolom dari matriks dari startRowIdx hingga endRowIdx memiliki nilai
+     * nol
      * <p>
      * 
      * @param startRowIdx index baris awal yang ingin dibat sebagai leading one
-     * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
+     * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam
+     *         satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
      */
-    public void makeColumnZero (int leadingOneRowIdx, int startRowIdx, int endRowIdx, int mainColIdx) {
+    public void makeColumnZero(int leadingOneRowIdx, int startRowIdx, int endRowIdx, int mainColIdx) {
         // KAMUS LOKAL
-
+        double anchorElmt;
         // ALGORITMA
-        for(int rowIdx = startRowIdx; rowIdx <= endRowIdx; rowIdx++) {
-            for (int colIdx = 0; colIdx <= getNRow() - 1; colIdx++) {
-                setElmt(rowIdx, colIdx, getElmt(rowIdx, colIdx) - getElmt(rowIdx, mainColIdx) * getElmt(leadingOneRowIdx, colIdx));
+        for (int rowIdx = startRowIdx; rowIdx <= endRowIdx; rowIdx++) {
+            anchorElmt = getElmt(rowIdx, mainColIdx);
+            for (int colIdx = 0; colIdx <= getNCol() - 1; colIdx++) {
+                setElmt(rowIdx, colIdx, getElmt(rowIdx, colIdx) - anchorElmt * getElmt(leadingOneRowIdx, colIdx));
             }
         }
     }
@@ -321,9 +337,10 @@ public class Matrix {
     /**
      * 
      * @param startRowIdx index baris awal yang ingin dibat sebagai leading one
-     * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
+     * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam
+     *         satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
      */
-    public Matrix getEchelonForm (int startColIdx, int endColIdx) {
+    public MatrixDoublePair getEchelonForm(int startColIdx, int endColIdx) {
         // KAMUS LOKAL
         Matrix hasil;
         int rowIdx, rowNonZeroIdx;
@@ -334,31 +351,31 @@ public class Matrix {
 
         rowIdx = 0;
         multiplier = 1;
-        for(int colIdx = startColIdx; colIdx <= endColIdx; colIdx++) {
-            rowNonZeroIdx = getNonZeroRowIdx(rowIdx, hasil.getNRow() - 1, colIdx);
+        for (int colIdx = startColIdx; colIdx <= endColIdx; colIdx++) {
+            rowNonZeroIdx = hasil.getNonZeroRowIdx(rowIdx, hasil.getNRow() - 1, colIdx);
             if (rowNonZeroIdx == -1) {
                 continue;
             } else {
                 hasil.swapRow(rowIdx, rowNonZeroIdx);
                 multiplier *= hasil.getElmt(rowIdx, colIdx);
-                hasil.multiplyRowScalar(rowIdx, 1/hasil.getElmt(rowIdx, colIdx));
+                hasil.multiplyRowScalar(rowIdx, 1 / hasil.getElmt(rowIdx, colIdx));
                 hasil.makeColumnZero(rowIdx, rowIdx + 1, hasil.getNRow() - 1, colIdx);
                 rowIdx++;
             }
         }
-        return hasil;
+        return new MatrixDoublePair(hasil, multiplier);
     }
-    public Matrix getReducedForm (int startColIdx, int endColIdx) {
+
+    public Matrix getReducedForm(int startColIdx, int endColIdx) {
         // KAMUS LOKAL
         Matrix hasil;
         int rowIdx, rowNonZeroIdx;
 
         // ALGORITMA
-        hasil = getEchelonForm(startColIdx, endColIdx);
-        
+        hasil = getEchelonForm(startColIdx, endColIdx).first;
         rowIdx = 0;
-        for(int colIdx = startColIdx; colIdx <= endColIdx; colIdx++) {
-            rowNonZeroIdx = getNonZeroRowIdx(rowIdx, hasil.getNRow() - 1, colIdx);
+        for (int colIdx = startColIdx; colIdx <= endColIdx; colIdx++) {
+            rowNonZeroIdx = hasil.getNonZeroRowIdx(rowIdx, hasil.getNRow() - 1, colIdx);
             if (rowNonZeroIdx == -1) {
                 continue;
             } else {
@@ -368,9 +385,147 @@ public class Matrix {
         }
         return hasil;
     }
+
+    /**
+     * 
+     * @return matriks dengan matriks format solusi yang dapat ditampilkan, termasuk
+     *         dengan variabel parametrik
+     */
+    public Matrix getSolG() {
+        Matrix hasil = getEchelonForm(0, getNCol() - 2).first;
+        Matrix solusi = new Matrix(hasil.getNCol() - 1, hasil.getNCol() + 1);
+
+        // isi semua elemen solusi dengan 0
+        solusi.fillZero();
+
+        /*
+         * membuat matriks solusi menjadi bentuk x1 = ax2 + bx3 + ... + C dst.
+         * Misal: hasil matriks eselon:
+         * 1 2 3 1 5
+         * 0 1 4 0 2
+         * 0 0 1 1 0
+         * 0 0 0 0 0
+         * 
+         * Setelah proses loop di bawah: matriks solusi akan menjadi
+         * 0 -2 -3 1 5
+         * 0 0 -4 0 2
+         * 0 0 0 1 0
+         * 0 0 0 0 0
+         * 
+         * yaitu
+         * x1 = -2*x2 - 3*x3 + x4 + 5
+         * x2 = -4*x3 + 2
+         * x3 = 1
+         * x4 = t (parameter)
+         */
+        for (int i = 0; i < hasil.getNRow(); i++) {
+            int leadingOneIdx = -1;
+            for (int j = i; j < hasil.getNCol() - 1; j++) {
+                if (hasil.getElmt(i, j) == 1.0) {
+                    leadingOneIdx = j;
+                }
+            }
+
+            if (leadingOneIdx == -1)
+                break;
+            solusi.setElmt(leadingOneIdx, solusi.getNCol() - 1, 1);
+            // mengisi variable
+            for (int j = leadingOneIdx + 1; j < hasil.getNCol(); j++) {
+                double el = hasil.getElmt(i, j);
+                if (j != hasil.getNCol() - 1)
+                    el *= -1;
+                solusi.setElmt(leadingOneIdx, j, el);
+            }
+        }
+        System.out.println(Arrays.deepToString(solusi.getContents()));
+
+        /*
+         * SUBSTITUSI nilai variable lain (kecuali jika variabel tersebut dijadikan
+         * parameter)
+         * Berdasarkan contoh sebelumnya, hasil solusi akan menjadi
+         * x1 = t + 6
+         * x2 = -2
+         * x3 = 1
+         * x4 = t
+         */
+        for (int i = 0; i < hasil.getNRow() - 1; i++) {
+            for (int j = i + 1; j < hasil.getNCol() - 1; j++) {
+                double variableConstant = solusi.getElmt(i, j);
+
+                // jika nilai variabel -0 atau variabel merupakan variabel parametrik, tidak
+                // perlu melakukan proses
+                if (variableConstant == 0 || solusi.getElmt(j, solusi.getNCol() - 1) == 0)
+                    continue;
+
+                for (int k = j + 1; k < hasil.getNCol(); k++) {
+                    double el = solusi.getElmt(j, k);
+                    solusi.setElmt(i, k, solusi.getElmt(i, k) + variableConstant * el);
+                }
+                solusi.setElmt(i, j, 0);
+            }
+        }
+        return solusi;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public Matrix getSolGJ() {
+        Matrix hasil = getReducedForm(0, getNCol() - 2);
+        Matrix solusi = new Matrix(hasil.getNCol() - 1, hasil.getNCol() + 1);
+
+        // isi semua elemen solusi dengan 0
+        solusi.fillZero();
+
+        /*
+         * membuat matriks solusi menjadi bentuk x1 = ax2 + bx3 + ... + C dst.
+         * Misal: hasil matriks eselon tereduksi:
+         * 1 0 0 1 5
+         * 0 1 0 0 2
+         * 0 0 1 3 1
+         * 0 0 0 0 0
+         * 
+         * Setelah proses loop di bawah: matriks solusi akan menjadi
+         * 0 0 0 -1 5 1
+         * 0 0 0 0 2 1
+         * 0 0 0 -3 1 1
+         * 0 0 0 0 0 0
+         * 
+         * yaitu
+         * x1 = -x4 + 5
+         * x2 = 2
+         * x3 = -3*x4 + 1
+         * x4 = t (parameter)
+         */
+        for (int i = 0; i < hasil.getNRow(); i++) {
+            int leadingOneIdx = -1;
+            for (int j = i; j < hasil.getNCol() - 1; j++) {
+                if (hasil.getElmt(i, j) == 1.0) {
+                    leadingOneIdx = j;
+                }
+            }
+
+            if (leadingOneIdx == -1)
+                break;
+            solusi.setElmt(leadingOneIdx, solusi.getNCol() - 1, 1);
+
+            // mengisi variable
+            for (int j = leadingOneIdx + 1; j < hasil.getNCol(); j++) {
+                double el = hasil.getElmt(i, j);
+                if (j != hasil.getNCol() - 1)
+                    el *= -1;
+                solusi.setElmt(leadingOneIdx, j, el);
+            }
+        }
+        return solusi;
+    }
+
     /**
      * prekondisi: matriks merupakan maktriks square
-     * @return mengembalikan matriks yang telah di augmentasi dengan matriks identitas
+     * 
+     * @return mengembalikan matriks yang telah di augmentasi dengan matriks
+     *         identitas
      * 
      */
     public Matrix getAugmentedMatrixByIdentity() {
@@ -389,24 +544,41 @@ public class Matrix {
                 } else {
                     augmentedMatrix.setElmt(rowIdx, colIdx, 0);
                 }
-                
+
             }
         }
         return augmentedMatrix;
     }
-     /**
+
+    /**
      * 
      * @return mengembalikan inverse matriks
+     * @throws NoInverseException
      */
-    public Matrix getInverseMatrix () {
+    public Matrix getInverseMatrix() throws NoInverseException {
         // KAMUS LOKAL
+        int colIdx, rowIdx;
+        boolean isFoundRowEmpty;
         Matrix reducedMatrix, inversedMatrix, augmentedMatrix;
 
         // ALGORITMA
         augmentedMatrix = getAugmentedMatrixByIdentity();
         reducedMatrix = augmentedMatrix.getReducedForm(0, getNRow() - 1);
         inversedMatrix = reducedMatrix.getCopyMatrixByColumn(getNRow(), 2 * getNRow() - 1);
-        
+
+        rowIdx = 0;
+        isFoundRowEmpty = false;
+        while (!false && (rowIdx <= inversedMatrix.getNRow() - 1)) {
+            if (inversedMatrix.isRowEmpty(rowIdx)) {
+                isFoundRowEmpty = true;
+            } else {
+                rowIdx++;
+            }
+        }
+
+        if (isFoundRowEmpty) {
+            throw new Errors.NoInverseException();
+        }
 
         return inversedMatrix;
     }
@@ -695,5 +867,15 @@ public class Matrix {
             return hasilMatrix;
         }
 
+    }
+}
+
+class MatrixDoublePair {
+    public Matrix first;
+    public double second;
+
+    MatrixDoublePair(Matrix matrix, double num) {
+        this.first = matrix;
+        this.second = num;
     }
 }
