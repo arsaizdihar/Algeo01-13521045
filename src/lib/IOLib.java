@@ -256,7 +256,7 @@ public class IOLib {
                     for (int j = 0; j < solution.getNCol() - 2; j++) {
                         double examinedCoefficient = solution.getElmt(i, j);
                         String addedString = "";
-                        if (examinedCoefficient != 0) {
+                        if (examinedCoefficient != 0 && parameter.get(j) != null) {
                             addedString += String.format("%s%s",
                                     (examinedCoefficient == 1 ? "" : numberFormatter.format(examinedCoefficient)),
                                     parameter.get(j));
