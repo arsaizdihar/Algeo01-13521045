@@ -300,10 +300,10 @@ public class IOLib {
          */
         static public void print(Matrix solution, String variableSymbol) {
             String[] solutionTexts = createSolutionTexts(solution, variableSymbol);
-            printMessage(
+            ToKeyboard.printMessage(
                     "Solusi matriks adalah seperti di bawah ini. Perlu diingat bahwa variabel (contoh) ab bukanlah a * b melainkan variabel unik tersendiri");
             for (int i = 0; i < solutionTexts.length; i++) {
-                printMessage(solutionTexts[i]);
+                ToKeyboard.printMessage(solutionTexts[i]);
             }
         }
 
