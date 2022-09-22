@@ -104,7 +104,6 @@ public class IOLib {
             ToKeyboard
                     .printMessage("Tekan 1 untuk menerima input dari file atau 2 untuk menerima input dari keyboard.");
             int input = FromKeyboard.readNumber("pilihan anda", 1, 2);
-            System.out.println(input);
             inputValid = true;
             willReadFromFile = input == 1;
 
