@@ -1,6 +1,6 @@
 package lib;
 
-import java.text.NumberFormat;
+import java.util.Arrays;
 
 import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
@@ -437,6 +437,7 @@ public class Matrix {
                 solusi.setElmt(leadingOneIdx, j, el);
             }
         }
+        System.out.println(Arrays.deepToString(solusi.getContents()));
 
         /*
          * SUBSTITUSI nilai variable lain (kecuali jika variabel tersebut dijadikan
@@ -460,11 +461,16 @@ public class Matrix {
                     double el = solusi.getElmt(j, k);
                     solusi.setElmt(i, k, solusi.getElmt(i, k) + variableConstant * el);
                 }
+                solusi.setElmt(i, j, 0);
             }
         }
         return solusi;
     }
 
+    /**
+     * 
+     * @return
+     */
     public Matrix getSolGJ() {
         Matrix hasil = getReducedForm(0, getNCol() - 2);
         Matrix solusi = new Matrix(hasil.getNCol() - 1, hasil.getNCol() + 1);
@@ -551,19 +557,20 @@ public class Matrix {
      */
     public Matrix getInverseMatrix() throws NoInverseException {
         // KAMUS LOKAL
-        int colIdx, rowIdx;
+        int rowIdx;
         boolean isFoundRowEmpty;
         Matrix reducedMatrix, inversedMatrix, augmentedMatrix;
 
         // ALGORITMA
+
         augmentedMatrix = getAugmentedMatrixByIdentity();
         reducedMatrix = augmentedMatrix.getReducedForm(0, getNRow() - 1);
         inversedMatrix = reducedMatrix.getCopyMatrixByColumn(getNRow(), 2 * getNRow() - 1);
 
         rowIdx = 0;
         isFoundRowEmpty = false;
-        while (!false && (rowIdx <= inversedMatrix.getNRow() - 1)) {
-            if (inversedMatrix.isRowEmpty(rowIdx)) {
+        while (!isFoundRowEmpty && (rowIdx <= reducedMatrix.getNRow() - 1)) {
+            if (reducedMatrix.isRowEmpty(rowIdx)) {
                 isFoundRowEmpty = true;
             } else {
                 rowIdx++;
@@ -573,6 +580,7 @@ public class Matrix {
         if (isFoundRowEmpty) {
             throw new Errors.NoInverseException();
         }
+        inversedMatrix = reducedMatrix.getCopyMatrixByColumn(getNRow(), 2 * getNRow() - 1);
 
         return inversedMatrix;
     }
