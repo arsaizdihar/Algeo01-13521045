@@ -560,29 +560,29 @@ public class Matrix {
         // KAMUS LOKAL
         int rowIdx;
         boolean isFoundRowEmpty;
-        Matrix reducedMatrix, inversedMatrix, augmentedMatrix;
+        Matrix reducedMatrix, inversedMatrix, augmentedMatrix, testMatrix;
 
         // ALGORITMA
-
+        // Mengaugmentasi matriks dengan identitas dan melakukan OBE hingga ke bentuk reduced echelon
         augmentedMatrix = getAugmentedMatrixByIdentity();
         reducedMatrix = augmentedMatrix.getReducedForm(0, getNRow() - 1);
-        inversedMatrix = reducedMatrix.getCopyMatrixByColumn(getNRow(), 2 * getNRow() - 1);
 
+        // Test apakah matriks memiliki solusi
+        testMatrix = reducedMatrix.getCopyMatrixByColumn(0, getNRow() - 1);
         rowIdx = 0;
         isFoundRowEmpty = false;
-        while (!isFoundRowEmpty && (rowIdx <= reducedMatrix.getNRow() - 1)) {
-            if (reducedMatrix.isRowEmpty(rowIdx)) {
+        while (!isFoundRowEmpty && (rowIdx <= testMatrix.getNRow() - 1)) {
+            if (testMatrix.isRowEmpty(rowIdx)) {
                 isFoundRowEmpty = true;
             } else {
                 rowIdx++;
             }
         }
-
         if (isFoundRowEmpty) {
             throw new Errors.NoInverseException();
         }
-        inversedMatrix = reducedMatrix.getCopyMatrixByColumn(getNRow(), 2 * getNRow() - 1);
 
+        inversedMatrix = reducedMatrix.getCopyMatrixByColumn(getNRow(), 2 * getNRow() - 1);
         return inversedMatrix;
     }
 
