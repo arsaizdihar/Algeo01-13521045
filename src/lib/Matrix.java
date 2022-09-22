@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
+import lib.Errors.NoInverseException;
 import lib.Errors.NoSolutionException;
 
 public class Matrix {
@@ -552,15 +553,32 @@ public class Matrix {
     /**
      * 
      * @return mengembalikan inverse matriks
+     * @throws NoInverseException
      */
-    public Matrix getInverseMatrix() {
+    public Matrix getInverseMatrix() throws NoInverseException {
         // KAMUS LOKAL
+        int colIdx, rowIdx;
+        boolean isFoundRowEmpty;
         Matrix reducedMatrix, inversedMatrix, augmentedMatrix;
 
         // ALGORITMA
         augmentedMatrix = getAugmentedMatrixByIdentity();
         reducedMatrix = augmentedMatrix.getReducedForm(0, getNRow() - 1);
         inversedMatrix = reducedMatrix.getCopyMatrixByColumn(getNRow(), 2 * getNRow() - 1);
+
+        rowIdx = 0;
+        isFoundRowEmpty = false;
+        while (!false && (rowIdx <= inversedMatrix.getNRow() - 1)) {
+            if (inversedMatrix.isRowEmpty(rowIdx)) {
+                isFoundRowEmpty = true;
+            } else {
+                rowIdx++;
+            }
+        }
+
+        if (isFoundRowEmpty) {
+            throw new Errors.NoInverseException();
+        }
 
         return inversedMatrix;
     }
