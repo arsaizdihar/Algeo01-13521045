@@ -1,6 +1,7 @@
 package lib;
 
 import java.util.Arrays;
+import java.text.NumberFormat;
 
 import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
