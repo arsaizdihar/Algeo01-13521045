@@ -1,15 +1,16 @@
 package lib;
 
 import java.util.Arrays;
-import java.util.Scanner; // Import the Scanner class
+// import java.util.Scanner; // Import the Scanner class
 
 import lib.IOLib.RowError;
 
 public class FromKeyboard {
 
+    static ScannerSingleton scanner = ScannerSingleton.getInstance();
+
     static public String readString() {
-        Scanner inputReceiver = new Scanner(System.in);
-        String input = inputReceiver.nextLine();
+        String input = scanner.nextLine();
         return input;
     }
 
@@ -24,18 +25,18 @@ public class FromKeyboard {
      * @return angka masukan pengguna yang sudah sesuai dengan keperluan
      */
     static public int readNumber(String numberName, double lowerBound, double upperBound) {
-        Scanner inputReceiver = new Scanner(System.in);
         int inputtedNumber = 0;
         boolean inputValid = false;
         while (!inputValid) {
             System.out.format("Masukkan %s : ", numberName);
-            inputtedNumber = inputReceiver.nextInt();
+            inputtedNumber = scanner.nextInt();
             inputValid = inputtedNumber >= lowerBound && inputtedNumber <= upperBound;
             if (!inputValid) {
                 System.out.format("Bukan %s yang valid, tolong coba lagi%n", numberName);
             }
-
         }
+
+        scanner.nextLine();
 
         return inputtedNumber;
     }
@@ -78,14 +79,14 @@ public class FromKeyboard {
      *         masukan pengguna
      */
     static private double[] readRow(int nCol) {
-        Scanner inputReceiver = new Scanner(System.in);
+        // Scanner inputReceiver = new Scanner(System.in);
         double[] rowArrayTest = new double[0];
         boolean rowInputValid = false;
         while (!rowInputValid) {
 
             String errorMessage = "";
             System.out.printf("");
-            String rowString = inputReceiver.nextLine();
+            String rowString = scanner.nextLine();
             RowError rowError = IOLib.checkRow(rowString, nCol);
 
             if (rowError.isColumnDiscrepancy()) {
