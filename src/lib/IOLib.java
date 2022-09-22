@@ -300,7 +300,7 @@ public class IOLib {
          * <p>
          * I.S. matriks solusi terdefinisi, variableSymbol sebuah string
          * <p>
-         * F.S. tercetak ke layar matriks solusi yang telah diubah menjadi persamaan
+         * F.S. tercetak ke layar persamaan solusi
          * dengan variableSymbol sebagai variabelnya
          */
         static public void print(Matrix solution, String variableSymbol) {
@@ -318,11 +318,43 @@ public class IOLib {
          * <p>
          * I.S. matriks solusi terdefinisi
          * <p>
-         * F.S. tercetak ke layar matriks solusi yang telah diubah menjadi persamaan
+         * F.S. tercetak ke layar persamaan solusi
          * dengan x sebagai variabelnya
          */
         static public void print(Matrix solution) {
             print(solution, "x");
         }
+
+        /**
+         * Mencetak matriks solusi unik menjadi persamaan dan variabel ke
+         * layar
+         * <p>
+         * I.S. matriks solusi memiliki 1 kolom saja berisi nilai variabel ke-i,
+         * variableSymbol string terdefinisi
+         * <p>
+         * F.S. tercetak ke layar persamaan solusi
+         * dengan variableSymbol sebagai variabelnya
+         */
+        static public void printUnique(Matrix solution, String variableSymbol) {
+            for (int i = 0; i < solution.getNRow(); i++) {
+                String message = String.format("%s%d = %f", variableSymbol, i + 1, solution.getElmt(i, 0));
+                ToKeyboard.printMessage(message);
+            }
+        }
+
+        /**
+         * Mencetak matriks solusi unik menjadi persamaan dan variabel ke
+         * layar
+         * <p>
+         * I.S. matriks solusi memiliki 1 kolom saja berisi nilai variabel ke-i,
+         * variableSymbol
+         * <p>
+         * F.S. tercetak ke layar persamaan solusi
+         * dengan x sebagai variabelnya
+         */
+        static public void printUnique(Matrix solution) {
+            printUnique(solution, "x");
+        }
+
     }
 }

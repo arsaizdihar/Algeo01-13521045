@@ -53,7 +53,7 @@ public class Interface {
                 // Solve with inverted matrix and display the result
                 break;
             case 4:
-                // Solve with Cramer and display the result
+                CoreFunctionality.solveSPL.cramer();
                 break;
             case 5:
                 break;
