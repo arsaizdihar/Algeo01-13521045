@@ -73,6 +73,7 @@ public class Interface {
         while (programState != "exited") {
             switch (programState) {
                 case "main":
+                    ToKeyboard.clearConsole();
                     printMenu(mainMenuText);
                     programState = "mainEntering";
                     break;
