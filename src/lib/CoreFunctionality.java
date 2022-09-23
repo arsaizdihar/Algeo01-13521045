@@ -69,11 +69,10 @@ public class CoreFunctionality {
                     : FromKeyboard.SPL();
             try {
                 Matrix solution = matrix.getSolCramer();
-                IOLib.SPLSolution.print(solution);
                 if (IOLib.chooseToWriteToFile()) {
                     ToFile.SPL(solution);
                 } else {
-                    IOLib.SPLSolution.print(solution);
+                    IOLib.SPLSolution.printUnique(solution);
                 }
             } catch (InvalidMatrixSizeException e) {
             } catch (NoSolutionException e) {

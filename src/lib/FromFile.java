@@ -18,6 +18,7 @@ public class FromFile {
                 retrievedFile = new File(filename);
                 Scanner fileReader = new Scanner(retrievedFile);
                 fileFound = true;
+                fileReader.close();
             } catch (FileNotFoundException e) {
                 ToKeyboard.printMessage("File tidak ditemukan. Tolong coba lagi.");
             }
@@ -35,6 +36,7 @@ public class FromFile {
                 String lineInFile = fileReader.nextLine();
                 linesInFile.add(lineInFile);
             }
+            fileReader.close();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

@@ -45,17 +45,15 @@ public class Interface {
         switch (userChoiceSubMenu) {
             case 1:
                 CoreFunctionality.solveSPL.gauss();
-                // Solve with Gauss and display the result
                 break;
             case 2:
                 CoreFunctionality.solveSPL.gaussJordan();
-                // Solve with Gauss Jordan and display the result
                 break;
             case 3:
                 // Solve with inverted matrix and display the result
                 break;
             case 4:
-                // Solve with Cramer and display the result
+                CoreFunctionality.solveSPL.cramer();
                 break;
             case 5:
                 break;
@@ -75,6 +73,7 @@ public class Interface {
         while (programState != "exited") {
             switch (programState) {
                 case "main":
+                    ToKeyboard.clearConsole();
                     printMenu(mainMenuText);
                     programState = "mainEntering";
                     break;
@@ -87,14 +86,17 @@ public class Interface {
                     switch (userChoice) {
                         case 1:
                             menuSPL();
+                            FromKeyboard.EnterToContinue();
                             programState = "main";
                             break;
                         case 2:
                             CoreFunctionality.computeDeterminant();
+                            FromKeyboard.EnterToContinue();
                             programState = "main";
                             break;
                         case 3:
                             CoreFunctionality.computeInverse();
+                            FromKeyboard.EnterToContinue();
                             programState = "main";
                             break;
                         case 4:
