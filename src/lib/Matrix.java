@@ -1,6 +1,5 @@
 package lib;
 
-import java.util.Arrays;
 import java.text.NumberFormat;
 
 import lib.Errors.InvalidMatrixSizeException;
@@ -438,7 +437,6 @@ public class Matrix {
                 solusi.setElmt(leadingOneIdx, j, el);
             }
         }
-        System.out.println(Arrays.deepToString(solusi.getContents()));
 
         /*
          * SUBSTITUSI nilai variable lain (kecuali jika variabel tersebut dijadikan
@@ -455,7 +453,7 @@ public class Matrix {
 
                 // jika nilai variabel -0 atau variabel merupakan variabel parametrik, tidak
                 // perlu melakukan proses
-                if (variableConstant == 0 || solusi.getElmt(i, solusi.getNCol() - 1) == 0)
+                if (variableConstant == 0 || solusi.getElmt(j, solusi.getNCol() - 1) == 0)
                     continue;
 
                 for (int k = j + 1; k < hasil.getNCol(); k++) {
