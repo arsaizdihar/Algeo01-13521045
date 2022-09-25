@@ -14,12 +14,15 @@ public class CoreFunctionality {
         static public void gauss() {
             Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.SPL()
                     : FromKeyboard.SPL();
-            Matrix solution = matrix.getSolG();
-            // ToKeyboard.printMatrix(solution);
-            if (IOLib.chooseToWriteToFile()) {
-                ToFile.SPL(solution);
-            } else {
-                IOLib.SPLSolution.print(solution);
+            try {
+                Matrix solution = matrix.getSolG();
+                if (IOLib.chooseToWriteToFile()) {
+                    ToFile.SPL(solution);
+                } else {
+                    IOLib.SPLSolution.print(solution);
+                }
+            } catch (NoSolutionException e) {
+                ToKeyboard.printMessage("SPL tidak punya solusi");
             }
         }
 
@@ -30,12 +33,16 @@ public class CoreFunctionality {
         static public void gaussJordan() {
             Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.SPL()
                     : FromKeyboard.SPL();
-            Matrix solution = matrix.getSolGJ();
-            // ToKeyboard.printMatrix(solution);
-            if (IOLib.chooseToWriteToFile()) {
-                ToFile.SPL(solution);
-            } else {
-                IOLib.SPLSolution.print(solution);
+            try {
+                Matrix solution = matrix.getSolGJ();
+                // ToKeyboard.printMatrix(solution);
+                if (IOLib.chooseToWriteToFile()) {
+                    ToFile.SPL(solution);
+                } else {
+                    IOLib.SPLSolution.print(solution);
+                }
+            } catch (NoSolutionException e) {
+                ToKeyboard.printMessage("SPL tidak punya solusi!");
             }
         }
 
@@ -47,11 +54,11 @@ public class CoreFunctionality {
             Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.SPL()
                     : FromKeyboard.SPL(); // Get solution inverse
             try {
-                Matrix inverse = matrix.getInverseAdjoin();
+                Matrix solution = matrix.getSolInverse();
                 if (IOLib.chooseToWriteToFile()) {
-                    ToFile.inverse(inverse);
+                    ToFile.SPL(solution);
                 } else {
-                    ToKeyboard.printMatrix(inverse);
+                    IOLib.SPLSolution.print(solution);
                 }
             } catch (NoInverseException e) {
                 ToKeyboard.printMessage("Matriks ini singular. Tidak punya inverse");
@@ -75,14 +82,19 @@ public class CoreFunctionality {
                     IOLib.SPLSolution.printUnique(solution);
                 }
             } catch (InvalidMatrixSizeException e) {
+                throw new RuntimeException(e);
             } catch (NoSolutionException e) {
                 ToKeyboard.printMessage(
                         "Solusi SPL tidak unik. Tidak bisa diselesaikan dengan kaidah cramer! Berikut solusinya dengan eliminasi Gauss-Jordan :");
-                Matrix solution = matrix.getSolGJ();
-                if (IOLib.chooseToWriteToFile()) {
-                    ToFile.SPL(solution);
-                } else {
-                    IOLib.SPLSolution.print(solution);
+                try {
+                    Matrix solution = matrix.getSolGJ();
+                    if (IOLib.chooseToWriteToFile()) {
+                        ToFile.SPL(solution);
+                    } else {
+                        IOLib.SPLSolution.print(solution);
+                    }
+                } catch (NoSolutionException e2) {
+                    ToKeyboard.printMessage("Matriks tidak punya solusi.");
                 }
             }
         }
@@ -111,28 +123,57 @@ public class CoreFunctionality {
         // Take input of matrice and do stuff with it accordingly
     }
 
-    // This is not functional yet because the determinantFinder doesn't throw an
-    // error yet.
-    /**
-     * Prosedur yang menerima masukan matriks dari pengguna lalu mencetak
-     * inverse-nya. Jika matriks singular maka error ditangkap dan dikeluarkan ke
-     * layar bahwa matriks singular.
-     */
-    static public void computeInverse() {
-        Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.matrixToInvert() : FromKeyboard.MatrixSquare();
+    static public class Inverse {
+        // This is not functional yet because the determinantFinder doesn't throw an
+        // error yet.
+        /**
+         * Prosedur yang menerima masukan matriks dari pengguna lalu mencetak
+         * inverse-nya. Jika matriks singular maka error ditangkap dan dikeluarkan ke
+         * layar bahwa matriks singular.
+         */
+        static public void adjoin() {
+            Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.matrixToInvert() : FromKeyboard.MatrixSquare();
 
-        try {
-            Matrix inverse = matrix.getInverseAdjoin();
-            if (IOLib.chooseToWriteToFile()) {
-                ToFile.inverse(inverse);
-            } else {
-                ToKeyboard.printMatrix(inverse);
+            try {
+                Matrix inverse = matrix.getInverseAdjoin();
+                if (IOLib.chooseToWriteToFile()) {
+                    ToFile.inverse(inverse);
+                } else {
+                    ToKeyboard.printMatrix(inverse);
+                }
+
+            } catch (NoInverseException e) {
+                ToKeyboard.printMessage("Matriks adalah singular. Tidak punya inverse");
             }
 
-        } catch (NoInverseException e) {
-            ToKeyboard.printMessage("Matriks adalah singular. Tidak punya inverse");
+            // Take input of matrice and do stuff with it accordingly
         }
 
-        // Take input of matrice and do stuff with it accordingly
+        // This is not functional yet because the determinantFinder doesn't throw an
+        // error yet.
+        /**
+         * Prosedur yang menerima masukan matriks dari pengguna lalu mencetak
+         * inverse-nya. Jika matriks singular maka error ditangkap dan dikeluarkan ke
+         * layar bahwa matriks singular.
+         */
+        static public void obe() {
+            Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.matrixToInvert() : FromKeyboard.MatrixSquare();
+
+            try {
+                Matrix inverse = matrix.getInverseOBE();
+                if (IOLib.chooseToWriteToFile()) {
+                    ToFile.inverse(inverse);
+                } else {
+                    ToKeyboard.printMatrix(inverse);
+                }
+
+            } catch (NoInverseException e) {
+                ToKeyboard.printMessage("Matriks adalah singular. Tidak punya inverse");
+            }
+
+            // Take input of matrice and do stuff with it accordingly
+        }
+
     }
+
 }

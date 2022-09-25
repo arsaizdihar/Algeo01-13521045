@@ -130,7 +130,7 @@ public class IOLib {
      */
     static public String addWhiteSpace(String string, int amount) {
         for (int i = 0; i < amount; i++) {
-            string += " ";
+            string = " " + string;
         }
 
         return string;
