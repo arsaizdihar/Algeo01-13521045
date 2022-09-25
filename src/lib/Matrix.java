@@ -397,8 +397,26 @@ public class Matrix {
      * @return matriks dengan matriks format solusi yang dapat ditampilkan, termasuk
      *         dengan variabel parametrik
      */
-    public Matrix getSolG() {
+    public Matrix getSolG() throws NoSolutionException {
         Matrix hasil = getEchelonForm(0, getNCol() - 2).first;
+
+        int rowIdx;
+        boolean isFoundRowNoSolution;
+        Matrix testMatrix = getCopyMatrixByColumn(0, getNCol() - 2);
+        rowIdx = 0;
+        isFoundRowNoSolution = false;
+        while (!isFoundRowNoSolution && (rowIdx <= testMatrix.getNRow() - 1)) {
+            if (testMatrix.isRowEmpty(rowIdx) && (hasil.getElmt(rowIdx, getNCol() - 1) != 0)) {
+                isFoundRowNoSolution = true;
+            } else {
+                rowIdx++;
+            }
+        }
+
+        if (isFoundRowNoSolution) {
+            throw new Errors.NoSolutionException();
+        }
+
         Matrix solusi = new Matrix(hasil.getNCol() - 1, hasil.getNCol() + 1);
 
         // isi semua elemen solusi dengan 0
@@ -476,8 +494,27 @@ public class Matrix {
      * 
      * @return
      */
-    public Matrix getSolGJ() {
+    public Matrix getSolGJ() throws NoSolutionException {
         Matrix hasil = getReducedForm(0, getNCol() - 2);
+        
+        int rowIdx;
+        boolean isFoundRowNoSolution;
+        Matrix testMatrix = getCopyMatrixByColumn(0, getNCol() - 2);
+        rowIdx = 0;
+        isFoundRowNoSolution = false;
+        while (!isFoundRowNoSolution && (rowIdx <= testMatrix.getNRow() - 1)) {
+            if (testMatrix.isRowEmpty(rowIdx) && (hasil.getElmt(rowIdx, getNCol() - 1) != 0)) {
+                isFoundRowNoSolution = true;
+            } else {
+                rowIdx++;
+            }
+        }
+
+        if (isFoundRowNoSolution) {
+            throw new Errors.NoSolutionException();
+        }
+
+
         Matrix solusi = new Matrix(hasil.getNCol() - 1, hasil.getNCol() + 1);
 
         // isi semua elemen solusi dengan 0
@@ -802,6 +839,16 @@ public class Matrix {
 
         return res;
     }
+    // TODO inget lanjutin ini
+    // double getValueBicubic (double a, double b) {
+    //     Matrix coefficientMatrix;
+    //     int i, j;
+    //     double[][] coefficient;
+
+    //     coefficient = [[]];
+    //     coefficientMatrix = new Matrix(16, 16);
+    //     for (i <= )
+    // }
 
     /**
      * Menghasilkan panjang dari angka paling panjang dalam matriks stelah diformat
