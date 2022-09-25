@@ -839,10 +839,16 @@ public class Matrix {
 
         return res;
     }
-    // TODO inget lanjutin ini
-    public Matrix getValueBicubic (double a, double b) {
+    /**
+     * 
+     * @param a parameter a dari nilai f(a,b) yang ingin dicari interpolasinya di titik tersebut
+     * @param b parameter b dari nilai f(a,b) yang ingin dicari interpolasinya di titik tersebut
+     * @return nilai f(a,b) yang telah di interpolasi
+     */
+    public double getValueBicubic (double a, double b) {
         Matrix coefficientMatrix, pointValueMatrix, functionCoefficientMatrix;
         int i, j, x, y, rowIdx, colIdx;
+        double result;
 
         rowIdx = 0;
     
@@ -870,15 +876,22 @@ public class Matrix {
 
         functionCoefficientMatrix = new Matrix(16, 1);
         try {
-            functionCoefficientMatrix = multiply(coefficientMatrix.getInverseAdjoin(), pointValueMatrix);
+            functionCoefficientMatrix = multiply(coefficientMatrix.getInverseOBE(), pointValueMatrix);
         } catch (NoInverseException e) {
             throw new RuntimeException(e);
         } catch (InvalidMatrixSizeException e) {
             throw new RuntimeException(e);
         }
         
-
-
+        rowIdx = 0;
+        result = 0;
+        for (i = 0; i <= 3; i++) {
+            for (j = 0; j <= 3; j++) {
+                result += functionCoefficientMatrix.getElmt(rowIdx, 0) *  Math.pow(a, i) * Math.pow(b, j);
+                rowIdx++;
+            }
+        }
+        return result;
     }
 
     /**
