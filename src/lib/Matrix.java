@@ -585,6 +585,43 @@ public class Matrix {
 
     /**
      * 
+     * @return Inverse matrix menggunakan metode Adjoin
+     */
+    public Matrix getInverseAdjoin() throws NoInverseException {
+        Matrix cofactorMatrix;
+        int i, j;
+        double determinant;
+        
+        try {
+            determinant = getDeterminantCofactor();
+        } catch (InvalidMatrixSquareException e) {
+            throw new RuntimeException(e);
+        }
+
+        if (determinant == 0) {
+            throw new Errors.NoInverseException();
+        }
+            
+        cofactorMatrix = new Matrix(getNRow(), getNCol());
+
+        try {
+            for (i = 0; i <= getNRow() - 1; i++) {
+                for (j = 0; i <= getNCol() - 1; j++) {
+                    cofactorMatrix.setElmt(i, j, getMinor(i, j).getDeterminantCofactor() * (-2 * ((i+j) % 2) - 1));
+                }
+            }
+        } catch (InvalidMatrixSquareException e) {
+            throw new RuntimeException(e);
+        }
+
+        cofactorMatrix.transpose();
+        cofactorMatrix.multiplyScalar(determinant);
+
+        return cofactorMatrix;
+    }
+
+    /**
+     * 
      * @param rowIdx
      * @param colIdx
      * @return matriks dengan baris ke rowIdx dan kolom ke colIdx dihilangkan
@@ -901,7 +938,10 @@ public class Matrix {
         }
 
     }
+    
 }
+
+
 
 class MatrixDoublePair {
     public Matrix first;
