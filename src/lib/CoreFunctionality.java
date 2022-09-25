@@ -1,7 +1,5 @@
 package lib;
 
-import javax.management.RuntimeErrorException;
-
 import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
 import lib.Errors.NoInverseException;
@@ -125,28 +123,57 @@ public class CoreFunctionality {
         // Take input of matrice and do stuff with it accordingly
     }
 
-    // This is not functional yet because the determinantFinder doesn't throw an
-    // error yet.
-    /**
-     * Prosedur yang menerima masukan matriks dari pengguna lalu mencetak
-     * inverse-nya. Jika matriks singular maka error ditangkap dan dikeluarkan ke
-     * layar bahwa matriks singular.
-     */
-    static public void computeInverse() {
-        Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.matrixToInvert() : FromKeyboard.MatrixSquare();
+    static public class Inverse {
+        // This is not functional yet because the determinantFinder doesn't throw an
+        // error yet.
+        /**
+         * Prosedur yang menerima masukan matriks dari pengguna lalu mencetak
+         * inverse-nya. Jika matriks singular maka error ditangkap dan dikeluarkan ke
+         * layar bahwa matriks singular.
+         */
+        static public void adjoin() {
+            Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.matrixToInvert() : FromKeyboard.MatrixSquare();
 
-        try {
-            Matrix inverse = matrix.getInverseAdjoin();
-            if (IOLib.chooseToWriteToFile()) {
-                ToFile.inverse(inverse);
-            } else {
-                ToKeyboard.printMatrix(inverse);
+            try {
+                Matrix inverse = matrix.getInverseAdjoin();
+                if (IOLib.chooseToWriteToFile()) {
+                    ToFile.inverse(inverse);
+                } else {
+                    ToKeyboard.printMatrix(inverse);
+                }
+
+            } catch (NoInverseException e) {
+                ToKeyboard.printMessage("Matriks adalah singular. Tidak punya inverse");
             }
 
-        } catch (NoInverseException e) {
-            ToKeyboard.printMessage("Matriks adalah singular. Tidak punya inverse");
+            // Take input of matrice and do stuff with it accordingly
         }
 
-        // Take input of matrice and do stuff with it accordingly
+        // This is not functional yet because the determinantFinder doesn't throw an
+        // error yet.
+        /**
+         * Prosedur yang menerima masukan matriks dari pengguna lalu mencetak
+         * inverse-nya. Jika matriks singular maka error ditangkap dan dikeluarkan ke
+         * layar bahwa matriks singular.
+         */
+        static public void obe() {
+            Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.matrixToInvert() : FromKeyboard.MatrixSquare();
+
+            try {
+                Matrix inverse = matrix.getInverseOBE();
+                if (IOLib.chooseToWriteToFile()) {
+                    ToFile.inverse(inverse);
+                } else {
+                    ToKeyboard.printMatrix(inverse);
+                }
+
+            } catch (NoInverseException e) {
+                ToKeyboard.printMessage("Matriks adalah singular. Tidak punya inverse");
+            }
+
+            // Take input of matrice and do stuff with it accordingly
+        }
+
     }
+
 }

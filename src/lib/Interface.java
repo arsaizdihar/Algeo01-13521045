@@ -2,24 +2,34 @@ package lib;
 
 public class Interface {
 
-    private static final String[] mainMenuText = new String[] {
-            "Sistem Persamaaan Linier",
-            "Determinan",
-            "Matriks balikan",
-            "Interpolasi Polinom",
-            "Interpolasi Bicubic",
-            "Regresi linier berganda",
-            "Keluar"
-    };
+    private static class MenuText {
+        private static final String[] main = new String[] {
+                "Sistem Persamaaan Linier",
+                "Determinan",
+                "Matriks balikan",
+                "Interpolasi Polinom",
+                "Interpolasi Bicubic",
+                "Regresi linier berganda",
+                "Keluar"
+        };
 
-    // Kemungkinan besar ini bakal ditaruh di dalam fungsi untuk SPL
-    private static final String[] subMenuText = new String[] {
-            "Metode eliminasi Gauss",
-            "Metode eliminasi Gauss-Jordan",
-            "Metode matriks balikan",
-            "Kaidah Cramer",
-            "Kembali ke main menu",
-    };
+        // Kemungkinan besar ini bakal ditaruh di dalam fungsi untuk SPL
+        private static final String[] SPL = new String[] {
+                "Metode eliminasi Gauss",
+                "Metode eliminasi Gauss-Jordan",
+                "Metode matriks balikan",
+                "Kaidah Cramer",
+                "Kembali ke main menu",
+        };
+
+        // Kemungkinan besar ini bakal ditaruh di dalam fungsi untuk SPL
+        private static final String[] inverse = new String[] {
+                "Operasi Baris Elementer",
+                "Matrix adjoin",
+                "Kembali ke main menu",
+        };
+
+    }
 
     /**
      * Mencetak menu yang diberikan beserta nomornya.
@@ -40,7 +50,7 @@ public class Interface {
      * 
      */
     static public void menuSPL() {
-        printMenu(subMenuText);
+        printMenu(MenuText.SPL);
         int userChoiceSubMenu = FromKeyboard.readNumber("pilihan sub menu", 1, 5);
         switch (userChoiceSubMenu) {
             case 1:
@@ -62,6 +72,27 @@ public class Interface {
     }
 
     /**
+     * Fungsi yang mewakili subprogram sub menu pemecahan SPL. Menerima input
+     * pilihan submenu pengguna dan menjalankan subprogram yang bersesuaian
+     * 
+     */
+    static public void menuInverse() {
+        printMenu(MenuText.inverse);
+        int userChoiceSubMenu = FromKeyboard.readNumber("pilihan sub menu", 1, 5);
+        switch (userChoiceSubMenu) {
+            case 1:
+                CoreFunctionality.Inverse.obe();
+                break;
+            case 2:
+                CoreFunctionality.Inverse.adjoin();
+                break;
+            case 3:
+                break;
+
+        }
+    }
+
+    /**
      * Fungsi yang mewakili main event loop program. Menampilkan menu,
      * menerima input pilihan menu user,
      * menjalankan fungsi yang berupa subprogram
@@ -74,7 +105,7 @@ public class Interface {
             switch (programState) {
                 case "main":
                     ToKeyboard.clearConsole();
-                    printMenu(mainMenuText);
+                    printMenu(MenuText.main);
                     programState = "mainEntering";
                     break;
                 case "mainEntering":
@@ -95,7 +126,7 @@ public class Interface {
                             programState = "main";
                             break;
                         case 3:
-                            CoreFunctionality.computeInverse();
+                            menuInverse();
                             FromKeyboard.EnterToContinue();
                             programState = "main";
                             break;
