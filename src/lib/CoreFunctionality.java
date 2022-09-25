@@ -122,7 +122,7 @@ public class CoreFunctionality {
         Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.matrixToInvert() : FromKeyboard.MatrixSquare();
 
         try {
-            Matrix inverse = matrix.getInverseMatrix();
+            Matrix inverse = matrix.getInverseAdjoin();
             if (IOLib.chooseToWriteToFile()) {
                 ToFile.inverse(inverse);
             } else {

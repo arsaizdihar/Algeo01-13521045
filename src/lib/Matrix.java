@@ -588,10 +588,12 @@ public class Matrix {
      * @return Inverse matrix menggunakan metode Adjoin
      */
     public Matrix getInverseAdjoin() throws NoInverseException {
+        // KAMUS
         Matrix cofactorMatrix;
-        int i, j;
+        int i, j, sign;
         double determinant;
-        
+
+        // ALGORITMA
         try {
             determinant = getDeterminantCofactor();
         } catch (InvalidMatrixSquareException e) {
@@ -606,8 +608,9 @@ public class Matrix {
 
         try {
             for (i = 0; i <= getNRow() - 1; i++) {
-                for (j = 0; i <= getNCol() - 1; j++) {
-                    cofactorMatrix.setElmt(i, j, getMinor(i, j).getDeterminantCofactor() * (-2 * ((i+j) % 2) - 1));
+                for (j = 0; j <= getNCol() - 1; j++) {
+                    sign = (-2 * ((i+j) % 2) + 1);
+                    cofactorMatrix.setElmt(i, j, getMinor(i, j).getDeterminantCofactor() * sign);
                 }
             }
         } catch (InvalidMatrixSquareException e) {
@@ -615,7 +618,7 @@ public class Matrix {
         }
 
         cofactorMatrix.transpose();
-        cofactorMatrix.multiplyScalar(determinant);
+        cofactorMatrix.multiplyScalar(1/determinant);
 
         return cofactorMatrix;
     }
