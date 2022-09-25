@@ -551,10 +551,10 @@ public class Matrix {
 
     /**
      * 
-     * @return mengembalikan inverse matriks
+     * @return mengembalikan invers matriks dengan metode OBE
      * @throws NoInverseException
      */
-    public Matrix getInverseMatrix() throws NoInverseException {
+    public Matrix getInverseOBE() throws NoInverseException {
         // KAMUS LOKAL
         int rowIdx;
         boolean isFoundRowEmpty;
@@ -585,7 +585,7 @@ public class Matrix {
 
     /**
      * 
-     * @return Inverse matrix menggunakan metode Adjoin
+     * @return mengembalikan invers matriks dengan metode adjoin
      */
     public Matrix getInverseAdjoin() throws NoInverseException {
         // KAMUS
