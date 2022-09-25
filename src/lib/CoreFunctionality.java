@@ -1,5 +1,7 @@
 package lib;
 
+import javax.management.RuntimeErrorException;
+
 import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
 import lib.Errors.NoInverseException;
@@ -14,12 +16,15 @@ public class CoreFunctionality {
         static public void gauss() {
             Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.SPL()
                     : FromKeyboard.SPL();
-            Matrix solution = matrix.getSolG();
-            // ToKeyboard.printMatrix(solution);
-            if (IOLib.chooseToWriteToFile()) {
-                ToFile.SPL(solution);
-            } else {
-                IOLib.SPLSolution.print(solution);
+            try {
+                Matrix solution = matrix.getSolG();
+                if (IOLib.chooseToWriteToFile()) {
+                    ToFile.SPL(solution);
+                } else {
+                    IOLib.SPLSolution.print(solution);
+                }
+            } catch (NoSolutionException e) {
+                ToKeyboard.printMessage("SPL tidak punya solusi");
             }
         }
 
@@ -30,12 +35,16 @@ public class CoreFunctionality {
         static public void gaussJordan() {
             Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.SPL()
                     : FromKeyboard.SPL();
-            Matrix solution = matrix.getSolGJ();
-            // ToKeyboard.printMatrix(solution);
-            if (IOLib.chooseToWriteToFile()) {
-                ToFile.SPL(solution);
-            } else {
-                IOLib.SPLSolution.print(solution);
+            try {
+                Matrix solution = matrix.getSolGJ();
+                // ToKeyboard.printMatrix(solution);
+                if (IOLib.chooseToWriteToFile()) {
+                    ToFile.SPL(solution);
+                } else {
+                    IOLib.SPLSolution.print(solution);
+                }
+            } catch (NoSolutionException e) {
+                ToKeyboard.printMessage("SPL tidak punya solusi!");
             }
         }
 
@@ -47,11 +56,11 @@ public class CoreFunctionality {
             Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.SPL()
                     : FromKeyboard.SPL(); // Get solution inverse
             try {
-                Matrix inverse = matrix.getInverseAdjoin();
+                Matrix solution = matrix.getSolInverse();
                 if (IOLib.chooseToWriteToFile()) {
-                    ToFile.inverse(inverse);
+                    ToFile.SPL(solution);
                 } else {
-                    ToKeyboard.printMatrix(inverse);
+                    IOLib.SPLSolution.print(solution);
                 }
             } catch (NoInverseException e) {
                 ToKeyboard.printMessage("Matriks ini singular. Tidak punya inverse");
@@ -75,14 +84,19 @@ public class CoreFunctionality {
                     IOLib.SPLSolution.printUnique(solution);
                 }
             } catch (InvalidMatrixSizeException e) {
+                throw new RuntimeException(e);
             } catch (NoSolutionException e) {
                 ToKeyboard.printMessage(
                         "Solusi SPL tidak unik. Tidak bisa diselesaikan dengan kaidah cramer! Berikut solusinya dengan eliminasi Gauss-Jordan :");
-                Matrix solution = matrix.getSolGJ();
-                if (IOLib.chooseToWriteToFile()) {
-                    ToFile.SPL(solution);
-                } else {
-                    IOLib.SPLSolution.print(solution);
+                try {
+                    Matrix solution = matrix.getSolGJ();
+                    if (IOLib.chooseToWriteToFile()) {
+                        ToFile.SPL(solution);
+                    } else {
+                        IOLib.SPLSolution.print(solution);
+                    }
+                } catch (NoSolutionException e2) {
+                    ToKeyboard.printMessage("Matriks tidak punya solusi.");
                 }
             }
         }
