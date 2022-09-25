@@ -334,9 +334,15 @@ public class Matrix {
         }
     }
 
+    // TODO HAPUS DIBAWAH INI
+    public Matrix ambilEchelon(int startColIdx, int endColIdx) {
+        return getEchelonForm(startColIdx, endColIdx).first;
+    }
+
     /**
      * 
-     * @param startRowIdx index baris awal yang ingin dibat sebagai leading one
+     * @param startColIdx index baris awal yang ingin dibuat sebagai leading one
+     * @param endColIdx index baris terakhir yang ingin diubah menjadi bentuk echelon
      * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam
      *         satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
      */
@@ -519,6 +525,30 @@ public class Matrix {
         }
         return solusi;
     }
+    /**
+     * 
+     * @return Matriks solusi SPL dengan metode pengalian dengan inverse (kolom 1)
+     * 
+     */
+    public Matrix getSolInverse() throws NoInverseException {
+        Matrix inversedMatrix, rightMostColumnMatrix, solutionMatrix;
+
+        try {
+            inversedMatrix = getCopyMatrixByColumn(0, getNCol() - 2).getInverseAdjoin();
+        } catch (NoInverseException e) {
+            throw new NoInverseException();
+        }
+        rightMostColumnMatrix = getCopyMatrixByColumn(getNCol() - 1, getNCol() - 1);
+        
+        try {
+            solutionMatrix = multiply(inversedMatrix, rightMostColumnMatrix);
+        } catch (InvalidMatrixSizeException e) {
+            throw new RuntimeException(e);
+        }
+
+        return solutionMatrix;
+    }
+       
 
     /**
      * prekondisi: matriks merupakan maktriks square

@@ -47,7 +47,7 @@ public class CoreFunctionality {
             Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.SPL()
                     : FromKeyboard.SPL(); // Get solution inverse
             try {
-                Matrix inverse = matrix.getInverseOBE();
+                Matrix inverse = matrix.getInverseAdjoin();
                 if (IOLib.chooseToWriteToFile()) {
                     ToFile.inverse(inverse);
                 } else {
