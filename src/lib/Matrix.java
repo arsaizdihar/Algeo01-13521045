@@ -402,7 +402,7 @@ public class Matrix {
 
         int rowIdx;
         boolean isFoundRowNoSolution;
-        Matrix testMatrix = getCopyMatrixByColumn(0, getNCol() - 2);
+        Matrix testMatrix = hasil.getCopyMatrixByColumn(0, getNCol() - 2);
         rowIdx = 0;
         isFoundRowNoSolution = false;
         while (!isFoundRowNoSolution && (rowIdx <= testMatrix.getNRow() - 1)) {
@@ -499,7 +499,7 @@ public class Matrix {
         
         int rowIdx;
         boolean isFoundRowNoSolution;
-        Matrix testMatrix = getCopyMatrixByColumn(0, getNCol() - 2);
+        Matrix testMatrix = hasil.getCopyMatrixByColumn(0, getNCol() - 2);
         rowIdx = 0;
         isFoundRowNoSolution = false;
         while (!isFoundRowNoSolution && (rowIdx <= testMatrix.getNRow() - 1)) {
@@ -840,15 +840,46 @@ public class Matrix {
         return res;
     }
     // TODO inget lanjutin ini
-    // double getValueBicubic (double a, double b) {
-    //     Matrix coefficientMatrix;
-    //     int i, j;
-    //     double[][] coefficient;
+    public Matrix getValueBicubic (double a, double b) {
+        Matrix coefficientMatrix, pointValueMatrix, functionCoefficientMatrix;
+        int i, j, x, y, rowIdx, colIdx;
 
-    //     coefficient = [[]];
-    //     coefficientMatrix = new Matrix(16, 16);
-    //     for (i <= )
-    // }
+        rowIdx = 0;
+    
+        coefficientMatrix = new Matrix(16, 16);
+        for (x = -1; x <= 2; x++) {
+            for (y = -1; y <= 2; y++) {
+                colIdx = 0;
+                for (i = 0; i <= 3; i++) {
+                    for (j = 0; j <= 3; j++) {
+                       coefficientMatrix.setElmt(rowIdx, colIdx, Math.pow(x, i) * Math.pow(y, j));
+                       colIdx++;
+                    }
+                }
+                rowIdx++;
+            }
+        }
+        pointValueMatrix = new Matrix(16, 1);
+        rowIdx = 0;
+        for (i = 0; i <= 3; i++) {
+            for (j = 0; j <= 3; j++) {
+                pointValueMatrix.setElmt(rowIdx, 0, getElmt(i, j));
+                rowIdx++;
+            }
+        }
+
+        functionCoefficientMatrix = new Matrix(16, 1);
+        try {
+            functionCoefficientMatrix = multiply(coefficientMatrix.getInverseAdjoin(), pointValueMatrix);
+        } catch (NoInverseException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidMatrixSizeException e) {
+            throw new RuntimeException(e);
+        }
+        
+
+
+    }
 
     /**
      * Menghasilkan panjang dari angka paling panjang dalam matriks stelah diformat
