@@ -89,8 +89,6 @@ public class CoreFunctionality {
                 } else {
                     IOLib.SPLSolution.printUnique(solution);
                 }
-            } catch (InvalidMatrixSizeException e) {
-                throw new RuntimeException(e);
             } catch (NoSolutionException e) {
                 ToKeyboard.printMessage(
                         "Solusi SPL tidak unik. Tidak bisa diselesaikan dengan kaidah cramer! Berikut solusinya dengan eliminasi Gauss-Jordan :");
@@ -159,6 +157,50 @@ public class CoreFunctionality {
             // Take input of matrice and do stuff with it accordingly
         }
 
+    }
+
+    static public class Interpolation {
+
+        /**
+         * Prosedur untuk menerima input titik2 yang ingin dilakukan interpolasi
+         * polinomial. Lalu akan meminta input titik yang ingin diestimasikan.
+         */
+        static public void polinomial() {
+            Matrix polinom = IOLib.chooseToReadFromFile() ? FromFile.pointsInput(
+                    "Masukkan nama file berisi matriks dengan 2 kolom yang ingin dicari interpolasi polinomialnya :")
+                    : FromKeyboard.Points("jumlah titik");
+
+            // matrix polinom sudah pasti berukuran n x 2
+            try {
+                Matrix polFunc = polinom.getPolinomialFunction();
+
+                // print hasil fungsi interpolasi
+                System.out.println("Hasil interpolasi polinomial:");
+                System.out.printf("p%d(x) =", polinom.getNRow() - 1);
+                for (int i = polFunc.getNRow() - 1; i >= 0; i--) {
+                    System.out.printf(" %f", polFunc.getElmt(i, 0));
+                    if (i != 0) {
+                        System.out.print("x");
+                        if (i > 1) {
+                            System.out.printf("^%d", i);
+                        }
+                        System.out.print(" +");
+                    }
+                }
+                System.out.println();
+
+                // meminta input nilai yang ingin diestimasikan
+                while (true) {
+                    double x = FromKeyboard.readDouble("point untuk diestimasi");
+                    System.out.printf("Nilai dari p%d(%f) = %f\n", polinom.getNRow() - 1, x,
+                            polFunc.getValuePolinomial(x));
+                    if (!FromKeyboard.readString("Apakah ingin melanjutkan estimasi (y/n)? ").toLowerCase().equals("y"))
+                        break;
+                }
+            } catch (NoSolutionException e) {
+                System.out.println("Polinom yang dimasukkan tidak memiliki solusi unik");
+            }
+        }
     }
 
     /**
@@ -269,5 +311,4 @@ public class CoreFunctionality {
             }
         }
     }
-
 }

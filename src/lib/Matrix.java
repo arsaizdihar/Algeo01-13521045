@@ -154,6 +154,15 @@ public class Matrix {
 
     /**
      * 
+     * @return true jika matriks merupakan kumpulan point (satu baris terdiri atas
+     *         dua kolom x dan y)
+     */
+    public boolean isPoints() {
+        return getNCol() == 2;
+    }
+
+    /**
+     * 
      * @param rowIdx indeks baris yang ingin dicek
      * @return true jika semua elemen pada baris ke-rowIdx bernilai 0, false jika
      */
@@ -445,7 +454,7 @@ public class Matrix {
          */
         for (int i = 0; i < hasil.getNRow(); i++) {
             int leadingOneIdx = -1;
-            for (int j = i; j < hasil.getNCol() - 1; j++) {
+            for (int j = i; j < hasil.getNCol() - 1 && leadingOneIdx == -1; j++) {
                 if (hasil.getElmt(i, j) == 1.0) {
                     leadingOneIdx = j;
                 }
@@ -542,7 +551,7 @@ public class Matrix {
          */
         for (int i = 0; i < hasil.getNRow(); i++) {
             int leadingOneIdx = -1;
-            for (int j = i; j < hasil.getNCol() - 1; j++) {
+            for (int j = i; j < hasil.getNCol() - 1 && leadingOneIdx == -1; j++) {
                 if (hasil.getElmt(i, j) == 1.0) {
                     leadingOneIdx = j;
                 }
@@ -785,7 +794,7 @@ public class Matrix {
      * @throws InvalidMatrixSizeException
      * @throws NoSolutionException
      */
-    public Matrix getSolCramer() throws Errors.NoSolutionException, InvalidMatrixSizeException {
+    public Matrix getSolCramer() throws Errors.NoSolutionException {
         // KAMUS LOKAL
         Matrix res, temp, square;
         double det;
@@ -796,7 +805,7 @@ public class Matrix {
         }
 
         if (getNRow() >= getNCol()) {
-            throw new Errors.InvalidMatrixSizeException();
+            throw new RuntimeException();
         }
 
         // ALGORITMA
@@ -841,6 +850,47 @@ public class Matrix {
     }
 
     /**
+     * Fungsi untuk mendapatkan solusi dari interpolasi polinomial
+     * <p>
+     * Prekondisi: matriks berupa matriks point yaitu dengan kolom berjumlah 2
+     * 
+     * @return matriks solusi interpolasi polinomial derajat n yaitu matriks (n+1) x
+     *         1
+     * @throws NoSolutionException
+     */
+    public Matrix getPolinomialFunction() throws NoSolutionException {
+        Matrix polinomSPL = new Matrix(getNRow(), getNRow() + 1);
+
+        for (int i = 0; i < polinomSPL.getNRow(); i++) {
+            for (int j = 0; j < polinomSPL.getNCol() - 1; j++) {
+                polinomSPL.setElmt(i, j, Math.pow(getElmt(i, 0), j));
+            }
+            polinomSPL.setElmt(i, polinomSPL.getNCol() - 1, getElmt(i, 1));
+        }
+
+        return polinomSPL.getSolCramer();
+    }
+
+    /**
+     * Fungsi untuk mendapatkan hasil estimasi nilai x pada interpolasi polinomial
+     * <p>
+     * Prekondisi: matriks berupa hasil return dari getPolinomialFunction
+     * 
+     * @param x nilai yang ingin diestimasi
+     * @return hasil estimasi
+     */
+    public double getValuePolinomial(double x) {
+        double res = 0;
+        for (int i = 0; i < getNRow(); i++) {
+            res += getElmt(i, 0) * Math.pow(x, i);
+        }
+        return res;
+    }
+
+    /**
+     * Fungsi untuk mendapatkan solusi dari interpolasi polinomial
+     * <p>
+     * Prekondisi: matriks berupa matriks point yaitu dengan kolom berjumlah 2
      * 
      * @param a parameter a dari nilai f(a,b) yang ingin dicari interpolasinya di
      *          titik tersebut

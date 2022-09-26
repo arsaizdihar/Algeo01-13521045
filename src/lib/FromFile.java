@@ -122,6 +122,19 @@ public class FromFile {
         return inputtedMatrix;
     }
 
+    static public Matrix pointsInput(String message) {
+        ToKeyboard.printMessage(message);
+        Matrix input;
+        do {
+            input = Matrix();
+            if (!input.isPoints()) {
+                ToKeyboard.printMessage(
+                        "Isi file tidak sesuai dengan format points. Pastikan file berisi 2 kolom tiap baris (x dan y).\nPerbaiki file anda dan coba lagi.");
+            }
+        } while (!input.isPoints());
+        return input;
+    }
+
     static public Matrix matrixInput(String message, boolean isSquare) {
         ToKeyboard.printMessage(message);
         return isSquare ? MatrixSquare() : Matrix();

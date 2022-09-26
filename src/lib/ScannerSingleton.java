@@ -26,4 +26,8 @@ public class ScannerSingleton {
     public int nextInt() {
         return scanner.nextInt();
     }
+
+    public double nextDouble() {
+        return scanner.nextDouble();
+    }
 }

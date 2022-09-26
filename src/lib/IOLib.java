@@ -102,7 +102,7 @@ public class IOLib {
         while (!inputValid) {
             ToKeyboard
                     .printMessage("Tekan 1 untuk menerima input dari file atau 2 untuk menerima input dari keyboard.");
-            int input = FromKeyboard.readNumber("pilihan anda", 1, 2);
+            int input = FromKeyboard.readInt("pilihan anda", 1, 2);
             inputValid = true;
             willReadFromFile = input == 1;
 
@@ -116,7 +116,7 @@ public class IOLib {
         while (!inputValid) {
             ToKeyboard
                     .printMessage("Tekan 1 untuk mengeluarkan hasil ke file atau 2 untuk mengeluarkan hasil ke CLI.");
-            int input = FromKeyboard.readNumber("pilihan anda", 1, 2);
+            int input = FromKeyboard.readInt("pilihan anda", 1, 2);
             inputValid = true;
             willWriteToFile = input == 1;
         }
@@ -253,6 +253,7 @@ public class IOLib {
                 for (int i = 0; i < solution.getNRow(); i++) {
                     for (int j = 0; j < solution.getNCol() - 2; j++) {
                         double examinedCoefficient = solution.getElmt(i, j);
+                        // TODO @Fatih20 woi ini apaan
                         ToKeyboard.printNumber(examinedCoefficient);
                         String addedString = "";
                         if (examinedCoefficient != 0 && parameter.containsKey(j)) {

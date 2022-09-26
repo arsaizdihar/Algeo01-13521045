@@ -51,7 +51,7 @@ public class Interface {
      */
     static public void menuSPL() {
         printMenu(MenuText.SPL);
-        int userChoiceSubMenu = FromKeyboard.readNumber("pilihan sub menu", 1, 5);
+        int userChoiceSubMenu = FromKeyboard.readInt("pilihan sub menu", 1, 5);
         switch (userChoiceSubMenu) {
             case 1:
                 CoreFunctionality.solveSPL.gauss();
@@ -78,7 +78,7 @@ public class Interface {
      */
     static public void menuInverse() {
         printMenu(MenuText.inverse);
-        int userChoiceSubMenu = FromKeyboard.readNumber("pilihan sub menu", 1, 5);
+        int userChoiceSubMenu = FromKeyboard.readInt("pilihan sub menu", 1, 5);
         switch (userChoiceSubMenu) {
             case 1:
                 CoreFunctionality.Inverse.obe();
@@ -109,7 +109,7 @@ public class Interface {
                     programState = "mainEntering";
                     break;
                 case "mainEntering":
-                    userChoice = FromKeyboard.readNumber("pilihan menu", 1, 7);
+                    userChoice = FromKeyboard.readInt("pilihan menu", 1, 7);
                     // ToKeyboard.printMessage("\n");
                     programState = "mainEntered";
                     break;
@@ -131,7 +131,9 @@ public class Interface {
                             programState = "main";
                             break;
                         case 4:
-                            // Take input of a set of points and do stuff with it accordingly
+                            ToKeyboard.clearConsole();
+                            CoreFunctionality.Interpolation.polinomial();
+                            programState = "main";
                             break;
                         case 5:
                             // Take input of a set of points and do stuff with it accordingly
