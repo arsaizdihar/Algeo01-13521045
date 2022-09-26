@@ -2,6 +2,7 @@ package lib;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -153,6 +154,17 @@ public class FromFile {
     static public Matrix matrixToInvert() {
         String filePrompt = "Masukkan nama file berisi matriks persegi yang ingin dicari inverse-nya : ";
         return FromFile.matrixInput(filePrompt, true);
+    }
+
+    static public Image readImage() {
+        System.out.println("Masukkan nama file gambar yang ingin diperbesar: ");
+        while (true) {
+            try {
+                return new Image(FromFile.getFile());
+            } catch (IOException e) {
+                System.out.println("Gagal memproses gambar di file. Pastikan tipe file adalah gambar.");
+            }
+        }
     }
 
 }
