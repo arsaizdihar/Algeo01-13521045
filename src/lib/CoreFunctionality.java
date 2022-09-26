@@ -247,7 +247,6 @@ public class CoreFunctionality {
                 for (int n = 0; n <= addedRow.size() - 1; n++) {
                     addedRowArray[n] = addedRow.get(n);
                 }
-                // addedRowArray[dataToPredict.getNCol() - 1] = result;
 
                 resultMatrix.setRow(i, addedRowArray);
             }

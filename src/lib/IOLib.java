@@ -368,13 +368,13 @@ public class IOLib {
                 String variableText = "";
 
                 if (nthBeta < 0) {
-                    betaText = Double.toString(nthBeta);
+                    betaText = String.format("%.10f", nthBeta);
                 } else if (nthBeta > 0 && i != 0) {
-                    betaText = "+ " + Double.toString(nthBeta);
+                    betaText = "+ " + String.format("%.10f", nthBeta);
                 }
 
                 if (nthBeta != 0 && i > 0) {
-                    variableText = "x" + Integer.toString(i);
+                    variableText = " * x" + Integer.toString(i);
                 }
 
                 result = String.format("%s %s%s", result, betaText, variableText);
@@ -385,14 +385,13 @@ public class IOLib {
         static public String createResultText(double[] predictedDataRow) {
             String parameterText = "f(";
             int i = 0;
-            ToKeyboard.printNumber(predictedDataRow.length);
             for (i = 0; i < predictedDataRow.length - 2; i++) {
                 parameterText += Double.toString(predictedDataRow[i]) + ", ";
             }
 
             parameterText += Double.toString(predictedDataRow[i]) + ") = ";
             i++;
-            parameterText += Double.toString(predictedDataRow[i]);
+            parameterText += String.format("%.10f", predictedDataRow[i]);
 
             return parameterText;
         }

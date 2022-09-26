@@ -104,6 +104,7 @@ public class ToKeyboard {
     }
 
     static public void printMLR(List<Double> betaList, Matrix predictedData) {
+        printMessage("Hasil dibulatkan ke sepuluh tempat di belakang koma.");
         printMessage(IOLib.MLR.createEquationText(betaList));
         String[] resultTexts = IOLib.MLR.createArrayOfResultText(predictedData);
         for (int i = 0; i < resultTexts.length; i++) {
