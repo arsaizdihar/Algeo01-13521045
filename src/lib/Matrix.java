@@ -339,10 +339,6 @@ public class Matrix {
         return getEchelonForm(startColIdx, endColIdx).first;
     }
 
-    // TODO Make a function that receives starting row, ending row, starting column,
-    // and ending column and then return the average of all of those values. Use the
-    // function to make functions that produce the average of a column or row
-
     /**
      * 
      * @param startColIdx index baris awal yang ingin dibuat sebagai leading one
