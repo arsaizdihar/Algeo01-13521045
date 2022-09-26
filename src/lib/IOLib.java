@@ -101,7 +101,7 @@ public class IOLib {
         while (!inputValid) {
             ToKeyboard
                     .printMessage("Tekan 1 untuk menerima input dari file atau 2 untuk menerima input dari keyboard.");
-            int input = FromKeyboard.readNumber("pilihan anda", 1, 2);
+            int input = FromKeyboard.readInt("pilihan anda", 1, 2);
             inputValid = true;
             willReadFromFile = input == 1;
 
@@ -115,7 +115,7 @@ public class IOLib {
         while (!inputValid) {
             ToKeyboard
                     .printMessage("Tekan 1 untuk mengeluarkan hasil ke file atau 2 untuk mengeluarkan hasil ke CLI.");
-            int input = FromKeyboard.readNumber("pilihan anda", 1, 2);
+            int input = FromKeyboard.readInt("pilihan anda", 1, 2);
             inputValid = true;
             willWriteToFile = input == 1;
         }
