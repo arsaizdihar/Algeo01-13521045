@@ -698,6 +698,31 @@ public class Matrix {
 
         return cofactorMatrix;
     }
+    /**
+     * 
+     * @return Mengembalikan nilai determinan matriks dengan metode segitiga atas
+     * @throws Errors.InvalidMatrixSquareException
+     */
+    public double getDeterminantTriangle() throws Errors.InvalidMatrixSquareException {
+        // KAMUS
+        Matrix echelonMatrix;
+        double multiplier, diagonalProduct, determinant;
+        int i;
+        //ALGORITMA
+        if (!this.isSquare()) {
+            throw new Errors.InvalidMatrixSquareException();
+        }
+        echelonMatrix = this.getEchelonForm(0, this.getNCol() - 1).first;
+        multiplier = this.getEchelonForm(0, this.getNCol() - 1).second;
+
+        diagonalProduct = 1;
+        for (i = 0; i <= this.getNCol() - 1; i++) {
+            diagonalProduct *= echelonMatrix.getElmt(i, i);
+        }
+
+        determinant = diagonalProduct * multiplier;
+        return determinant;
+    }
 
     /**
      * 
