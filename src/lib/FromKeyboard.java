@@ -243,6 +243,8 @@ public class FromKeyboard {
         Matrix data = Matrix(dataCount, variableCount + 1,
                 "Masukkan sampel baris per baris dengan elemen terakhir adalah y dan elemen sisanya adalah variabel x");
 
+        ToKeyboard.printMessage("Sekarang masukkan data yang ingin diprediksi");
+
         int predictedDataCount = readNumberWithMinimum("jumlah sampel", 1);
 
         Matrix predictedData = Matrix(predictedDataCount, variableCount,

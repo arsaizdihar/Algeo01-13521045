@@ -216,10 +216,10 @@ public class CoreFunctionality {
 
             double averageOfBetaAndVariable = 0;
             for (int i = 0; i <= betaNoZeroMatrix.getNRow() - 1; i++) {
-                averageOfBetaAndVariable -= betaNoZeroMatrix.getElmt(i, 0);
+                averageOfBetaAndVariable += (betaNoZeroMatrix.getElmt(i, 0) * data.getAverageOfColumn(i));
             }
 
-            double betaZero = y.getAverageOfColumn(0) + averageOfBetaAndVariable;
+            double betaZero = y.getAverageOfColumn(0) - averageOfBetaAndVariable;
 
             List<Double> betaList = new ArrayList<Double>();
             betaList.add(betaZero);
@@ -242,12 +242,12 @@ public class CoreFunctionality {
 
                 addedRow.add(result);
 
-                double[] addedRowArray = new double[dataToPredict.getNCol()];
+                double[] addedRowArray = new double[dataToPredict.getNCol() + 1];
 
-                for (int n = 0; n < dataToPredict.getNCol() - 1; n++) {
+                for (int n = 0; n <= addedRow.size() - 1; n++) {
                     addedRowArray[n] = addedRow.get(n);
                 }
-                addedRowArray[dataToPredict.getNCol() - 1] = result;
+                // addedRowArray[dataToPredict.getNCol() - 1] = result;
 
                 resultMatrix.setRow(i, addedRowArray);
             }
