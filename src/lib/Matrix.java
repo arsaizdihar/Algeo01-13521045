@@ -1068,7 +1068,11 @@ public class Matrix {
         }
         return result;
     }
-
+    /**
+     * 
+     * @param scalingFactor berapa kali lipat perbesaran dengan scalingFactor merupakan bilangan bulat positif
+     * @return Matriks yang sudah diperbesar scalingFactor kali dengan interpolasi bicubic dan interpolasi bilinier pada edges nya
+     */
     public Matrix getNTimesSizeMatrix(int scalingFactor) {
         Matrix resultMatrix;
         double di, dj, x, y;
@@ -1076,10 +1080,10 @@ public class Matrix {
 
         di = (double)(this.getNRow() - 1) / (double)(this.getNRow() * scalingFactor - 1);
         dj = (double)(this.getNCol() - 1) / (double)(this.getNCol() * scalingFactor - 1);
-        resultMatrix = new Matrix(2 * this.getNRow(), 2 * this.getNCol());
+        resultMatrix = new Matrix(scalingFactor * this.getNRow(), scalingFactor * this.getNCol());
 
-        for (i = 0; i <= 2 * this.getNRow() - 1; i++) {
-            for (j = 0; j <= 2 * this.getNCol() - 1; j++) {
+        for (i = 0; i <= scalingFactor * this.getNRow() - 1; i++) {
+            for (j = 0; j <= scalingFactor * this.getNCol() - 1; j++) {
                 x = (double)(i) * di;
                 y = (double)(j) * dj;
                 floorX = (int)(x);
