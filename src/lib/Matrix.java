@@ -945,7 +945,7 @@ public class Matrix {
      */
     public double getAverageByColumnAndRow(int startRowIdx, int endRowIdx, int startColIdx, int endColIdx) {
         double sum = 0;
-        int cellCount = (endRowIdx - startRowIdx) * (endColIdx - startColIdx);
+        int cellCount = (endRowIdx - startRowIdx + 1) * (endColIdx - startColIdx + 1);
         for (int i = startRowIdx; i <= endRowIdx; i++) {
             for (int j = startColIdx; j <= endColIdx; j++) {
                 sum += getElmt(i, j);
@@ -968,6 +968,16 @@ public class Matrix {
     }
 
     /**
+     * Mencari rata-rata dari salah satu kolom pada matrix.
+     * 
+     * @param colIdx kolom yang ingin dicari rata-ratanya
+     * @return rata-rata dari nilai sel pada kolom yang diberikan
+     */
+    public double getAverageOfColumn(int colIdx) {
+        return getAverageByColumn(colIdx, colIdx);
+    }
+
+    /**
      * Mencari rata-rata dari sebagian matriks dari baris sekian sampai baris
      * sekian. Kolom yang dihitung adalah seluruh kolom. Index inklusif.
      * 
@@ -977,6 +987,16 @@ public class Matrix {
      */
     public double getAverageByRow(int startRowIdx, int endRowIdx) {
         return getAverageByColumnAndRow(startRowIdx, endRowIdx, 0, getNCol() - 1);
+    }
+
+    /**
+     * Mencari rata-rata dari salah satu baris pada matrix.
+     * 
+     * @param rowIdx baris yang ingin dicari rata-ratanya
+     * @return rata-rata dari nilai sel pada baris yang diberikan
+     */
+    public double getAverageOfRow(int rowIdx) {
+        return getAverageByRow(rowIdx, rowIdx);
     }
 
     /**
