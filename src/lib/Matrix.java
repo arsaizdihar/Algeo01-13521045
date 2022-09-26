@@ -339,10 +339,15 @@ public class Matrix {
         return getEchelonForm(startColIdx, endColIdx).first;
     }
 
+    // TODO Make a function that receives starting row, ending row, starting column,
+    // and ending column and then return the average of all of those values. Use the
+    // function to make functions that produce the average of a column or row
+
     /**
      * 
      * @param startColIdx index baris awal yang ingin dibuat sebagai leading one
-     * @param endColIdx index baris terakhir yang ingin diubah menjadi bentuk echelon
+     * @param endColIdx   index baris terakhir yang ingin diubah menjadi bentuk
+     *                    echelon
      * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam
      *         satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
      */
@@ -496,7 +501,7 @@ public class Matrix {
      */
     public Matrix getSolGJ() throws NoSolutionException {
         Matrix hasil = getReducedForm(0, getNCol() - 2);
-        
+
         int rowIdx;
         boolean isFoundRowNoSolution;
         Matrix testMatrix = getCopyMatrixByColumn(0, getNCol() - 2);
@@ -513,7 +518,6 @@ public class Matrix {
         if (isFoundRowNoSolution) {
             throw new Errors.NoSolutionException();
         }
-
 
         Matrix solusi = new Matrix(hasil.getNCol() - 1, hasil.getNCol() + 1);
 
@@ -562,6 +566,7 @@ public class Matrix {
         }
         return solusi;
     }
+
     /**
      * 
      * @return Matriks solusi SPL dengan metode pengalian dengan inverse (kolom 1)
@@ -576,7 +581,7 @@ public class Matrix {
             throw new NoInverseException();
         }
         rightMostColumnMatrix = getCopyMatrixByColumn(getNCol() - 1, getNCol() - 1);
-        
+
         try {
             solutionMatrix = multiply(inversedMatrix, rightMostColumnMatrix);
         } catch (InvalidMatrixSizeException e) {
@@ -585,7 +590,6 @@ public class Matrix {
 
         return solutionMatrix;
     }
-       
 
     /**
      * prekondisi: matriks merupakan maktriks square
@@ -631,7 +635,7 @@ public class Matrix {
         augmentedMatrix = getAugmentedMatrixByIdentity();
         reducedMatrix = augmentedMatrix.getReducedForm(0, getNRow() - 1);
         testMatrix = reducedMatrix.getCopyMatrixByColumn(0, getNRow() - 1);
-        
+
         rowIdx = 0;
         isFoundRowEmpty = false;
         while (!isFoundRowEmpty && (rowIdx <= testMatrix.getNRow() - 1)) {
@@ -670,13 +674,13 @@ public class Matrix {
         if (determinant == 0) {
             throw new Errors.NoInverseException();
         }
-            
+
         cofactorMatrix = new Matrix(getNRow(), getNCol());
 
         try {
             for (i = 0; i <= getNRow() - 1; i++) {
                 for (j = 0; j <= getNCol() - 1; j++) {
-                    sign = (-2 * ((i+j) % 2) + 1);
+                    sign = (-2 * ((i + j) % 2) + 1);
                     cofactorMatrix.setElmt(i, j, getMinor(i, j).getDeterminantCofactor() * sign);
                 }
             }
@@ -685,7 +689,7 @@ public class Matrix {
         }
 
         cofactorMatrix.transpose();
-        cofactorMatrix.multiplyScalar(1/determinant);
+        cofactorMatrix.multiplyScalar(1 / determinant);
 
         return cofactorMatrix;
     }
@@ -841,14 +845,19 @@ public class Matrix {
     }
     // TODO inget lanjutin ini
     // double getValueBicubic (double a, double b) {
-    //     Matrix coefficientMatrix;
-    //     int i, j;
-    //     double[][] coefficient;
+    // Matrix coefficientMatrix;
+    // int i, j;
+    // double[][] coefficient;
 
-    //     coefficient = [[]];
-    //     coefficientMatrix = new Matrix(16, 16);
-    //     for (i <= )
+    // coefficient = [[]];
+    // coefficientMatrix = new Matrix(16, 16);
+    // for (i <= )
     // }
+
+    // TODO Make a function that receives augmented matrix and then compute the MLR
+    // with the b1, b2, ... using this formula :
+    // https://econstats.com/RegressionOut_3_1.htm, b0 formula is in here :
+    // https://www.statology.org/multiple-linear-regression-by-hand/
 
     /**
      * Menghasilkan panjang dari angka paling panjang dalam matriks stelah diformat
@@ -1018,10 +1027,8 @@ public class Matrix {
         }
 
     }
-    
+
 }
-
-
 
 class MatrixDoublePair {
     public Matrix first;
