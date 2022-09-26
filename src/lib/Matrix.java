@@ -1069,13 +1069,13 @@ public class Matrix {
         return result;
     }
 
-    public Matrix getTwoTimesSizeMatrix() {
+    public Matrix getNTimesSizeMatrix(int scalingFactor) {
         Matrix resultMatrix;
         double di, dj, x, y;
         int floorX, floorY, i, j;
 
-        di = (double)(this.getNRow() - 1) / (double)(this.getNRow() * 2 - 1);
-        dj = (double)(this.getNCol() - 1) / (double)(this.getNCol() * 2 - 1);
+        di = (double)(this.getNRow() - 1) / (double)(this.getNRow() * scalingFactor - 1);
+        dj = (double)(this.getNCol() - 1) / (double)(this.getNCol() * scalingFactor - 1);
         resultMatrix = new Matrix(2 * this.getNRow(), 2 * this.getNCol());
 
         for (i = 0; i <= 2 * this.getNRow() - 1; i++) {
