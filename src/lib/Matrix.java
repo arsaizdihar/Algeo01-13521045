@@ -454,7 +454,7 @@ public class Matrix {
          */
         for (int i = 0; i < hasil.getNRow(); i++) {
             int leadingOneIdx = -1;
-            for (int j = i; j < hasil.getNCol() - 1; j++) {
+            for (int j = i; j < hasil.getNCol() - 1 && leadingOneIdx == -1; j++) {
                 if (hasil.getElmt(i, j) == 1.0) {
                     leadingOneIdx = j;
                 }
@@ -551,7 +551,7 @@ public class Matrix {
          */
         for (int i = 0; i < hasil.getNRow(); i++) {
             int leadingOneIdx = -1;
-            for (int j = i; j < hasil.getNCol() - 1; j++) {
+            for (int j = i; j < hasil.getNCol() - 1 && leadingOneIdx == -1; j++) {
                 if (hasil.getElmt(i, j) == 1.0) {
                     leadingOneIdx = j;
                 }

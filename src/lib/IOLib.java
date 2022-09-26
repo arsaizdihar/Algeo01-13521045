@@ -252,6 +252,7 @@ public class IOLib {
                 for (int i = 0; i < solution.getNRow(); i++) {
                     for (int j = 0; j < solution.getNCol() - 2; j++) {
                         double examinedCoefficient = solution.getElmt(i, j);
+                        // TODO @Fatih20 woi ini apaan
                         ToKeyboard.printNumber(examinedCoefficient);
                         String addedString = "";
                         if (examinedCoefficient != 0 && parameter.containsKey(j)) {
