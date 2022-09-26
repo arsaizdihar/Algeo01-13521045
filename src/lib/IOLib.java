@@ -4,6 +4,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class IOLib {
     static public class RowError {
@@ -356,5 +357,52 @@ public class IOLib {
             printUnique(solution, "x");
         }
 
+    }
+
+    static public class MLR {
+        static public String createEquationText(List<Double> betaList) {
+            String result = "y =";
+            for (int i = 0; i < betaList.size(); i++) {
+                double nthBeta = betaList.get(i);
+                String betaText = "";
+                String variableText = "";
+
+                if (nthBeta < 0) {
+                    betaText = Double.toString(nthBeta);
+                } else if (nthBeta > 0) {
+                    betaText = "+" + Double.toString(nthBeta);
+                }
+
+                if (nthBeta != 0 && i > 0) {
+                    variableText = "x" + Integer.toString(i + 1);
+                }
+
+                result = String.format("%s %s%s", result, betaText, variableText);
+            }
+            return result;
+        }
+
+        static public String createResultText(double[] predictedDataRow) {
+            String parameterText = "f(";
+            int i = 0;
+            for (i = 0; i < predictedDataRow.length - 2; i++) {
+                parameterText += Double.toString(predictedDataRow[i]) + ", ";
+            }
+
+            parameterText += Double.toString(predictedDataRow[i]) + ") = ";
+            i++;
+            parameterText += Double.toString(predictedDataRow[i]);
+
+            return parameterText;
+        }
+
+        static public String[] createArrayOfResultText(Matrix predictedData) {
+            ArrayList<String> listOfResultText = new ArrayList<String>();
+            for (int i = 0; i <= predictedData.getNRow() - 1; i++) {
+                listOfResultText.add(createResultText(predictedData.getRow(i)));
+            }
+
+            return listOfResultText.stream().toArray(String[]::new);
+        }
     }
 }

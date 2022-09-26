@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ToFile {
 
@@ -139,5 +140,15 @@ public class ToFile {
         ToKeyboard
                 .printMessage("Masukkan nama file yang ingin diisi dengan invers dari matriks yang telah dimasukkan :");
         writeToFile(matrixToRowString(invertedMatrix));
+    }
+
+    public static void MLR(List<Double> betaList, Matrix predictedData) {
+        ArrayList<String> rowOfTexts = new ArrayList<String>();
+        rowOfTexts.add(IOLib.MLR.createEquationText(betaList));
+        for (int i = 0; i < predictedData.getNRow(); i++) {
+            rowOfTexts.add(IOLib.MLR.createResultText(predictedData.getRow(i)));
+        }
+
+        writeToFile((rowOfTexts.stream().toArray(String[]::new)));
     }
 }
