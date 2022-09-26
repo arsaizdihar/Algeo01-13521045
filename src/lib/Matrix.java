@@ -923,7 +923,7 @@ public class Matrix {
      *          titik tersebut
      * @return nilai f(a,b) yang telah di interpolasi
      */
-    public double getValueBicubic(double a, double b) {
+    public double getValueBicubicSpecific(double a, double b) {
         Matrix coefficientMatrix, pointValueMatrix, functionCoefficientMatrix;
         int i, j, x, y, rowIdx, colIdx;
         double result;
@@ -971,7 +971,134 @@ public class Matrix {
         }
         return result;
     }
+    public double getValueBicubic(int rowStart, int colStart, double a, double b) {
+        Matrix coefficientMatrix, pointValueMatrix, functionCoefficientMatrix;
+        int i, j, x, y, rowIdx, colIdx;
+        double result;
 
+        rowIdx = 0;
+
+        coefficientMatrix = new Matrix(16, 16);
+        for (x = rowStart; x <= rowStart + 3; x++) {
+            for (y = colStart; y <= colStart + 3; y++) {
+                colIdx = 0;
+                for (i = 0; i <= 3; i++) {
+                    for (j = 0; j <= 3; j++) {
+                        coefficientMatrix.setElmt(rowIdx, colIdx, Math.pow(x, i) * Math.pow(y, j));
+                        colIdx++;
+                    }
+                }
+                rowIdx++;
+            }
+        }
+        pointValueMatrix = new Matrix(16, 1);
+        rowIdx = 0;
+        for (i = rowStart; i <= rowStart+3; i++) {
+            for (j = colStart; j <= colStart+3; j++) {
+                pointValueMatrix.setElmt(rowIdx, 0, getElmt(i, j));
+                rowIdx++;
+            }
+        }
+
+        functionCoefficientMatrix = new Matrix(16, 1);
+        try {
+            functionCoefficientMatrix = multiply(coefficientMatrix.getInverseOBE(), pointValueMatrix);
+        } catch (NoInverseException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidMatrixSizeException e) {
+            throw new RuntimeException(e);
+        }
+
+        rowIdx = 0;
+        result = 0;
+        for (i = 0; i <= 3; i++) {
+            for (j = 0; j <= 3; j++) {
+                result += functionCoefficientMatrix.getElmt(rowIdx, 0) * Math.pow(a, i) * Math.pow(b, j);
+                rowIdx++;
+            }
+        }
+        return result;
+    }
+
+    public double getValueBilinear(int rowStart, int colStart, double a, double b) {
+        Matrix coefficientMatrix, pointValueMatrix, functionCoefficientMatrix;
+        int i, j, x, y, rowIdx, colIdx;
+        double result;
+
+        rowIdx = 0;
+
+        coefficientMatrix = new Matrix(4, 4);
+        for (x = rowStart; x <= rowStart + 1; x++) {
+            for (y = colStart; y <= colStart + 1; y++) {
+                colIdx = 0;
+                for (i = 0; i <= 1; i++) {
+                    for (j = 0; j <= 1; j++) {
+                        coefficientMatrix.setElmt(rowIdx, colIdx, Math.pow(x, i) * Math.pow(y, j));
+                        colIdx++;
+                    }
+                }
+                rowIdx++;
+            }
+        }
+        pointValueMatrix = new Matrix(4, 1);
+        rowIdx = 0;
+        for (i = rowStart; i <= rowStart+1; i++) {
+            for (j = colStart; j <= colStart+1; j++) {
+                pointValueMatrix.setElmt(rowIdx, 0, getElmt(i, j));
+                rowIdx++;
+            }
+        }
+
+        functionCoefficientMatrix = new Matrix(4, 1);
+        try {
+            functionCoefficientMatrix = multiply(coefficientMatrix.getInverseOBE(), pointValueMatrix);
+        } catch (NoInverseException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidMatrixSizeException e) {
+            throw new RuntimeException(e);
+        }
+
+        rowIdx = 0;
+        result = 0;
+        for (i = 0; i <= 1; i++) {
+            for (j = 0; j <= 1; j++) {
+                result += functionCoefficientMatrix.getElmt(rowIdx, 0) * Math.pow(a, i) * Math.pow(b, j);
+                rowIdx++;
+            }
+        }
+        return result;
+    }
+
+    public Matrix getTwoTimesSizeMatrix() {
+        Matrix resultMatrix;
+        double di, dj, x, y;
+        int floorX, floorY, i, j;
+
+        di = (double)(this.getNRow() - 1) / (double)(this.getNRow() * 2 - 1);
+        dj = (double)(this.getNCol() - 1) / (double)(this.getNCol() * 2 - 1);
+        resultMatrix = new Matrix(2 * this.getNRow(), 2 * this.getNCol());
+
+        for (i = 0; i <= 2 * this.getNRow() - 1; i++) {
+            for (j = 0; j <= 2 * this.getNCol() - 1; j++) {
+                x = (double)(i) * di;
+                y = (double)(j) * dj;
+                floorX = (int)(x);
+                floorY = (int)(y);
+                if (floorX == this.getNRow() - 1) {
+                    floorX--;
+                }
+                if (floorY == this.getNCol() - 1) {
+                    floorY--;
+                }
+                if (floorX == 0 || floorX == this.getNRow() - 2 || floorY == 0 || floorY == this.getNCol() - 2) {
+                    resultMatrix.setElmt(i, j, this.getValueBilinear(floorX, floorY, x, y));
+                } else {
+                    resultMatrix.setElmt(i, j, this.getValueBicubic(floorX - 1, floorY - 1, x, y));
+                }
+            }
+        }
+        return resultMatrix;
+    }
     /**
      * Menghasilkan panjang dari angka paling panjang dalam matriks stelah diformat
      * 
