@@ -935,6 +935,51 @@ public class Matrix {
     }
 
     /**
+     * Mencari rata-rata dari sebuah bagian matriks. Index inklusif.
+     * 
+     * @param startRowIdx baris awal pencarian rata-rata
+     * @param endRowIdx   baris akhir pencarian rata-rata
+     * @param startColIdx kolom awal pencarian rata-rata
+     * @param endColIdx   kolom akhir pencarian rata-rata
+     * @return rata-rata dari nilai sel pada bagian yang diberikan
+     */
+    public double getAverageByColumnAndRow(int startRowIdx, int endRowIdx, int startColIdx, int endColIdx) {
+        double sum = 0;
+        int cellCount = (endRowIdx - startRowIdx) * (endColIdx - startColIdx);
+        for (int i = startRowIdx; i <= endRowIdx; i++) {
+            for (int j = startColIdx; j <= endColIdx; j++) {
+                sum += getElmt(i, j);
+            }
+        }
+
+        return sum / cellCount;
+    }
+
+    /**
+     * Mencari rata-rata dari sebagian matriks dari kolom sekian sampai kolom
+     * sekian. Baris yang dihitung adalah seluruh baris. Index inklusif.
+     * 
+     * @param startColIdx kolom awal pencarian rata-rata
+     * @param endColIdx   kolom akhir pencarian rata-rata
+     * @return rata-rata dari nilai sel pada bagian yang diberikan
+     */
+    public double getAverageByColumn(int startColIdx, int endColIdx) {
+        return getAverageByColumnAndRow(0, getNRow() - 1, startColIdx, endColIdx);
+    }
+
+    /**
+     * Mencari rata-rata dari sebagian matriks dari baris sekian sampai baris
+     * sekian. Kolom yang dihitung adalah seluruh kolom. Index inklusif.
+     * 
+     * @param startRowIdx baris awal pencarian rata-rata
+     * @param endRowIdx   baris akhir pencarian rata-rata
+     * @return rata-rata dari nilai sel pada bagian yang diberikan
+     */
+    public double getAverageByRow(int startRowIdx, int endRowIdx) {
+        return getAverageByColumnAndRow(startRowIdx, endRowIdx, 0, getNCol() - 1);
+    }
+
+    /**
      * Mengecek apakah dua matriks memiliki jumlah kolom yang sama
      * 
      * @param matriks1 matriks pertama yang ingin dicek
