@@ -1,5 +1,6 @@
 package lib;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -7,7 +8,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Image {
-  Matrix matrix;
+  private Matrix rMat, gMat, bMat, aMat;
 
   public Image(File file) throws IOException {
     BufferedImage img = ImageIO.read(file);
@@ -17,46 +18,70 @@ public class Image {
     setMatrixFromImage(img);
   }
 
-  public Image(Matrix matrix) {
-    this.matrix = matrix;
+  public Image(Matrix rMat, Matrix gMat, Matrix bMat, Matrix aMat) {
+    this.rMat = rMat;
+    this.gMat = gMat;
+    this.bMat = bMat;
+    this.aMat = aMat;
   }
 
   private void setMatrixFromImage(BufferedImage img) {
     int width = img.getWidth();
     int height = img.getHeight();
-    double[][] result = new double[height][width];
+    rMat = new Matrix(height, width);
+    gMat = new Matrix(height, width);
+    bMat = new Matrix(height, width);
+    aMat = new Matrix(height, width);
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
-        // get grayscale
-        int rgb = img.getRGB(j, i);
-        int r = (rgb >> 16) & 0xFF;
-        int g = (rgb >> 8) & 0xFF;
-        int b = (rgb & 0xFF);
-        result[i][j] = (r + g + b) / 3;
+        Color c = new Color(img.getRGB(j, i), true);
+        int r = c.getRed();
+        int g = c.getGreen();
+        int b = c.getBlue();
+        int a = c.getAlpha();
+        rMat.setElmt(i, j, r);
+        gMat.setElmt(i, j, g);
+        bMat.setElmt(i, j, b);
+        aMat.setElmt(i, j, a);
       }
     }
-    matrix = new Matrix(height, width);
-    matrix.setContents(result);
   }
 
-  public void exportImage(String filename) {
-    BufferedImage img = new BufferedImage(matrix.getNCol(), matrix.getNRow(), BufferedImage.TYPE_INT_RGB);
-    for (int i = 0; i < matrix.getNRow(); i++) {
-      for (int j = 0; j < matrix.getNCol(); j++) {
-        int rgb = (int) matrix.getElmt(i, j);
-        int r = rgb;
-        int g = rgb;
-        int b = rgb;
-        int color = (r << 16) | (g << 8) | b;
-        img.setRGB(j, i, color);
+  public BufferedImage getBufferedImage() {
+    BufferedImage img = new BufferedImage(rMat.getNCol(), rMat.getNRow(), BufferedImage.TYPE_INT_ARGB);
+    for (int i = 0; i < rMat.getNRow(); i++) {
+      for (int j = 0; j < rMat.getNCol(); j++) {
+        int r = onColorRange((int) rMat.getElmt(i, j));
+        int g = onColorRange((int) gMat.getElmt(i, j));
+        int b = onColorRange((int) bMat.getElmt(i, j));
+        int a = onColorRange((int) aMat.getElmt(i, j));
+        int rgb = new Color(r, g, b, a).getRGB();
+        img.setRGB(j, i, rgb);
       }
     }
 
-    try {
-      File file = new File(filename);
-      ImageIO.write(img, "jpeg", file);
-    } catch (IOException e) {
-      e.printStackTrace();
+    return img;
+  }
+
+  private static int onColorRange(int color) {
+    if (color < 0) {
+      return 0;
+    } else if (color > 255) {
+      return 255;
+    } else {
+      return color;
     }
+  }
+
+  public Image getNTimesSizeImage(int scalingFactor) {
+    Matrix rMatScaled = rMat.getNTimesSizeMatrix(scalingFactor);
+    ToKeyboard.printMessage("25% done");
+    Matrix gMatScaled = gMat.getNTimesSizeMatrix(scalingFactor);
+    ToKeyboard.printMessage("50% done");
+    Matrix bMatScaled = bMat.getNTimesSizeMatrix(scalingFactor);
+    ToKeyboard.printMessage("75% done");
+    Matrix aMatScaled = aMat.getNTimesSizeMatrix(scalingFactor);
+    ToKeyboard.printMessage("100% done");
+    return new Image(rMatScaled, gMatScaled, bMatScaled, aMatScaled);
   }
 }

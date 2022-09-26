@@ -215,6 +215,15 @@ public class CoreFunctionality {
                 System.out.println("Polinom yang dimasukkan tidak memiliki solusi unik");
             }
         }
+
+        static public void imageScaling() {
+            Image image = FromFile.readImage();
+            int scaleFactor = FromKeyboard.readIntWithMinimum("kelipatan perbesaran gambar", 1);
+            ToKeyboard.printMessage("Memperbesar gambar... (akan memakan waktu beberapa saat)");
+            Image scaledImage = image.getNTimesSizeImage(scaleFactor);
+
+            ToFile.exportImageFile(scaledImage);
+        }
     }
 
 }
