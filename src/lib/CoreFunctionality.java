@@ -185,7 +185,7 @@ public class CoreFunctionality {
     }
 
     static public class MLR {
-        static public List<Double> betaProducer(Matrix data) {
+        static private List<Double> betaProducer(Matrix data) {
             Matrix x = data.getCopyMatrixByColumn(0, data.getNCol() - 2);
             Matrix y = data.getCopyMatrixByColumn(data.getNCol() - 1, data.getNCol() - 1);
             Matrix transposedX = x.getCopyMatrixByColumn(0, x.getNCol() - 1);
@@ -230,7 +230,7 @@ public class CoreFunctionality {
             return betaList;
         }
 
-        static public Matrix resultGenerator(List<Double> betaList, Matrix dataToPredict) {
+        static private Matrix resultGenerator(List<Double> betaList, Matrix dataToPredict) {
             Matrix resultMatrix = new Matrix(dataToPredict.getNRow(), dataToPredict.getNCol() + 1);
             for (int i = 0; i <= dataToPredict.getNRow() - 1; i++) {
                 List<Double> addedRow = Arrays.stream(dataToPredict.getRow(i)).boxed().collect(Collectors.toList());
@@ -250,7 +250,6 @@ public class CoreFunctionality {
                 addedRowArray[dataToPredict.getNCol() - 1] = result;
 
                 resultMatrix.setRow(i, addedRowArray);
-
             }
 
             return resultMatrix;
@@ -264,7 +263,11 @@ public class CoreFunctionality {
 
             List<Double> betaList = betaProducer(data);
             Matrix predictedData = resultGenerator(betaList, dataToPredict);
-
+            if (IOLib.chooseToWriteToFile()) {
+                ToFile.MLR(betaList, predictedData);
+            } else {
+                ToKeyboard.printMLR(betaList, predictedData);
+            }
         }
     }
 
