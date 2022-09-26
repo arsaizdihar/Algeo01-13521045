@@ -281,10 +281,10 @@ public class Matrix {
         Matrix resultMatrix;
 
         // ALGORITMA
-        resultMatrix = new Matrix(getNRow(), endColIdx - startColIdx + 1);
-        for (int rowIdx = 0; rowIdx <= getNRow() - 1; rowIdx++) {
+        resultMatrix = new Matrix(this.getNRow(), endColIdx - startColIdx + 1);
+        for (int rowIdx = 0; rowIdx <= this.getNRow() - 1; rowIdx++) {
             for (int colIdx = startColIdx; colIdx <= endColIdx; colIdx++) {
-                resultMatrix.setElmt(rowIdx, colIdx - startColIdx, getElmt(rowIdx, colIdx));
+                resultMatrix.setElmt(rowIdx, colIdx - startColIdx, this.getElmt(rowIdx, colIdx));
             }
         }
 
@@ -363,7 +363,7 @@ public class Matrix {
         double multiplier;
 
         // ALGORITMA
-        hasil = getCopyMatrixByColumn(0, getNCol() - 1);
+        hasil = getCopyMatrixByColumn(0, this.getNCol() - 1);
 
         rowIdx = 0;
         multiplier = 1;
@@ -388,7 +388,7 @@ public class Matrix {
         int rowIdx, rowNonZeroIdx;
 
         // ALGORITMA
-        hasil = getEchelonForm(startColIdx, endColIdx).first;
+        hasil = this.getEchelonForm(startColIdx, endColIdx).first;
         rowIdx = 0;
         for (int colIdx = startColIdx; colIdx <= endColIdx; colIdx++) {
             rowNonZeroIdx = hasil.getNonZeroRowIdx(rowIdx, hasil.getNRow() - 1, colIdx);
@@ -408,7 +408,7 @@ public class Matrix {
      *         dengan variabel parametrik
      */
     public Matrix getSolG() throws NoSolutionException {
-        Matrix hasil = getEchelonForm(0, getNCol() - 2).first;
+        Matrix hasil = this.getEchelonForm(0, this.getNCol() - 2).first;
 
         int rowIdx;
         boolean isFoundRowNoSolution;
@@ -505,15 +505,15 @@ public class Matrix {
      * @return
      */
     public Matrix getSolGJ() throws NoSolutionException {
-        Matrix hasil = getReducedForm(0, getNCol() - 2);
+        Matrix hasil = this.getReducedForm(0, this.getNCol() - 2);
 
         int rowIdx;
         boolean isFoundRowNoSolution;
-        Matrix testMatrix = hasil.getCopyMatrixByColumn(0, getNCol() - 2);
+        Matrix testMatrix = hasil.getCopyMatrixByColumn(0, this.getNCol() - 2);
         rowIdx = 0;
         isFoundRowNoSolution = false;
         while (!isFoundRowNoSolution && (rowIdx <= testMatrix.getNRow() - 1)) {
-            if (testMatrix.isRowEmpty(rowIdx) && (hasil.getElmt(rowIdx, getNCol() - 1) != 0)) {
+            if (testMatrix.isRowEmpty(rowIdx) && (hasil.getElmt(rowIdx, this.getNCol() - 1) != 0)) {
                 isFoundRowNoSolution = true;
             } else {
                 rowIdx++;
@@ -581,11 +581,11 @@ public class Matrix {
         Matrix inversedMatrix, rightMostColumnMatrix, solutionMatrix;
 
         try {
-            inversedMatrix = getCopyMatrixByColumn(0, getNCol() - 2).getInverseAdjoin();
+            inversedMatrix = this.getCopyMatrixByColumn(0, this.getNCol() - 2).getInverseAdjoin();
         } catch (NoInverseException e) {
             throw new NoInverseException();
         }
-        rightMostColumnMatrix = getCopyMatrixByColumn(getNCol() - 1, getNCol() - 1);
+        rightMostColumnMatrix = this.getCopyMatrixByColumn(this.getNCol() - 1, this.getNCol() - 1);
 
         try {
             solutionMatrix = multiply(inversedMatrix, rightMostColumnMatrix);
@@ -608,13 +608,13 @@ public class Matrix {
         Matrix augmentedMatrix;
 
         // ALGORITMA
-        augmentedMatrix = new Matrix(getNRow(), 2 * getNRow());
-        for (int rowIdx = 0; rowIdx <= getNRow() - 1; rowIdx++) {
-            for (int colIdx = 0; colIdx <= getNCol() - 1; colIdx++) {
-                augmentedMatrix.setElmt(rowIdx, colIdx, getElmt(rowIdx, colIdx));
+        augmentedMatrix = new Matrix(this.getNRow(), 2 * this.getNRow());
+        for (int rowIdx = 0; rowIdx <= this.getNRow() - 1; rowIdx++) {
+            for (int colIdx = 0; colIdx <= this.getNCol() - 1; colIdx++) {
+                augmentedMatrix.setElmt(rowIdx, colIdx, this.getElmt(rowIdx, colIdx));
             }
-            for (int colIdx = getNCol(); colIdx <= 2 * getNCol() - 1; colIdx++) {
-                if (colIdx == getNRow() + rowIdx) {
+            for (int colIdx = this.getNCol(); colIdx <= 2 * this.getNCol() - 1; colIdx++) {
+                if (colIdx == this.getNRow() + rowIdx) {
                     augmentedMatrix.setElmt(rowIdx, colIdx, 1);
                 } else {
                     augmentedMatrix.setElmt(rowIdx, colIdx, 0);
@@ -637,9 +637,9 @@ public class Matrix {
         Matrix reducedMatrix, inversedMatrix, augmentedMatrix, testMatrix;
 
         // ALGORITMA
-        augmentedMatrix = getAugmentedMatrixByIdentity();
-        reducedMatrix = augmentedMatrix.getReducedForm(0, getNRow() - 1);
-        testMatrix = reducedMatrix.getCopyMatrixByColumn(0, getNRow() - 1);
+        augmentedMatrix = this.getAugmentedMatrixByIdentity();
+        reducedMatrix = augmentedMatrix.getReducedForm(0, this.getNRow() - 1);
+        testMatrix = reducedMatrix.getCopyMatrixByColumn(0, this.getNRow() - 1);
 
         rowIdx = 0;
         isFoundRowEmpty = false;
@@ -680,13 +680,13 @@ public class Matrix {
             throw new Errors.NoInverseException();
         }
 
-        cofactorMatrix = new Matrix(getNRow(), getNCol());
+        cofactorMatrix = new Matrix(this.getNRow(), this.getNCol());
 
         try {
-            for (i = 0; i <= getNRow() - 1; i++) {
-                for (j = 0; j <= getNCol() - 1; j++) {
+            for (i = 0; i <= this.getNRow() - 1; i++) {
+                for (j = 0; j <= this.getNCol() - 1; j++) {
                     sign = (-2 * ((i + j) % 2) + 1);
-                    cofactorMatrix.setElmt(i, j, getMinor(i, j).getDeterminantCofactor() * sign);
+                    cofactorMatrix.setElmt(i, j, this.getMinor(i, j).getDeterminantCofactor() * sign);
                 }
             }
         } catch (InvalidMatrixSquareException e) {
@@ -736,16 +736,16 @@ public class Matrix {
         int iRes, jRes;
 
         // ALGORITMA
-        res = new Matrix(getNRow() - 1, getNCol() - 1);
+        res = new Matrix(this.getNRow() - 1, this.getNCol() - 1);
 
-        for (int i = 0; i < getNRow(); i++) {
-            for (int j = 0; j < getNCol(); j++) {
+        for (int i = 0; i < this.getNRow(); i++) {
+            for (int j = 0; j < this.getNCol(); j++) {
                 if (i != rowIdx && j != colIdx) {
                     // menentukan indeks baru
                     iRes = i < rowIdx ? i : i - 1;
                     jRes = j < colIdx ? j : j - 1;
 
-                    res.setElmt(iRes, jRes, getElmt(i, j));
+                    res.setElmt(iRes, jRes, this.getElmt(i, j));
                 }
             }
         }
@@ -765,22 +765,22 @@ public class Matrix {
         Matrix temp;
 
         // ALGORITMA
-        if (isSPL()) {
+        if (this.isSPL()) {
             return;
         }
 
-        temp = new Matrix(getNCol() - 1, getNCol());
-        for (int i = 0; i < getNRow(); i++) {
-            if (i < getNRow()) {
-                temp.setRow(i, getRow(i));
+        temp = new Matrix(this.getNCol() - 1, this.getNCol());
+        for (int i = 0; i < this.getNRow(); i++) {
+            if (i < this.getNRow()) {
+                temp.setRow(i, this.getRow(i));
             } else {
-                for (int j = 0; j < getNCol(); j++) {
+                for (int j = 0; j < this.getNCol(); j++) {
                     temp.setElmt(i, j, 0);
                 }
             }
         }
 
-        setContents(temp.getContents());
+        this.setContents(temp.getContents());
     }
 
     /**
@@ -796,17 +796,20 @@ public class Matrix {
         double multiplier;
 
         // ALGORITMA
-        // basis, matriks 1x1
-        if (!isSquare()) {
+        if (!this.isSquare()) {
             throw new Errors.InvalidMatrixSquareException();
         }
-        if (getNRow() == 1) {
-            return getElmt(0, 0);
+
+        // basis, matriks 1x1
+        if (this.getNRow() == 1) {
+            return this.getElmt(0, 0);
         } else {
             res = 0;
-            for (int i = 0; i < getNCol(); i++) {
+            for (int i = 0; i < this.getNCol(); i++) {
                 multiplier = i % 2 == 0 ? 1 : -1;
-                res += getElmt(0, i) * multiplier * getMinor(0, i).getDeterminantCofactor();
+                if (this.getElmt(0, i) == 0)
+                    continue;
+                res += this.getElmt(0, i) * multiplier * this.getMinor(0, i).getDeterminantCofactor();
             }
             return res;
         }
@@ -825,21 +828,21 @@ public class Matrix {
         double det;
 
         // ALGORITMA
-        if (!isSPL()) {
+        if (!this.isSPL()) {
             throw new Errors.NoSolutionException();
         }
 
-        if (getNRow() >= getNCol()) {
+        if (this.getNRow() >= this.getNCol()) {
             throw new RuntimeException();
         }
 
         // ALGORITMA
-        res = new Matrix(getNCol() - 1, 1);
-        square = new Matrix(getNRow(), getNRow());
+        res = new Matrix(this.getNCol() - 1, 1);
+        square = new Matrix(this.getNRow(), this.getNRow());
 
-        for (int i = 0; i < getNRow(); i++) {
-            for (int j = 0; j < getNRow(); j++) {
-                square.setElmt(i, j, getElmt(i, j));
+        for (int i = 0; i < this.getNRow(); i++) {
+            for (int j = 0; j < this.getNRow(); j++) {
+                square.setElmt(i, j, this.getElmt(i, j));
             }
         }
 
@@ -853,14 +856,14 @@ public class Matrix {
             throw new Errors.NoSolutionException();
         }
 
-        for (int i = 0; i < getNCol() - 1; i++) {
-            temp = new Matrix(getNRow(), getNRow());
-            for (int j = 0; j < getNRow(); j++) {
-                for (int k = 0; k < getNCol() - 1; k++) {
+        for (int i = 0; i < this.getNCol() - 1; i++) {
+            temp = new Matrix(this.getNRow(), this.getNRow());
+            for (int j = 0; j < this.getNRow(); j++) {
+                for (int k = 0; k < this.getNCol() - 1; k++) {
                     if (k == i) {
-                        temp.setElmt(j, k, getElmt(j, getNCol() - 1));
+                        temp.setElmt(j, k, this.getElmt(j, this.getNCol() - 1));
                     } else {
-                        temp.setElmt(j, k, getElmt(j, k));
+                        temp.setElmt(j, k, this.getElmt(j, k));
                     }
                 }
             }
@@ -884,13 +887,13 @@ public class Matrix {
      * @throws NoSolutionException
      */
     public Matrix getPolinomialFunction() throws NoSolutionException {
-        Matrix polinomSPL = new Matrix(getNRow(), getNRow() + 1);
+        Matrix polinomSPL = new Matrix(this.getNRow(), this.getNRow() + 1);
 
         for (int i = 0; i < polinomSPL.getNRow(); i++) {
             for (int j = 0; j < polinomSPL.getNCol() - 1; j++) {
-                polinomSPL.setElmt(i, j, Math.pow(getElmt(i, 0), j));
+                polinomSPL.setElmt(i, j, Math.pow(this.getElmt(i, 0), j));
             }
-            polinomSPL.setElmt(i, polinomSPL.getNCol() - 1, getElmt(i, 1));
+            polinomSPL.setElmt(i, polinomSPL.getNCol() - 1, this.getElmt(i, 1));
         }
 
         return polinomSPL.getSolCramer();
@@ -906,8 +909,8 @@ public class Matrix {
      */
     public double getValuePolinomial(double x) {
         double res = 0;
-        for (int i = 0; i < getNRow(); i++) {
-            res += getElmt(i, 0) * Math.pow(x, i);
+        for (int i = 0; i < this.getNRow(); i++) {
+            res += this.getElmt(i, 0) * Math.pow(x, i);
         }
         return res;
     }
@@ -944,7 +947,7 @@ public class Matrix {
         rowIdx = 0;
         for (i = 0; i <= 3; i++) {
             for (j = 0; j <= 3; j++) {
-                pointValueMatrix.setElmt(rowIdx, 0, getElmt(i, j));
+                pointValueMatrix.setElmt(rowIdx, 0, this.getElmt(i, j));
                 rowIdx++;
             }
         }
