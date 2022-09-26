@@ -781,6 +781,8 @@ public class Matrix {
             res = 0;
             for (int i = 0; i < getNCol(); i++) {
                 multiplier = i % 2 == 0 ? 1 : -1;
+                if (getElmt(0, i) == 0)
+                    continue;
                 res += getElmt(0, i) * multiplier * getMinor(0, i).getDeterminantCofactor();
             }
             return res;
