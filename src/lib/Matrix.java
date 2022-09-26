@@ -154,6 +154,15 @@ public class Matrix {
 
     /**
      * 
+     * @return true jika matriks merupakan kumpulan point (satu baris terdiri atas
+     *         dua kolom x dan y)
+     */
+    public boolean isPoints() {
+        return getNCol() == 2;
+    }
+
+    /**
+     * 
      * @param rowIdx indeks baris yang ingin dicek
      * @return true jika semua elemen pada baris ke-rowIdx bernilai 0, false jika
      */
@@ -342,7 +351,8 @@ public class Matrix {
     /**
      * 
      * @param startColIdx index baris awal yang ingin dibuat sebagai leading one
-     * @param endColIdx index baris terakhir yang ingin diubah menjadi bentuk echelon
+     * @param endColIdx   index baris terakhir yang ingin diubah menjadi bentuk
+     *                    echelon
      * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam
      *         satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
      */
@@ -496,7 +506,7 @@ public class Matrix {
      */
     public Matrix getSolGJ() throws NoSolutionException {
         Matrix hasil = getReducedForm(0, getNCol() - 2);
-        
+
         int rowIdx;
         boolean isFoundRowNoSolution;
         Matrix testMatrix = hasil.getCopyMatrixByColumn(0, getNCol() - 2);
@@ -513,7 +523,6 @@ public class Matrix {
         if (isFoundRowNoSolution) {
             throw new Errors.NoSolutionException();
         }
-
 
         Matrix solusi = new Matrix(hasil.getNCol() - 1, hasil.getNCol() + 1);
 
@@ -562,6 +571,7 @@ public class Matrix {
         }
         return solusi;
     }
+
     /**
      * 
      * @return Matriks solusi SPL dengan metode pengalian dengan inverse (kolom 1)
@@ -576,7 +586,7 @@ public class Matrix {
             throw new NoInverseException();
         }
         rightMostColumnMatrix = getCopyMatrixByColumn(getNCol() - 1, getNCol() - 1);
-        
+
         try {
             solutionMatrix = multiply(inversedMatrix, rightMostColumnMatrix);
         } catch (InvalidMatrixSizeException e) {
@@ -585,7 +595,6 @@ public class Matrix {
 
         return solutionMatrix;
     }
-       
 
     /**
      * prekondisi: matriks merupakan maktriks square
@@ -631,7 +640,7 @@ public class Matrix {
         augmentedMatrix = getAugmentedMatrixByIdentity();
         reducedMatrix = augmentedMatrix.getReducedForm(0, getNRow() - 1);
         testMatrix = reducedMatrix.getCopyMatrixByColumn(0, getNRow() - 1);
-        
+
         rowIdx = 0;
         isFoundRowEmpty = false;
         while (!isFoundRowEmpty && (rowIdx <= testMatrix.getNRow() - 1)) {
@@ -670,13 +679,13 @@ public class Matrix {
         if (determinant == 0) {
             throw new Errors.NoInverseException();
         }
-            
+
         cofactorMatrix = new Matrix(getNRow(), getNCol());
 
         try {
             for (i = 0; i <= getNRow() - 1; i++) {
                 for (j = 0; j <= getNCol() - 1; j++) {
-                    sign = (-2 * ((i+j) % 2) + 1);
+                    sign = (-2 * ((i + j) % 2) + 1);
                     cofactorMatrix.setElmt(i, j, getMinor(i, j).getDeterminantCofactor() * sign);
                 }
             }
@@ -685,7 +694,7 @@ public class Matrix {
         }
 
         cofactorMatrix.transpose();
-        cofactorMatrix.multiplyScalar(1/determinant);
+        cofactorMatrix.multiplyScalar(1 / determinant);
 
         return cofactorMatrix;
     }
@@ -785,7 +794,7 @@ public class Matrix {
      * @throws InvalidMatrixSizeException
      * @throws NoSolutionException
      */
-    public Matrix getSolCramer() throws Errors.NoSolutionException, InvalidMatrixSizeException {
+    public Matrix getSolCramer() throws Errors.NoSolutionException {
         // KAMUS LOKAL
         Matrix res, temp, square;
         double det;
@@ -796,7 +805,7 @@ public class Matrix {
         }
 
         if (getNRow() >= getNCol()) {
-            throw new Errors.InvalidMatrixSizeException();
+            throw new RuntimeException();
         }
 
         // ALGORITMA
@@ -839,27 +848,68 @@ public class Matrix {
 
         return res;
     }
+
+    /**
+     * Fungsi untuk mendapatkan solusi dari interpolasi polinomial
+     * <p>
+     * Prekondisi: matriks berupa matriks point yaitu dengan kolom berjumlah 2
+     * 
+     * @return matriks solusi interpolasi polinomial derajat n yaitu matriks (n+1) x
+     *         1
+     * @throws NoSolutionException
+     */
+    public Matrix getPolinomialFunction() throws NoSolutionException {
+        Matrix polinomSPL = new Matrix(getNRow(), getNRow() + 1);
+
+        for (int i = 0; i < polinomSPL.getNRow(); i++) {
+            for (int j = 0; j < polinomSPL.getNCol() - 1; j++) {
+                polinomSPL.setElmt(i, j, Math.pow(getElmt(i, 0), j));
+            }
+            polinomSPL.setElmt(i, polinomSPL.getNCol() - 1, getElmt(i, 1));
+        }
+
+        return polinomSPL.getSolCramer();
+    }
+
+    /**
+     * Fungsi untuk mendapatkan hasil estimasi nilai x pada interpolasi polinomial
+     * <p>
+     * Prekondisi: matriks berupa hasil return dari getPolinomialFunction
+     * 
+     * @param x nilai yang ingin diestimasi
+     * @return hasil estimasi
+     */
+    public double getValuePolinomial(double x) {
+        double res = 0;
+        for (int i = 0; i < getNRow(); i++) {
+            res += getElmt(i, 0) * Math.pow(x, i);
+        }
+        return res;
+    }
+
     /**
      * 
-     * @param a parameter a dari nilai f(a,b) yang ingin dicari interpolasinya di titik tersebut
-     * @param b parameter b dari nilai f(a,b) yang ingin dicari interpolasinya di titik tersebut
+     * @param a parameter a dari nilai f(a,b) yang ingin dicari interpolasinya di
+     *          titik tersebut
+     * @param b parameter b dari nilai f(a,b) yang ingin dicari interpolasinya di
+     *          titik tersebut
      * @return nilai f(a,b) yang telah di interpolasi
      */
-    public double getValueBicubic (double a, double b) {
+    public double getValueBicubic(double a, double b) {
         Matrix coefficientMatrix, pointValueMatrix, functionCoefficientMatrix;
         int i, j, x, y, rowIdx, colIdx;
         double result;
 
         rowIdx = 0;
-    
+
         coefficientMatrix = new Matrix(16, 16);
         for (x = -1; x <= 2; x++) {
             for (y = -1; y <= 2; y++) {
                 colIdx = 0;
                 for (i = 0; i <= 3; i++) {
                     for (j = 0; j <= 3; j++) {
-                       coefficientMatrix.setElmt(rowIdx, colIdx, Math.pow(x, i) * Math.pow(y, j));
-                       colIdx++;
+                        coefficientMatrix.setElmt(rowIdx, colIdx, Math.pow(x, i) * Math.pow(y, j));
+                        colIdx++;
                     }
                 }
                 rowIdx++;
@@ -882,12 +932,12 @@ public class Matrix {
         } catch (InvalidMatrixSizeException e) {
             throw new RuntimeException(e);
         }
-        
+
         rowIdx = 0;
         result = 0;
         for (i = 0; i <= 3; i++) {
             for (j = 0; j <= 3; j++) {
-                result += functionCoefficientMatrix.getElmt(rowIdx, 0) *  Math.pow(a, i) * Math.pow(b, j);
+                result += functionCoefficientMatrix.getElmt(rowIdx, 0) * Math.pow(a, i) * Math.pow(b, j);
                 rowIdx++;
             }
         }
@@ -1062,10 +1112,8 @@ public class Matrix {
         }
 
     }
-    
+
 }
-
-
 
 class MatrixDoublePair {
     public Matrix first;

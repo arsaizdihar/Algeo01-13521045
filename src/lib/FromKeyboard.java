@@ -22,9 +22,9 @@ public class FromKeyboard {
      * @param numberName nama angka yang dibaca. Teks digunakan untuk user prompt.
      * @param lowerBound batas minimum angka yang boleh
      * @param upperBound batas maksimum angka yang boleh
-     * @return angka masukan pengguna yang sudah sesuai dengan keperluan
+     * @return integer angka masukan pengguna yang sudah sesuai dengan keperluan
      */
-    static public int readNumber(String numberName, double lowerBound, double upperBound) {
+    static public int readInt(String numberName, int lowerBound, int upperBound) {
         int inputtedNumber = 0;
         boolean inputValid = false;
         while (!inputValid) {
@@ -48,10 +48,10 @@ public class FromKeyboard {
      * 
      * @param numberName nama angka yang dibaca. Teks digunakan untuk user prompt.
      * @param lowerBound batas minimum angka yang boleh
-     * @return angka masukan pengguna yang sudah sesuai dengan keperluan
+     * @return integer angka masukan pengguna yang sudah sesuai dengan keperluan
      */
-    static public int readNumberWithMinimum(String numberName, int lowerBound) {
-        return readNumber(numberName, lowerBound, Double.MAX_VALUE);
+    static public int readIntWithMinimum(String numberName, int lowerBound) {
+        return readInt(numberName, lowerBound, Integer.MAX_VALUE);
     }
 
     /**
@@ -61,11 +61,37 @@ public class FromKeyboard {
      * 
      * @param numberName nama angka yang dibaca. Teks digunakan untuk user prompt.
      * @param upperBound batas maksimum angka yang boleh
-     * @return angka masukan pengguna yang sudah sesuai dengan keperluan
+     * @return integer angka masukan pengguna yang sudah sesuai dengan keperluan
      */
-    static public int readNumberWithMaximum(String numberName, int upperBound) {
-        return readNumber(numberName, Double.MIN_VALUE, upperBound);
+    static public int readIntWithMaximum(String numberName, int upperBound) {
+        return readInt(numberName, Integer.MIN_VALUE, upperBound);
 
+    }
+
+    /**
+     * Fungsi baca angka generik. Membaca sebuah angka yang dimasukkan user.
+     * 
+     * @param numberName nama angka yang dibaca. Teks digunakan untuk user prompt.
+     * @return double angka masukan pengguna yang sudah sesuai dengan keperluan
+     */
+    static public double readDouble(String numberName) {
+        System.out.format("Masukkan %s : ", numberName);
+        double inputtedNumber = scanner.nextDouble();
+
+        scanner.nextLine();
+
+        return inputtedNumber;
+    }
+
+    /**
+     * Fungsi baca angka generik. Membaca sebuah angka yang dimasukkan user.
+     * 
+     * @param numberName nama angka yang dibaca. Teks digunakan untuk user prompt.
+     * @return double angka masukan pengguna yang sudah sesuai dengan keperluan
+     */
+    static public String readString(String prompt) {
+        System.out.print(prompt);
+        return scanner.nextLine();
     }
 
     /**
@@ -155,7 +181,7 @@ public class FromKeyboard {
      *         pengguna
      */
     static public Matrix MatrixSquare() {
-        int n = readNumberWithMinimum("jumlah baris dan kolom", 1);
+        int n = readIntWithMinimum("jumlah baris dan kolom", 1);
 
         return Matrix(n, n, "Masukkan matriks baris per baris dengan tiap elemen dipisahkan spasi");
     }
@@ -167,13 +193,21 @@ public class FromKeyboard {
      * Mengulangi input salah satu baris jika kolom yang dimasukkan jumlahnya tidak
      * sesuai atau ada elemen yang bukan angka
      * 
+     * @param prompt string yang ingin ditampilkan saat meminta jumlah baris
      * @return matriks dengan 2 kolom. kolom pertamanya adalah x dan kolom keduanya
      *         adalah y
      */
-    static public Matrix Points() {
-        int n = readNumberWithMinimum("jumlah variabel", 1);
+    static public Matrix Points(String prompt) {
+        int n = readIntWithMinimum(prompt, 1);
 
         return Matrix(n, 2, "Masukkan titik baris per baris dengan x dan y dipisahkan spasi");
+    }
+
+    /**
+     * Memanggil fungsi this.Points dengan propmt "jumlah variabel"
+     */
+    static public Matrix Points() {
+        return Points("jumlah variabel");
     }
 
     /**
@@ -192,8 +226,8 @@ public class FromKeyboard {
      *         variabel pada persamana
      */
     static public Matrix SPL() {
-        int m = readNumberWithMinimum("jumlah persamaan", 1);
-        int n = readNumberWithMinimum("jumlah variabel", 1);
+        int m = readIntWithMinimum("jumlah persamaan", 1);
+        int n = readIntWithMinimum("jumlah variabel", 1);
 
         return Matrix(m, n + 1,
                 "Masukkan SPL baris per baris dengan koefisien variabel dipisahkan spasi dan elemen terakhir sebagai b");
@@ -212,8 +246,8 @@ public class FromKeyboard {
      *         variabel pada persamana
      */
     static public Matrix Matrix() {
-        int m = readNumberWithMinimum("jumlah baris", 1);
-        int n = readNumberWithMinimum("jumlah kolom", 1);
+        int m = readIntWithMinimum("jumlah baris", 1);
+        int n = readIntWithMinimum("jumlah kolom", 1);
 
         return Matrix(m, n,
                 "Masukkan matriks baris per baris dengan tiap elemen dipisahkan spasi");
@@ -237,8 +271,8 @@ public class FromKeyboard {
      *         variabel
      */
     static public Matrix MLR() {
-        int m = readNumberWithMinimum("jumlah sampel", 1);
-        int n = readNumberWithMinimum("jumlah variabel", 1);
+        int m = readIntWithMinimum("jumlah sampel", 1);
+        int n = readIntWithMinimum("jumlah variabel", 1);
 
         return Matrix(m, n + 1,
                 "Masukkan sampel baris per baris dengan elemen terakhir adalah y dan elemen sisanya adalah variabel x");
