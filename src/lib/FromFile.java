@@ -156,6 +156,16 @@ public class FromFile {
         return FromFile.matrixInput(filePrompt, true);
     }
 
+    static public Matrix[] MLR() {
+        ToKeyboard.printMessage(
+                "File berisi data yang sudah ada dan data yang ingin diprediksi nilai y-nya adalah dipisah dan dibedakan.");
+        Matrix data = FromFile.matrixInput("Masukkan nama file berisi data riil yang sudah ada : ", false);
+        Matrix predictedData = FromFile
+                .matrixInput("Masukkan nama file berisi data variabel x yang ingin diprediksi : ", false);
+        Matrix[] returnValue = { data, predictedData };
+        return returnValue;
+    }
+
     static public Image readImage() {
         System.out.println("Masukkan nama file gambar yang ingin diperbesar: ");
         while (true) {

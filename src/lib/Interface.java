@@ -140,7 +140,9 @@ public class Interface {
                             // Take input of a set of points and do stuff with it accordingly
                             break;
                         case 6:
-                            // Take input of a set of points and do stuff with it accordingly
+                            CoreFunctionality.MLR.compute();
+                            FromKeyboard.EnterToContinue();
+                            programState = "main";
                             break;
                         case 7:
                             CoreFunctionality.Interpolation.imageScaling();

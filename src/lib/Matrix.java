@@ -918,6 +918,9 @@ public class Matrix {
     }
 
     /**
+     * Fungsi untuk mendapatkan solusi dari interpolasi polinomial
+     * <p>
+     * Prekondisi: matriks berupa matriks point yaitu dengan kolom berjumlah 2
      * 
      * @param a parameter a dari nilai f(a,b) yang ingin dicari interpolasinya di
      *          titik tersebut
@@ -1138,6 +1141,71 @@ public class Matrix {
      */
     public int getMostDigit() {
         return getMostDigit(2);
+    }
+
+    /**
+     * Mencari rata-rata dari sebuah bagian matriks. Index inklusif.
+     * 
+     * @param startRowIdx baris awal pencarian rata-rata
+     * @param endRowIdx   baris akhir pencarian rata-rata
+     * @param startColIdx kolom awal pencarian rata-rata
+     * @param endColIdx   kolom akhir pencarian rata-rata
+     * @return rata-rata dari nilai sel pada bagian yang diberikan
+     */
+    public double getAverageByColumnAndRow(int startRowIdx, int endRowIdx, int startColIdx, int endColIdx) {
+        double sum = 0;
+        int cellCount = (endRowIdx - startRowIdx + 1) * (endColIdx - startColIdx + 1);
+        for (int i = startRowIdx; i <= endRowIdx; i++) {
+            for (int j = startColIdx; j <= endColIdx; j++) {
+                sum += getElmt(i, j);
+            }
+        }
+
+        return sum / cellCount;
+    }
+
+    /**
+     * Mencari rata-rata dari sebagian matriks dari kolom sekian sampai kolom
+     * sekian. Baris yang dihitung adalah seluruh baris. Index inklusif.
+     * 
+     * @param startColIdx kolom awal pencarian rata-rata
+     * @param endColIdx   kolom akhir pencarian rata-rata
+     * @return rata-rata dari nilai sel pada bagian yang diberikan
+     */
+    public double getAverageByColumn(int startColIdx, int endColIdx) {
+        return getAverageByColumnAndRow(0, getNRow() - 1, startColIdx, endColIdx);
+    }
+
+    /**
+     * Mencari rata-rata dari salah satu kolom pada matrix.
+     * 
+     * @param colIdx kolom yang ingin dicari rata-ratanya
+     * @return rata-rata dari nilai sel pada kolom yang diberikan
+     */
+    public double getAverageOfColumn(int colIdx) {
+        return getAverageByColumn(colIdx, colIdx);
+    }
+
+    /**
+     * Mencari rata-rata dari sebagian matriks dari baris sekian sampai baris
+     * sekian. Kolom yang dihitung adalah seluruh kolom. Index inklusif.
+     * 
+     * @param startRowIdx baris awal pencarian rata-rata
+     * @param endRowIdx   baris akhir pencarian rata-rata
+     * @return rata-rata dari nilai sel pada bagian yang diberikan
+     */
+    public double getAverageByRow(int startRowIdx, int endRowIdx) {
+        return getAverageByColumnAndRow(startRowIdx, endRowIdx, 0, getNCol() - 1);
+    }
+
+    /**
+     * Mencari rata-rata dari salah satu baris pada matrix.
+     * 
+     * @param rowIdx baris yang ingin dicari rata-ratanya
+     * @return rata-rata dari nilai sel pada baris yang diberikan
+     */
+    public double getAverageOfRow(int rowIdx) {
+        return getAverageByRow(rowIdx, rowIdx);
     }
 
     /**

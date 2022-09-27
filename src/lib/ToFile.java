@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -150,6 +151,16 @@ public class ToFile {
         writeToFile(matrixToRowString(invertedMatrix));
     }
 
+    public static void MLR(List<Double> betaList, Matrix predictedData) {
+        ArrayList<String> rowOfTexts = new ArrayList<String>();
+        rowOfTexts.add(IOLib.MLR.createEquationText(betaList));
+        for (int i = 0; i < predictedData.getNRow(); i++) {
+            rowOfTexts.add(IOLib.MLR.createResultText(predictedData.getRow(i)));
+        }
+
+        writeToFile((rowOfTexts.stream().toArray(String[]::new)));
+    }
+
     public static void exportImageFile(Image img) {
         ToKeyboard.printMessage("Masukkan nama file gambar yang ingin diexport :");
         String filename = getValidFilename();
@@ -162,5 +173,8 @@ public class ToFile {
             String errorMessage = "Gambar tidak dapat ditulis karena suatu hal. Mohon coba lagi.";
             ToKeyboard.printMessage(errorMessage);
         }
-    }
-}
+    }}
+
+    
+
+    

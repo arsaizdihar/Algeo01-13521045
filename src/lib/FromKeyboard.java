@@ -84,10 +84,10 @@ public class FromKeyboard {
     }
 
     /**
-     * Fungsi baca angka generik. Membaca sebuah angka yang dimasukkan user.
+     * Fungsi baca string generik. Membaca sebuah string yang dimasukkan user.
      * 
-     * @param numberName nama angka yang dibaca. Teks digunakan untuk user prompt.
-     * @return double angka masukan pengguna yang sudah sesuai dengan keperluan
+     * @param prompt nama string yang dibaca. Teks digunakan untuk user prompt.
+     * @return String masukan pengguna
      */
     static public String readString(String prompt) {
         System.out.print(prompt);
@@ -270,12 +270,22 @@ public class FromKeyboard {
      *         terakhir adalah nilai f() sementara kolom lainnya adalah nilai
      *         variabel
      */
-    static public Matrix MLR() {
-        int m = readIntWithMinimum("jumlah sampel", 1);
-        int n = readIntWithMinimum("jumlah variabel", 1);
+    static public Matrix[] MLR() {
+        int dataCount = readIntWithMinimum("jumlah sampel", 1);
+        int variableCount = readIntWithMinimum("jumlah variabel", 1);
 
-        return Matrix(m, n + 1,
+        Matrix data = Matrix(dataCount, variableCount + 1,
                 "Masukkan sampel baris per baris dengan elemen terakhir adalah y dan elemen sisanya adalah variabel x");
+
+        ToKeyboard.printMessage("Sekarang masukkan data yang ingin diprediksi");
+
+        int predictedDataCount = readIntWithMinimum("jumlah sampel", 1);
+
+        Matrix predictedData = Matrix(predictedDataCount, variableCount,
+                "Masukkan data yang ingin diprediksi baris per baris dengan tiap elemen sebagai variabel x");
+
+        Matrix[] returnValue = { data, predictedData };
+        return returnValue;
 
     }
 }
