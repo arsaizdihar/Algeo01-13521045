@@ -357,7 +357,7 @@ public class Matrix {
      * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam
      *         satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
      */
-    public MatrixDoublePair getEchelonForm(int startColIdx, int endColIdx) {
+    public Pair<Matrix, Double> getEchelonForm(int startColIdx, int endColIdx) {
         // KAMUS LOKAL
         Matrix hasil;
         int rowIdx, rowNonZeroIdx;
@@ -380,7 +380,7 @@ public class Matrix {
                 rowIdx++;
             }
         }
-        return new MatrixDoublePair(hasil, multiplier);
+        return new Pair<Matrix, Double>(hasil, multiplier);
     }
 
     public Matrix getReducedForm(int startColIdx, int endColIdx) {
@@ -1297,15 +1297,5 @@ public class Matrix {
         } catch (NoInverseException e) {
             throw new RuntimeException(e);
         }
-    }
-}
-
-class MatrixDoublePair {
-    public Matrix first;
-    public double second;
-
-    MatrixDoublePair(Matrix matrix, double num) {
-        this.first = matrix;
-        this.second = num;
     }
 }
