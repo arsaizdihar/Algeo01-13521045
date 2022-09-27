@@ -10,6 +10,7 @@ public class Interface {
                 "Interpolasi Polinom",
                 "Interpolasi Bicubic",
                 "Regresi linier berganda",
+                "Perbesaran gambar",
                 "Keluar"
         };
 
@@ -109,7 +110,7 @@ public class Interface {
                     programState = "mainEntering";
                     break;
                 case "mainEntering":
-                    userChoice = FromKeyboard.readInt("pilihan menu", 1, 7);
+                    userChoice = FromKeyboard.readInt("pilihan menu", 1, 8);
                     // ToKeyboard.printMessage("\n");
                     programState = "mainEntered";
                     break;
@@ -144,6 +145,11 @@ public class Interface {
                             programState = "main";
                             break;
                         case 7:
+                            CoreFunctionality.Interpolation.imageScaling();
+                            FromKeyboard.EnterToContinue();
+                            programState = "main";
+                            break;
+                        case 8:
                             ToKeyboard.printMessage("Good luck tubesnya!");
                             programState = "exited";
                             break;

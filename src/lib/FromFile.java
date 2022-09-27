@@ -2,6 +2,7 @@ package lib;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -163,6 +164,17 @@ public class FromFile {
                 .matrixInput("Masukkan nama file berisi data variabel x yang ingin diprediksi : ", false);
         Matrix[] returnValue = { data, predictedData };
         return returnValue;
+    }
+
+    static public Image readImage() {
+        System.out.println("Masukkan nama file gambar yang ingin diperbesar: ");
+        while (true) {
+            try {
+                return new Image(FromFile.getFile());
+            } catch (IOException e) {
+                System.out.println("Gagal memproses gambar di file. Pastikan tipe file adalah gambar.");
+            }
+        }
     }
 
 }

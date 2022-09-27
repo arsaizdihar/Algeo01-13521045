@@ -9,6 +9,7 @@ import lib.Errors.NoSolutionException;
 
 public class Matrix {
     private double[][] contents;
+    static final Matrix inverseBicubicCoefficientMatrix = getInverseBicubicCoefficient();
 
     /*** KONSTRUKTOR ***/
 
@@ -281,10 +282,10 @@ public class Matrix {
         Matrix resultMatrix;
 
         // ALGORITMA
-        resultMatrix = new Matrix(getNRow(), endColIdx - startColIdx + 1);
-        for (int rowIdx = 0; rowIdx <= getNRow() - 1; rowIdx++) {
+        resultMatrix = new Matrix(this.getNRow(), endColIdx - startColIdx + 1);
+        for (int rowIdx = 0; rowIdx <= this.getNRow() - 1; rowIdx++) {
             for (int colIdx = startColIdx; colIdx <= endColIdx; colIdx++) {
-                resultMatrix.setElmt(rowIdx, colIdx - startColIdx, getElmt(rowIdx, colIdx));
+                resultMatrix.setElmt(rowIdx, colIdx - startColIdx, this.getElmt(rowIdx, colIdx));
             }
         }
 
@@ -356,14 +357,14 @@ public class Matrix {
      * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam
      *         satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
      */
-    public MatrixDoublePair getEchelonForm(int startColIdx, int endColIdx) {
+    public Pair<Matrix, Double> getEchelonForm(int startColIdx, int endColIdx) {
         // KAMUS LOKAL
         Matrix hasil;
         int rowIdx, rowNonZeroIdx;
         double multiplier;
 
         // ALGORITMA
-        hasil = getCopyMatrixByColumn(0, getNCol() - 1);
+        hasil = getCopyMatrixByColumn(0, this.getNCol() - 1);
 
         rowIdx = 0;
         multiplier = 1;
@@ -379,7 +380,7 @@ public class Matrix {
                 rowIdx++;
             }
         }
-        return new MatrixDoublePair(hasil, multiplier);
+        return new Pair<Matrix, Double>(hasil, multiplier);
     }
 
     public Matrix getReducedForm(int startColIdx, int endColIdx) {
@@ -388,7 +389,7 @@ public class Matrix {
         int rowIdx, rowNonZeroIdx;
 
         // ALGORITMA
-        hasil = getEchelonForm(startColIdx, endColIdx).first;
+        hasil = this.getEchelonForm(startColIdx, endColIdx).first;
         rowIdx = 0;
         for (int colIdx = startColIdx; colIdx <= endColIdx; colIdx++) {
             rowNonZeroIdx = hasil.getNonZeroRowIdx(rowIdx, hasil.getNRow() - 1, colIdx);
@@ -408,7 +409,7 @@ public class Matrix {
      *         dengan variabel parametrik
      */
     public Matrix getSolG() throws NoSolutionException {
-        Matrix hasil = getEchelonForm(0, getNCol() - 2).first;
+        Matrix hasil = this.getEchelonForm(0, this.getNCol() - 2).first;
 
         int rowIdx;
         boolean isFoundRowNoSolution;
@@ -505,15 +506,15 @@ public class Matrix {
      * @return
      */
     public Matrix getSolGJ() throws NoSolutionException {
-        Matrix hasil = getReducedForm(0, getNCol() - 2);
+        Matrix hasil = this.getReducedForm(0, this.getNCol() - 2);
 
         int rowIdx;
         boolean isFoundRowNoSolution;
-        Matrix testMatrix = hasil.getCopyMatrixByColumn(0, getNCol() - 2);
+        Matrix testMatrix = hasil.getCopyMatrixByColumn(0, this.getNCol() - 2);
         rowIdx = 0;
         isFoundRowNoSolution = false;
         while (!isFoundRowNoSolution && (rowIdx <= testMatrix.getNRow() - 1)) {
-            if (testMatrix.isRowEmpty(rowIdx) && (hasil.getElmt(rowIdx, getNCol() - 1) != 0)) {
+            if (testMatrix.isRowEmpty(rowIdx) && (hasil.getElmt(rowIdx, this.getNCol() - 1) != 0)) {
                 isFoundRowNoSolution = true;
             } else {
                 rowIdx++;
@@ -581,11 +582,11 @@ public class Matrix {
         Matrix inversedMatrix, rightMostColumnMatrix, solutionMatrix;
 
         try {
-            inversedMatrix = getCopyMatrixByColumn(0, getNCol() - 2).getInverseAdjoin();
+            inversedMatrix = this.getCopyMatrixByColumn(0, this.getNCol() - 2).getInverseAdjoin();
         } catch (NoInverseException e) {
             throw new NoInverseException();
         }
-        rightMostColumnMatrix = getCopyMatrixByColumn(getNCol() - 1, getNCol() - 1);
+        rightMostColumnMatrix = this.getCopyMatrixByColumn(this.getNCol() - 1, this.getNCol() - 1);
 
         try {
             solutionMatrix = multiply(inversedMatrix, rightMostColumnMatrix);
@@ -608,13 +609,13 @@ public class Matrix {
         Matrix augmentedMatrix;
 
         // ALGORITMA
-        augmentedMatrix = new Matrix(getNRow(), 2 * getNRow());
-        for (int rowIdx = 0; rowIdx <= getNRow() - 1; rowIdx++) {
-            for (int colIdx = 0; colIdx <= getNCol() - 1; colIdx++) {
-                augmentedMatrix.setElmt(rowIdx, colIdx, getElmt(rowIdx, colIdx));
+        augmentedMatrix = new Matrix(this.getNRow(), 2 * this.getNRow());
+        for (int rowIdx = 0; rowIdx <= this.getNRow() - 1; rowIdx++) {
+            for (int colIdx = 0; colIdx <= this.getNCol() - 1; colIdx++) {
+                augmentedMatrix.setElmt(rowIdx, colIdx, this.getElmt(rowIdx, colIdx));
             }
-            for (int colIdx = getNCol(); colIdx <= 2 * getNCol() - 1; colIdx++) {
-                if (colIdx == getNRow() + rowIdx) {
+            for (int colIdx = this.getNCol(); colIdx <= 2 * this.getNCol() - 1; colIdx++) {
+                if (colIdx == this.getNRow() + rowIdx) {
                     augmentedMatrix.setElmt(rowIdx, colIdx, 1);
                 } else {
                     augmentedMatrix.setElmt(rowIdx, colIdx, 0);
@@ -637,9 +638,9 @@ public class Matrix {
         Matrix reducedMatrix, inversedMatrix, augmentedMatrix, testMatrix;
 
         // ALGORITMA
-        augmentedMatrix = getAugmentedMatrixByIdentity();
-        reducedMatrix = augmentedMatrix.getReducedForm(0, getNRow() - 1);
-        testMatrix = reducedMatrix.getCopyMatrixByColumn(0, getNRow() - 1);
+        augmentedMatrix = this.getAugmentedMatrixByIdentity();
+        reducedMatrix = augmentedMatrix.getReducedForm(0, this.getNRow() - 1);
+        testMatrix = reducedMatrix.getCopyMatrixByColumn(0, this.getNRow() - 1);
 
         rowIdx = 0;
         isFoundRowEmpty = false;
@@ -680,13 +681,13 @@ public class Matrix {
             throw new Errors.NoInverseException();
         }
 
-        cofactorMatrix = new Matrix(getNRow(), getNCol());
+        cofactorMatrix = new Matrix(this.getNRow(), this.getNCol());
 
         try {
-            for (i = 0; i <= getNRow() - 1; i++) {
-                for (j = 0; j <= getNCol() - 1; j++) {
+            for (i = 0; i <= this.getNRow() - 1; i++) {
+                for (j = 0; j <= this.getNCol() - 1; j++) {
                     sign = (-2 * ((i + j) % 2) + 1);
-                    cofactorMatrix.setElmt(i, j, getMinor(i, j).getDeterminantCofactor() * sign);
+                    cofactorMatrix.setElmt(i, j, this.getMinor(i, j).getDeterminantCofactor() * sign);
                 }
             }
         } catch (InvalidMatrixSquareException e) {
@@ -701,6 +702,32 @@ public class Matrix {
 
     /**
      * 
+     * @return Mengembalikan nilai determinan matriks dengan metode segitiga atas
+     * @throws Errors.InvalidMatrixSquareException
+     */
+    public double getDeterminantTriangle() throws Errors.InvalidMatrixSquareException {
+        // KAMUS
+        Matrix echelonMatrix;
+        double multiplier, diagonalProduct, determinant;
+        int i;
+        // ALGORITMA
+        if (!this.isSquare()) {
+            throw new Errors.InvalidMatrixSquareException();
+        }
+        echelonMatrix = this.getEchelonForm(0, this.getNCol() - 1).first;
+        multiplier = this.getEchelonForm(0, this.getNCol() - 1).second;
+
+        diagonalProduct = 1;
+        for (i = 0; i <= this.getNCol() - 1; i++) {
+            diagonalProduct *= echelonMatrix.getElmt(i, i);
+        }
+
+        determinant = diagonalProduct * multiplier;
+        return determinant;
+    }
+
+    /**
+     * 
      * @param rowIdx
      * @param colIdx
      * @return matriks dengan baris ke rowIdx dan kolom ke colIdx dihilangkan
@@ -711,16 +738,16 @@ public class Matrix {
         int iRes, jRes;
 
         // ALGORITMA
-        res = new Matrix(getNRow() - 1, getNCol() - 1);
+        res = new Matrix(this.getNRow() - 1, this.getNCol() - 1);
 
-        for (int i = 0; i < getNRow(); i++) {
-            for (int j = 0; j < getNCol(); j++) {
+        for (int i = 0; i < this.getNRow(); i++) {
+            for (int j = 0; j < this.getNCol(); j++) {
                 if (i != rowIdx && j != colIdx) {
                     // menentukan indeks baru
                     iRes = i < rowIdx ? i : i - 1;
                     jRes = j < colIdx ? j : j - 1;
 
-                    res.setElmt(iRes, jRes, getElmt(i, j));
+                    res.setElmt(iRes, jRes, this.getElmt(i, j));
                 }
             }
         }
@@ -740,22 +767,22 @@ public class Matrix {
         Matrix temp;
 
         // ALGORITMA
-        if (isSPL()) {
+        if (this.isSPL()) {
             return;
         }
 
-        temp = new Matrix(getNCol() - 1, getNCol());
-        for (int i = 0; i < getNRow(); i++) {
-            if (i < getNRow()) {
-                temp.setRow(i, getRow(i));
+        temp = new Matrix(this.getNCol() - 1, this.getNCol());
+        for (int i = 0; i < this.getNRow(); i++) {
+            if (i < this.getNRow()) {
+                temp.setRow(i, this.getRow(i));
             } else {
-                for (int j = 0; j < getNCol(); j++) {
+                for (int j = 0; j < this.getNCol(); j++) {
                     temp.setElmt(i, j, 0);
                 }
             }
         }
 
-        setContents(temp.getContents());
+        this.setContents(temp.getContents());
     }
 
     /**
@@ -771,17 +798,20 @@ public class Matrix {
         double multiplier;
 
         // ALGORITMA
-        // basis, matriks 1x1
-        if (!isSquare()) {
+        if (!this.isSquare()) {
             throw new Errors.InvalidMatrixSquareException();
         }
-        if (getNRow() == 1) {
-            return getElmt(0, 0);
+
+        // basis, matriks 1x1
+        if (this.getNRow() == 1) {
+            return this.getElmt(0, 0);
         } else {
             res = 0;
-            for (int i = 0; i < getNCol(); i++) {
+            for (int i = 0; i < this.getNCol(); i++) {
                 multiplier = i % 2 == 0 ? 1 : -1;
-                res += getElmt(0, i) * multiplier * getMinor(0, i).getDeterminantCofactor();
+                if (this.getElmt(0, i) == 0)
+                    continue;
+                res += this.getElmt(0, i) * multiplier * this.getMinor(0, i).getDeterminantCofactor();
             }
             return res;
         }
@@ -800,21 +830,21 @@ public class Matrix {
         double det;
 
         // ALGORITMA
-        if (!isSPL()) {
+        if (!this.isSPL()) {
             throw new Errors.NoSolutionException();
         }
 
-        if (getNRow() >= getNCol()) {
+        if (this.getNRow() >= this.getNCol()) {
             throw new RuntimeException();
         }
 
         // ALGORITMA
-        res = new Matrix(getNCol() - 1, 1);
-        square = new Matrix(getNRow(), getNRow());
+        res = new Matrix(this.getNCol() - 1, 1);
+        square = new Matrix(this.getNRow(), this.getNRow());
 
-        for (int i = 0; i < getNRow(); i++) {
-            for (int j = 0; j < getNRow(); j++) {
-                square.setElmt(i, j, getElmt(i, j));
+        for (int i = 0; i < this.getNRow(); i++) {
+            for (int j = 0; j < this.getNRow(); j++) {
+                square.setElmt(i, j, this.getElmt(i, j));
             }
         }
 
@@ -828,14 +858,14 @@ public class Matrix {
             throw new Errors.NoSolutionException();
         }
 
-        for (int i = 0; i < getNCol() - 1; i++) {
-            temp = new Matrix(getNRow(), getNRow());
-            for (int j = 0; j < getNRow(); j++) {
-                for (int k = 0; k < getNCol() - 1; k++) {
+        for (int i = 0; i < this.getNCol() - 1; i++) {
+            temp = new Matrix(this.getNRow(), this.getNRow());
+            for (int j = 0; j < this.getNRow(); j++) {
+                for (int k = 0; k < this.getNCol() - 1; k++) {
                     if (k == i) {
-                        temp.setElmt(j, k, getElmt(j, getNCol() - 1));
+                        temp.setElmt(j, k, this.getElmt(j, this.getNCol() - 1));
                     } else {
-                        temp.setElmt(j, k, getElmt(j, k));
+                        temp.setElmt(j, k, this.getElmt(j, k));
                     }
                 }
             }
@@ -859,13 +889,13 @@ public class Matrix {
      * @throws NoSolutionException
      */
     public Matrix getPolinomialFunction() throws NoSolutionException {
-        Matrix polinomSPL = new Matrix(getNRow(), getNRow() + 1);
+        Matrix polinomSPL = new Matrix(this.getNRow(), this.getNRow() + 1);
 
         for (int i = 0; i < polinomSPL.getNRow(); i++) {
             for (int j = 0; j < polinomSPL.getNCol() - 1; j++) {
-                polinomSPL.setElmt(i, j, Math.pow(getElmt(i, 0), j));
+                polinomSPL.setElmt(i, j, Math.pow(this.getElmt(i, 0), j));
             }
-            polinomSPL.setElmt(i, polinomSPL.getNCol() - 1, getElmt(i, 1));
+            polinomSPL.setElmt(i, polinomSPL.getNCol() - 1, this.getElmt(i, 1));
         }
 
         return polinomSPL.getSolCramer();
@@ -881,8 +911,8 @@ public class Matrix {
      */
     public double getValuePolinomial(double x) {
         double res = 0;
-        for (int i = 0; i < getNRow(); i++) {
-            res += getElmt(i, 0) * Math.pow(x, i);
+        for (int i = 0; i < this.getNRow(); i++) {
+            res += this.getElmt(i, 0) * Math.pow(x, i);
         }
         return res;
     }
@@ -898,40 +928,23 @@ public class Matrix {
      *          titik tersebut
      * @return nilai f(a,b) yang telah di interpolasi
      */
-    public double getValueBicubic(double a, double b) {
-        Matrix coefficientMatrix, pointValueMatrix, functionCoefficientMatrix;
-        int i, j, x, y, rowIdx, colIdx;
+    public double getValueBicubicSpecific(double a, double b) {
+        Matrix pointValueMatrix, functionCoefficientMatrix;
+        int i, j, rowIdx;
         double result;
 
-        rowIdx = 0;
-
-        coefficientMatrix = new Matrix(16, 16);
-        for (x = -1; x <= 2; x++) {
-            for (y = -1; y <= 2; y++) {
-                colIdx = 0;
-                for (i = 0; i <= 3; i++) {
-                    for (j = 0; j <= 3; j++) {
-                        coefficientMatrix.setElmt(rowIdx, colIdx, Math.pow(x, i) * Math.pow(y, j));
-                        colIdx++;
-                    }
-                }
-                rowIdx++;
-            }
-        }
         pointValueMatrix = new Matrix(16, 1);
         rowIdx = 0;
         for (i = 0; i <= 3; i++) {
             for (j = 0; j <= 3; j++) {
-                pointValueMatrix.setElmt(rowIdx, 0, getElmt(i, j));
+                pointValueMatrix.setElmt(rowIdx, 0, this.getElmt(i, j));
                 rowIdx++;
             }
         }
 
         functionCoefficientMatrix = new Matrix(16, 1);
         try {
-            functionCoefficientMatrix = multiply(coefficientMatrix.getInverseOBE(), pointValueMatrix);
-        } catch (NoInverseException e) {
-            throw new RuntimeException(e);
+            functionCoefficientMatrix = multiply(inverseBicubicCoefficientMatrix, pointValueMatrix);
         } catch (InvalidMatrixSizeException e) {
             throw new RuntimeException(e);
         }
@@ -945,6 +958,156 @@ public class Matrix {
             }
         }
         return result;
+    }
+
+    /**
+     * Prekondisi: rowStart + 3 < this.getNRow() dan colStart + 3 < this.getNCol()
+     * 
+     * @param rowStart baris awal yang ingin diinterpolasi
+     * @param colStart kolom awal yang ingin diinterpolasi
+     * @return matriks yang berisi koefisien2 dari interpolasi bicubic
+     */
+    public Matrix getBicubicFunction(int rowStart, int colStart) {
+        Matrix pointValueMatrix, functionCoefficientMatrix;
+        int i, j, rowIdx;
+
+        pointValueMatrix = new Matrix(16, 1);
+        rowIdx = 0;
+        for (i = rowStart; i <= rowStart + 3; i++) {
+            for (j = colStart; j <= colStart + 3; j++) {
+                pointValueMatrix.setElmt(rowIdx, 0, getElmt(i, j));
+                rowIdx++;
+            }
+        }
+
+        functionCoefficientMatrix = new Matrix(16, 1);
+        try {
+            functionCoefficientMatrix = multiply(inverseBicubicCoefficientMatrix, pointValueMatrix);
+        } catch (InvalidMatrixSizeException e) {
+            throw new RuntimeException(e);
+        }
+
+        return functionCoefficientMatrix;
+    }
+
+    /**
+     * Fungsi untuk mendapatkan nilai interpolasi bicubic dari matriks solusi
+     * bicubic
+     * <p>
+     * Prekondisi: matriks merupakan matriks hasil dari this.getBicubicFunction
+     * 
+     * @param a        parameter a dari nilai f(a,b) yang ingin dicari
+     *                 interpolasinya
+     * @param b        parameter b dari nilai f(a,b) yang ingin dicari
+     *                 interpolasinya
+     * @param startRow baris awal dari matriks solusi bicubic
+     * @param startCol kolom awal dari matriks solusi bicubic
+     * @return nilai f(a,b) yang telah di interpolasi
+     */
+    public double getValueBicubic(double a, double b, int startRow, int startCol) {
+        int rowIdx = 0;
+        double result = 0;
+        for (int i = 0; i <= 3; i++) {
+            for (int j = 0; j <= 3; j++) {
+                result += getElmt(rowIdx, 0) * Math.pow(a - startRow, i) * Math.pow(b - startCol, j);
+                rowIdx++;
+            }
+        }
+        return result;
+    }
+
+    public double getValueBilinear(int rowStart, int colStart, double a, double b) {
+        Matrix coefficientMatrix, pointValueMatrix, functionCoefficientMatrix;
+        int i, j, x, y, rowIdx, colIdx;
+        double result;
+
+        rowIdx = 0;
+
+        coefficientMatrix = new Matrix(4, 4);
+        for (x = rowStart; x <= rowStart + 1; x++) {
+            for (y = colStart; y <= colStart + 1; y++) {
+                colIdx = 0;
+                for (i = 0; i <= 1; i++) {
+                    for (j = 0; j <= 1; j++) {
+                        coefficientMatrix.setElmt(rowIdx, colIdx, Math.pow(x, i) * Math.pow(y, j));
+                        colIdx++;
+                    }
+                }
+                rowIdx++;
+            }
+        }
+        pointValueMatrix = new Matrix(4, 1);
+        rowIdx = 0;
+        for (i = rowStart; i <= rowStart + 1; i++) {
+            for (j = colStart; j <= colStart + 1; j++) {
+                pointValueMatrix.setElmt(rowIdx, 0, getElmt(i, j));
+                rowIdx++;
+            }
+        }
+
+        functionCoefficientMatrix = new Matrix(4, 1);
+        try {
+            functionCoefficientMatrix = multiply(coefficientMatrix.getInverseOBE(), pointValueMatrix);
+        } catch (NoInverseException e) {
+            throw new RuntimeException(e);
+        } catch (InvalidMatrixSizeException e) {
+            throw new RuntimeException(e);
+        }
+
+        rowIdx = 0;
+        result = 0;
+        for (i = 0; i <= 1; i++) {
+            for (j = 0; j <= 1; j++) {
+                result += functionCoefficientMatrix.getElmt(rowIdx, 0) * Math.pow(a, i) * Math.pow(b, j);
+                rowIdx++;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 
+     * @param scalingFactor berapa kali lipat perbesaran dengan scalingFactor
+     *                      merupakan bilangan bulat positif
+     * @return Matriks yang sudah diperbesar scalingFactor kali dengan interpolasi
+     *         bicubic dan interpolasi bilinier pada edges nya
+     */
+    public Matrix getNTimesSizeMatrix(int scalingFactor) {
+        Matrix resultMatrix;
+        double di, dj, x, y;
+        int floorX, floorY, i, j;
+
+        di = (double) (this.getNRow() - 1) / (double) (this.getNRow() * scalingFactor - 1);
+        dj = (double) (this.getNCol() - 1) / (double) (this.getNCol() * scalingFactor - 1);
+        resultMatrix = new Matrix(scalingFactor * this.getNRow(), scalingFactor * this.getNCol());
+        int lastFloorX = -1, lastFloorY = -1;
+        Matrix bicubicFunction = null;
+
+        for (i = 0; i <= scalingFactor * this.getNRow() - 1; i++) {
+            for (j = 0; j <= scalingFactor * this.getNCol() - 1; j++) {
+                x = (double) (i) * di;
+                y = (double) (j) * dj;
+                floorX = (int) (x);
+                floorY = (int) (y);
+                if (floorX == this.getNRow() - 1) {
+                    floorX--;
+                }
+                if (floorY == this.getNCol() - 1) {
+                    floorY--;
+                }
+                if (floorX == 0 || floorX == this.getNRow() - 2 || floorY == 0 || floorY == this.getNCol() - 2) {
+                    resultMatrix.setElmt(i, j, this.getValueBilinear(floorX, floorY, x, y));
+                } else {
+                    if (floorX != lastFloorX || floorY != lastFloorY) {
+                        bicubicFunction = this.getBicubicFunction(floorX - 1, floorY - 1);
+                        lastFloorX = floorX;
+                        lastFloorY = floorY;
+                    }
+                    resultMatrix.setElmt(i, j, bicubicFunction.getValueBicubic(x, y, floorX, floorY));
+                }
+            }
+        }
+        return resultMatrix;
     }
 
     /**
@@ -1181,14 +1344,26 @@ public class Matrix {
 
     }
 
-}
+    private static Matrix getInverseBicubicCoefficient() {
+        Matrix coefficientMatrix = new Matrix(16, 16);
 
-class MatrixDoublePair {
-    public Matrix first;
-    public double second;
-
-    MatrixDoublePair(Matrix matrix, double num) {
-        this.first = matrix;
-        this.second = num;
+        int rowIdx = 0;
+        for (int x = -1; x <= 2; x++) {
+            for (int y = -1; y <= 2; y++) {
+                int colIdx = 0;
+                for (int i = 0; i <= 3; i++) {
+                    for (int j = 0; j <= 3; j++) {
+                        coefficientMatrix.setElmt(rowIdx, colIdx, Math.pow(x, i) * Math.pow(y, j));
+                        colIdx++;
+                    }
+                }
+                rowIdx++;
+            }
+        }
+        try {
+            return coefficientMatrix.getInverseOBE();
+        } catch (NoInverseException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

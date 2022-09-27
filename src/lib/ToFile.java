@@ -1,11 +1,14 @@
 package lib;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 public class ToFile {
 
@@ -62,7 +65,7 @@ public class ToFile {
         return createFileCondition;
     }
 
-    public static void writeToFile(String[] rowStrings) {
+    private static String getValidFilename() {
         String filename = FromKeyboard.readString();
         CreateFileCondition createFileCondition = createFileSuccessful(filename);
         while (!createFileCondition.isSuccessful()) {
@@ -79,6 +82,12 @@ public class ToFile {
             filename = FromKeyboard.readString();
             createFileCondition = createFileSuccessful(filename);
         }
+
+        return filename;
+    }
+
+    public static void writeToFile(String[] rowStrings) {
+        String filename = getValidFilename();
 
         try {
             FileWriter fileWriter = new FileWriter(filename, true);
@@ -151,4 +160,21 @@ public class ToFile {
 
         writeToFile((rowOfTexts.stream().toArray(String[]::new)));
     }
-}
+
+    public static void exportImageFile(Image img) {
+        ToKeyboard.printMessage("Masukkan nama file gambar yang ingin diexport :");
+        String filename = getValidFilename();
+        File file = new File(filename);
+        BufferedImage buffImg = img.getBufferedImage();
+        try {
+            ImageIO.write(buffImg, "png", file);
+            System.out.printf("Gambar berhasil diexport ke file %s\n", filename);
+        } catch (IOException e) {
+            String errorMessage = "Gambar tidak dapat ditulis karena suatu hal. Mohon coba lagi.";
+            ToKeyboard.printMessage(errorMessage);
+        }
+    }}
+
+    
+
+    
