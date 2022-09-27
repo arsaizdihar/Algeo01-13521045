@@ -18,6 +18,10 @@ public class Image {
     setMatrixFromImage(img);
   }
 
+  public int getPixelSize() {
+    return rMat.getNCol() * rMat.getNRow();
+  }
+
   public Image(Matrix rMat, Matrix gMat, Matrix bMat, Matrix aMat) {
     this.rMat = rMat;
     this.gMat = gMat;
@@ -73,15 +77,14 @@ public class Image {
     }
   }
 
-  public Image getNTimesSizeImage(int scalingFactor) {
-    Matrix rMatScaled = rMat.getNTimesSizeMatrix(scalingFactor);
+  public void scale(int scalingFactor) {
+    rMat = rMat.getNTimesSizeMatrix(scalingFactor);
     ToKeyboard.printMessage("25% done");
-    Matrix gMatScaled = gMat.getNTimesSizeMatrix(scalingFactor);
+    gMat = gMat.getNTimesSizeMatrix(scalingFactor);
     ToKeyboard.printMessage("50% done");
-    Matrix bMatScaled = bMat.getNTimesSizeMatrix(scalingFactor);
+    bMat = bMat.getNTimesSizeMatrix(scalingFactor);
     ToKeyboard.printMessage("75% done");
-    Matrix aMatScaled = aMat.getNTimesSizeMatrix(scalingFactor);
+    aMat = aMat.getNTimesSizeMatrix(scalingFactor);
     ToKeyboard.printMessage("100% done");
-    return new Image(rMatScaled, gMatScaled, bMatScaled, aMatScaled);
   }
 }

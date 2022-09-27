@@ -219,10 +219,23 @@ public class CoreFunctionality {
         static public void imageScaling() {
             Image image = FromFile.readImage();
             int scaleFactor = FromKeyboard.readIntWithMinimum("kelipatan perbesaran gambar", 1);
-            ToKeyboard.printMessage("Memperbesar gambar... (akan memakan waktu beberapa saat)");
-            Image scaledImage = image.getNTimesSizeImage(scaleFactor);
+            /*
+             * membatasi ukuran gambar agar RAM yang dipakai tidak lebih dari 1GB (2^30
+             * byte). satu pixel akan memakai 8 byte (double) per r,g,b, dan a atau total 32
+             * byte (2^5). Sehingga maksimal ukuran pixel hasil adalah (2^30/2^5) = 2^25
+             * pixel
+             */
+            if (image.getPixelSize() * Math.pow(scaleFactor, 2) > Math.pow(2, 25)) {
+                System.out.printf(
+                        "Ukuran scaling gambar terlalu besar (%,.0f pixel). Jumlah pixel di gambar hasil tidak boleh lebih dari %,d\n",
+                        image.getPixelSize() * Math.pow(scaleFactor, 2), (int) Math.pow(2, 25));
+                return;
+            }
 
-            ToFile.exportImageFile(scaledImage);
+            ToKeyboard.printMessage("Memperbesar gambar... (akan memakan waktu beberapa saat)");
+            image.scale(scaleFactor);
+
+            ToFile.exportImageFile(image);
         }
     }
 
