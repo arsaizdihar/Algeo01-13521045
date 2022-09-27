@@ -1277,7 +1277,6 @@ public class Matrix {
     }
 
     private static Matrix getInverseBicubicCoefficient() {
-        System.out.println("calledlol");
         Matrix coefficientMatrix = new Matrix(16, 16);
 
         int rowIdx = 0;
