@@ -1,4 +1,7 @@
+#!/bin/bash
+
 cd src
 javac -d ../bin ./*.java
+[ -d "bin" ] || mkdir bin
 cd ../bin
-jar -cvfm matriks.jar ../src/META-INF/MANIFEST.MF *
+jar -cvfm matrix.jar ../src/META-INF/MANIFEST.MF *
