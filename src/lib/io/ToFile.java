@@ -1,4 +1,4 @@
-package lib;
+package lib.io;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.imageio.ImageIO;
+
+import lib.Image;
+import lib.Matrix;
 
 public class ToFile {
 
@@ -173,8 +176,5 @@ public class ToFile {
             String errorMessage = "Gambar tidak dapat ditulis karena suatu hal. Mohon coba lagi.";
             ToKeyboard.printMessage(errorMessage);
         }
-    }}
-
-    
-
-    
+    }
+}

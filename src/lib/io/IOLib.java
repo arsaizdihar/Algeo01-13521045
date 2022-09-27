@@ -1,10 +1,12 @@
-package lib;
+package lib.io;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
+import lib.Matrix;
 
 public class IOLib {
     static public class RowError {

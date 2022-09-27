@@ -1,13 +1,14 @@
-package lib;
+package lib.io;
 
 import java.util.Arrays;
 // import java.util.Scanner; // Import the Scanner class
+import java.util.Scanner;
 
-import lib.IOLib.RowError;
+import lib.Matrix;
+import lib.io.IOLib.RowError;
 
 public class FromKeyboard {
-
-    static ScannerSingleton scanner = ScannerSingleton.getInstance();
+    static Scanner scanner = new Scanner(System.in);
 
     static public String readString() {
         String input = scanner.nextLine();

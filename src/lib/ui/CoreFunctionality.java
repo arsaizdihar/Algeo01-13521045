@@ -1,17 +1,21 @@
-package lib;
+package lib.ui;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-
-import javax.management.RuntimeErrorException;
 
 import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
 import lib.Errors.NoInverseException;
 import lib.Errors.NoSolutionException;
+import lib.Image;
+import lib.Matrix;
+import lib.io.FromFile;
+import lib.io.FromKeyboard;
+import lib.io.IOLib;
+import lib.io.ToFile;
+import lib.io.ToKeyboard;
 
 public class CoreFunctionality {
     static public class solveSPL {

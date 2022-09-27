@@ -1,4 +1,4 @@
-package lib;
+package lib.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import lib.IOLib.RowError;
+import lib.Image;
+import lib.Matrix;
+import lib.io.IOLib.RowError;
 
 public class FromFile {
     static private File getFile() {

@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import lib.io.ToKeyboard;
+
 public class Image {
   private Matrix rMat, gMat, bMat, aMat;
 
