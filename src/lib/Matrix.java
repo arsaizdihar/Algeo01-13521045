@@ -698,6 +698,7 @@ public class Matrix {
 
         return cofactorMatrix;
     }
+
     /**
      * 
      * @return Mengembalikan nilai determinan matriks dengan metode segitiga atas
@@ -708,7 +709,7 @@ public class Matrix {
         Matrix echelonMatrix;
         double multiplier, diagonalProduct, determinant;
         int i;
-        //ALGORITMA
+        // ALGORITMA
         if (!this.isSquare()) {
             throw new Errors.InvalidMatrixSquareException();
         }
@@ -971,10 +972,17 @@ public class Matrix {
         }
         return result;
     }
-    public double getValueBicubic(int rowStart, int colStart, double a, double b) {
+
+    /**
+     * Prekondisi: rowStart + 3 < this.getNRow() dan colStart + 3 < this.getNCol()
+     * 
+     * @param rowStart baris awal yang ingin diinterpolasi
+     * @param colStart kolom awal yang ingin diinterpolasi
+     * @return matriks yang berisi koefisien2 dari interpolasi bicubic
+     */
+    public Matrix getBicubicFunction(int rowStart, int colStart) {
         Matrix coefficientMatrix, pointValueMatrix, functionCoefficientMatrix;
         int i, j, x, y, rowIdx, colIdx;
-        double result;
 
         rowIdx = 0;
 
@@ -993,8 +1001,8 @@ public class Matrix {
         }
         pointValueMatrix = new Matrix(16, 1);
         rowIdx = 0;
-        for (i = rowStart; i <= rowStart+3; i++) {
-            for (j = colStart; j <= colStart+3; j++) {
+        for (i = rowStart; i <= rowStart + 3; i++) {
+            for (j = colStart; j <= colStart + 3; j++) {
                 pointValueMatrix.setElmt(rowIdx, 0, getElmt(i, j));
                 rowIdx++;
             }
@@ -1009,11 +1017,25 @@ public class Matrix {
             throw new RuntimeException(e);
         }
 
-        rowIdx = 0;
-        result = 0;
-        for (i = 0; i <= 3; i++) {
-            for (j = 0; j <= 3; j++) {
-                result += functionCoefficientMatrix.getElmt(rowIdx, 0) * Math.pow(a, i) * Math.pow(b, j);
+        return functionCoefficientMatrix;
+    }
+
+    /**
+     * Fungsi untuk mendapatkan nilai interpolasi bicubic dari matriks solusi
+     * bicubic
+     * <p>
+     * Prekondisi: matriks merupakan matriks hasil dari this.getBicubicFunction
+     * 
+     * @param a parameter a dari nilai f(a,b) yang ingin dicari interpolasinya
+     * @param b parameter b dari nilai f(a,b) yang ingin dicari interpolasinya
+     * @return nilai f(a,b) yang telah di interpolasi
+     */
+    public double getValueBicubic(double a, double b) {
+        int rowIdx = 0;
+        double result = 0;
+        for (int i = 0; i <= 3; i++) {
+            for (int j = 0; j <= 3; j++) {
+                result += getElmt(rowIdx, 0) * Math.pow(a, i) * Math.pow(b, j);
                 rowIdx++;
             }
         }
@@ -1042,8 +1064,8 @@ public class Matrix {
         }
         pointValueMatrix = new Matrix(4, 1);
         rowIdx = 0;
-        for (i = rowStart; i <= rowStart+1; i++) {
-            for (j = colStart; j <= colStart+1; j++) {
+        for (i = rowStart; i <= rowStart + 1; i++) {
+            for (j = colStart; j <= colStart + 1; j++) {
                 pointValueMatrix.setElmt(rowIdx, 0, getElmt(i, j));
                 rowIdx++;
             }
@@ -1068,26 +1090,31 @@ public class Matrix {
         }
         return result;
     }
+
     /**
      * 
-     * @param scalingFactor berapa kali lipat perbesaran dengan scalingFactor merupakan bilangan bulat positif
-     * @return Matriks yang sudah diperbesar scalingFactor kali dengan interpolasi bicubic dan interpolasi bilinier pada edges nya
+     * @param scalingFactor berapa kali lipat perbesaran dengan scalingFactor
+     *                      merupakan bilangan bulat positif
+     * @return Matriks yang sudah diperbesar scalingFactor kali dengan interpolasi
+     *         bicubic dan interpolasi bilinier pada edges nya
      */
     public Matrix getNTimesSizeMatrix(int scalingFactor) {
         Matrix resultMatrix;
         double di, dj, x, y;
         int floorX, floorY, i, j;
 
-        di = (double)(this.getNRow() - 1) / (double)(this.getNRow() * scalingFactor - 1);
-        dj = (double)(this.getNCol() - 1) / (double)(this.getNCol() * scalingFactor - 1);
+        di = (double) (this.getNRow() - 1) / (double) (this.getNRow() * scalingFactor - 1);
+        dj = (double) (this.getNCol() - 1) / (double) (this.getNCol() * scalingFactor - 1);
         resultMatrix = new Matrix(scalingFactor * this.getNRow(), scalingFactor * this.getNCol());
+        int lastFloorX = -1, lastFloorY = -1;
+        Matrix bicubicFunction = null;
 
         for (i = 0; i <= scalingFactor * this.getNRow() - 1; i++) {
             for (j = 0; j <= scalingFactor * this.getNCol() - 1; j++) {
-                x = (double)(i) * di;
-                y = (double)(j) * dj;
-                floorX = (int)(x);
-                floorY = (int)(y);
+                x = (double) (i) * di;
+                y = (double) (j) * dj;
+                floorX = (int) (x);
+                floorY = (int) (y);
                 if (floorX == this.getNRow() - 1) {
                     floorX--;
                 }
@@ -1097,12 +1124,18 @@ public class Matrix {
                 if (floorX == 0 || floorX == this.getNRow() - 2 || floorY == 0 || floorY == this.getNCol() - 2) {
                     resultMatrix.setElmt(i, j, this.getValueBilinear(floorX, floorY, x, y));
                 } else {
-                    resultMatrix.setElmt(i, j, this.getValueBicubic(floorX - 1, floorY - 1, x, y));
+                    if (floorX != lastFloorX || floorY != lastFloorY) {
+                        bicubicFunction = this.getBicubicFunction(floorX - 1, floorY - 1);
+                        lastFloorX = floorX;
+                        lastFloorY = floorY;
+                    }
+                    resultMatrix.setElmt(i, j, bicubicFunction.getValueBicubic(x, y));
                 }
             }
         }
         return resultMatrix;
     }
+
     /**
      * Menghasilkan panjang dari angka paling panjang dalam matriks stelah diformat
      * 
