@@ -9,6 +9,7 @@ import lib.Errors.NoSolutionException;
 
 public class Matrix {
     private double[][] contents;
+    static final Matrix inverseBicubicCoefficientMatrix = getInverseBicubicCoefficient();
 
     /*** KONSTRUKTOR ***/
 
@@ -925,25 +926,10 @@ public class Matrix {
      * @return nilai f(a,b) yang telah di interpolasi
      */
     public double getValueBicubicSpecific(double a, double b) {
-        Matrix coefficientMatrix, pointValueMatrix, functionCoefficientMatrix;
-        int i, j, x, y, rowIdx, colIdx;
+        Matrix pointValueMatrix, functionCoefficientMatrix;
+        int i, j, rowIdx;
         double result;
 
-        rowIdx = 0;
-
-        coefficientMatrix = new Matrix(16, 16);
-        for (x = -1; x <= 2; x++) {
-            for (y = -1; y <= 2; y++) {
-                colIdx = 0;
-                for (i = 0; i <= 3; i++) {
-                    for (j = 0; j <= 3; j++) {
-                        coefficientMatrix.setElmt(rowIdx, colIdx, Math.pow(x, i) * Math.pow(y, j));
-                        colIdx++;
-                    }
-                }
-                rowIdx++;
-            }
-        }
         pointValueMatrix = new Matrix(16, 1);
         rowIdx = 0;
         for (i = 0; i <= 3; i++) {
@@ -955,9 +941,7 @@ public class Matrix {
 
         functionCoefficientMatrix = new Matrix(16, 1);
         try {
-            functionCoefficientMatrix = multiply(coefficientMatrix.getInverseOBE(), pointValueMatrix);
-        } catch (NoInverseException e) {
-            throw new RuntimeException(e);
+            functionCoefficientMatrix = multiply(inverseBicubicCoefficientMatrix, pointValueMatrix);
         } catch (InvalidMatrixSizeException e) {
             throw new RuntimeException(e);
         }
@@ -981,24 +965,9 @@ public class Matrix {
      * @return matriks yang berisi koefisien2 dari interpolasi bicubic
      */
     public Matrix getBicubicFunction(int rowStart, int colStart) {
-        Matrix coefficientMatrix, pointValueMatrix, functionCoefficientMatrix;
-        int i, j, x, y, rowIdx, colIdx;
+        Matrix pointValueMatrix, functionCoefficientMatrix;
+        int i, j, rowIdx;
 
-        rowIdx = 0;
-
-        coefficientMatrix = new Matrix(16, 16);
-        for (x = rowStart; x <= rowStart + 3; x++) {
-            for (y = colStart; y <= colStart + 3; y++) {
-                colIdx = 0;
-                for (i = 0; i <= 3; i++) {
-                    for (j = 0; j <= 3; j++) {
-                        coefficientMatrix.setElmt(rowIdx, colIdx, Math.pow(x, i) * Math.pow(y, j));
-                        colIdx++;
-                    }
-                }
-                rowIdx++;
-            }
-        }
         pointValueMatrix = new Matrix(16, 1);
         rowIdx = 0;
         for (i = rowStart; i <= rowStart + 3; i++) {
@@ -1010,9 +979,7 @@ public class Matrix {
 
         functionCoefficientMatrix = new Matrix(16, 1);
         try {
-            functionCoefficientMatrix = multiply(coefficientMatrix.getInverseOBE(), pointValueMatrix);
-        } catch (NoInverseException e) {
-            throw new RuntimeException(e);
+            functionCoefficientMatrix = multiply(inverseBicubicCoefficientMatrix, pointValueMatrix);
         } catch (InvalidMatrixSizeException e) {
             throw new RuntimeException(e);
         }
@@ -1026,16 +993,20 @@ public class Matrix {
      * <p>
      * Prekondisi: matriks merupakan matriks hasil dari this.getBicubicFunction
      * 
-     * @param a parameter a dari nilai f(a,b) yang ingin dicari interpolasinya
-     * @param b parameter b dari nilai f(a,b) yang ingin dicari interpolasinya
+     * @param a        parameter a dari nilai f(a,b) yang ingin dicari
+     *                 interpolasinya
+     * @param b        parameter b dari nilai f(a,b) yang ingin dicari
+     *                 interpolasinya
+     * @param startRow baris awal dari matriks solusi bicubic
+     * @param startCol kolom awal dari matriks solusi bicubic
      * @return nilai f(a,b) yang telah di interpolasi
      */
-    public double getValueBicubic(double a, double b) {
+    public double getValueBicubic(double a, double b, int startRow, int startCol) {
         int rowIdx = 0;
         double result = 0;
         for (int i = 0; i <= 3; i++) {
             for (int j = 0; j <= 3; j++) {
-                result += getElmt(rowIdx, 0) * Math.pow(a, i) * Math.pow(b, j);
+                result += getElmt(rowIdx, 0) * Math.pow(a - startRow, i) * Math.pow(b - startCol, j);
                 rowIdx++;
             }
         }
@@ -1129,7 +1100,7 @@ public class Matrix {
                         lastFloorX = floorX;
                         lastFloorY = floorY;
                     }
-                    resultMatrix.setElmt(i, j, bicubicFunction.getValueBicubic(x, y));
+                    resultMatrix.setElmt(i, j, bicubicFunction.getValueBicubic(x, y, floorX, floorY));
                 }
             }
         }
@@ -1305,6 +1276,29 @@ public class Matrix {
 
     }
 
+    private static Matrix getInverseBicubicCoefficient() {
+        System.out.println("calledlol");
+        Matrix coefficientMatrix = new Matrix(16, 16);
+
+        int rowIdx = 0;
+        for (int x = -1; x <= 2; x++) {
+            for (int y = -1; y <= 2; y++) {
+                int colIdx = 0;
+                for (int i = 0; i <= 3; i++) {
+                    for (int j = 0; j <= 3; j++) {
+                        coefficientMatrix.setElmt(rowIdx, colIdx, Math.pow(x, i) * Math.pow(y, j));
+                        colIdx++;
+                    }
+                }
+                rowIdx++;
+            }
+        }
+        try {
+            return coefficientMatrix.getInverseOBE();
+        } catch (NoInverseException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
 
 class MatrixDoublePair {
