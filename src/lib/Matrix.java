@@ -1,6 +1,7 @@
 package lib;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 
 import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
@@ -1074,39 +1075,52 @@ public class Matrix {
      */
     public Matrix getNTimesSizeMatrix(int scalingFactor) {
         Matrix resultMatrix;
-        double di, dj, x, y;
-        int floorX, floorY, i, j;
+        double di, dj;
 
         di = (double) (this.getNRow() - 1) / (double) (this.getNRow() * scalingFactor - 1);
         dj = (double) (this.getNCol() - 1) / (double) (this.getNCol() * scalingFactor - 1);
         resultMatrix = new Matrix(scalingFactor * this.getNRow(), scalingFactor * this.getNCol());
-        int lastFloorX = -1, lastFloorY = -1;
-        Matrix bicubicFunction = null;
 
-        for (i = 0; i <= scalingFactor * this.getNRow() - 1; i++) {
-            for (j = 0; j <= scalingFactor * this.getNCol() - 1; j++) {
-                x = (double) (i) * di;
-                y = (double) (j) * dj;
-                floorX = (int) (x);
-                floorY = (int) (y);
-                if (floorX == this.getNRow() - 1) {
-                    floorX--;
-                }
-                if (floorY == this.getNCol() - 1) {
-                    floorY--;
-                }
-                if (floorX == 0 || floorX == this.getNRow() - 2 || floorY == 0 || floorY == this.getNCol() - 2) {
-                    resultMatrix.setElmt(i, j, this.getValueBilinear(floorX, floorY, x, y));
-                } else {
-                    if (floorX != lastFloorX || floorY != lastFloorY) {
-                        bicubicFunction = this.getBicubicFunction(floorX - 1, floorY - 1);
-                        lastFloorX = floorX;
-                        lastFloorY = floorY;
-                    }
-                    resultMatrix.setElmt(i, j, bicubicFunction.getValueBicubic(x, y, floorX, floorY));
-                }
+        ArrayList<int[]> points = new ArrayList<int[]>(this.getNRow() * this.getNCol());
+        for (int i = 0; i < this.getNRow(); i++) {
+            for (int j = 0; j < this.getNCol(); j++) {
+                points.add(new int[] { i, j });
             }
         }
+
+        points.parallelStream().forEach(point -> {
+            int lastFloorX = -1, lastFloorY = -1;
+            Matrix bicubicFunction = null;
+            for (int i = 0; i < scalingFactor; i++) {
+                for (int j = 0; j < scalingFactor; j++) {
+                    int desX = point[0] * scalingFactor + i;
+                    int desY = point[1] * scalingFactor + j;
+                    double x = (double) (desX) * di;
+                    double y = (double) (desY) * dj;
+                    int floorX = (int) x;
+                    int floorY = (int) y;
+
+                    if (floorX == this.getNRow() - 1) {
+                        floorX--;
+                    }
+                    if (floorY == this.getNCol() - 1) {
+                        floorY--;
+                    }
+
+                    if (floorX == 0 || floorX == this.getNRow() - 2 || floorY == 0 || floorY == this.getNCol() - 2) {
+                        resultMatrix.setElmt(desX, desY, this.getValueBilinear(floorX, floorY, x, y));
+                    } else {
+                        if (floorX != lastFloorX || floorY != lastFloorY) {
+                            bicubicFunction = this.getBicubicFunction(floorX - 1, floorY - 1);
+                            lastFloorX = floorX;
+                            lastFloorY = floorY;
+                        }
+                        resultMatrix.setElmt(desX, desY, bicubicFunction.getValueBicubic(x, y, floorX, floorY));
+                    }
+                }
+            }
+        });
+
         return resultMatrix;
     }
 
