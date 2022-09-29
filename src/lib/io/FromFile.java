@@ -152,6 +152,10 @@ public class FromFile {
         String filePrompt = "Masukkan nama file berisi matriks persegi yang ingin dicari determinannya : ";
         return FromFile.matrixInput(filePrompt, true);
     }
+    static public Matrix matrixToInterpolate() {
+        String filePrompt = "Masukkan nama file berisi matriks 4x4 beserta nilai a dan b pada bari selanjutnya yang ingin dicari nilai interpolasi f(a,b) nya : ";
+        return FromFile.matrixInput(filePrompt, false);
+    }
 
     static public Matrix matrixToInvert() {
         String filePrompt = "Masukkan nama file berisi matriks persegi yang ingin dicari inverse-nya : ";

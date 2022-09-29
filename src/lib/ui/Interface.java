@@ -140,7 +140,10 @@ public class Interface {
                             programState = "main";
                             break;
                         case 5:
-                            // Take input of a set of points and do stuff with it accordingly
+                            ToKeyboard.clearConsole();
+                            CoreFunctionality.Interpolation.bicubic();
+                            FromKeyboard.EnterToContinue();
+                            programState = "main";
                             break;
                         case 6:
                             CoreFunctionality.MLR.compute();

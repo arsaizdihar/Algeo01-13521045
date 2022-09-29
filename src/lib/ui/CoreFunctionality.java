@@ -206,6 +206,23 @@ public class CoreFunctionality {
             }
         }
 
+        static public void bicubic() {
+            Matrix fourXFourMatrix = new Matrix(4, 4);
+            Matrix combinedMatrix = IOLib.chooseToReadFromFile() ? FromFile.matrixToInterpolate()
+                    : FromKeyboard.BicubicMatrix();
+
+            // matrix polinom sudah pasti berukuran n x 2
+            for (int i = 0; i <= 3; i++) {
+                for (int j = 0; j <= 3; j++) {
+                    fourXFourMatrix.setElmt(i, j, combinedMatrix.getElmt(i, j));
+                }
+            } 
+            double a = combinedMatrix.getElmt(4, 0);
+            double b = combinedMatrix.getElmt(4, 1);
+            double hasil = fourXFourMatrix.getValueBicubicSpecific(a, b);
+            System.out.printf("Didapat\nf(%f,%f) = %f\n", a, b, hasil);
+        }
+
         static public void imageScaling() {
             Image image = FromFile.readImage();
             int scaleFactor = FromKeyboard.readIntWithMinimum("kelipatan perbesaran gambar", 1);

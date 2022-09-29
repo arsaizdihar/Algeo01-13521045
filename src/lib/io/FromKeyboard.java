@@ -187,6 +187,29 @@ public class FromKeyboard {
         return Matrix(n, n, "Masukkan matriks baris per baris dengan tiap elemen dipisahkan spasi");
     }
 
+    static public Matrix BicubicMatrix () {
+        Matrix result = new Matrix(5, 4);
+        Matrix variablePoints = new Matrix(1, 2);
+        Matrix fourXFourMatrix = Matrix(4, 4, "Masukkan matriks 4 kali 4 baris per baris dengan tiap elemen dipisahkan spasi");
+        while (true) {
+            variablePoints = FromKeyboard.Matrix(1,2, "Masukkan nilai a dan b dalam satu baris dan dipisahkan spasi, dimana f(a,b) adalah nilai yang ingin dicari");
+            if ((0 <= variablePoints.getElmt(0, 0)) && (variablePoints.getElmt(0, 0) <= 1) && 
+            (0 <= variablePoints.getElmt(0, 1)) && (variablePoints.getElmt(0, 1) <= 1)) {
+                break;
+            }
+            System.out.printf("Nilai a dan b harus diantara 0 dan 1\n");
+        }
+        for (int i = 0; i <= 3; i++) {
+                for (int j = 0; j <= 3; j++) {
+                    result.setElmt(i, j, fourXFourMatrix.getElmt(i, j));
+                }
+            } 
+        for (int j = 0; j < 2; j++) {
+            result.setElmt(4, j, variablePoints.getElmt(0, j));
+        }
+        return result;
+    }
+
     /**
      * Fungsi baca kumpulan titik. Membaca jumlah titik yang ingin dibaca lalu
      * membaca tiap titik satu per satu dengan x dan y dipisahkan spasi
