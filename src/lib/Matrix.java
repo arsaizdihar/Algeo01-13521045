@@ -344,12 +344,6 @@ public class Matrix {
             }
         }
     }
-
-    // TODO HAPUS DIBAWAH INI
-    public Matrix ambilEchelon(int startColIdx, int endColIdx) {
-        return getEchelonForm(startColIdx, endColIdx).first;
-    }
-
     /**
      * 
      * @param startColIdx index baris awal yang ingin dibuat sebagai leading one
@@ -383,7 +377,12 @@ public class Matrix {
         }
         return new Pair<Matrix, Double>(hasil, multiplier);
     }
-
+    /**
+     * 
+     * @param startColIdx Index kolom awal dari matriks yang ingin direduksi
+     * @param endColIdx Index kolom akhir dari matriks yang ingin direduksi
+     * @return Matriks dengan kolom yang terambil sudah dalam bentuk baris eselon tereduksi
+     */
     public Matrix getReducedForm(int startColIdx, int endColIdx) {
         // KAMUS LOKAL
         Matrix hasil;
@@ -406,7 +405,7 @@ public class Matrix {
 
     /**
      * 
-     * @return matriks dengan matriks format solusi yang dapat ditampilkan, termasuk
+     * @return Matriks dengan matriks format solusi yang dapat ditampilkan, termasuk
      *         dengan variabel parametrik
      */
     public Matrix getSolG() throws NoSolutionException {
@@ -504,7 +503,7 @@ public class Matrix {
 
     /**
      * 
-     * @return
+     * @return 
      */
     public Matrix getSolGJ() throws NoSolutionException {
         Matrix hasil = this.getReducedForm(0, this.getNCol() - 2);
