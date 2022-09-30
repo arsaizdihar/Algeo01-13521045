@@ -503,7 +503,8 @@ public class Matrix {
 
     /**
      * 
-     * @return 
+     * @return Matriks dengan matriks format solusi yang dapat ditampilkan, termasuk
+     *         dengan variabel parametrik
      */
     public Matrix getSolGJ() throws NoSolutionException {
         Matrix hasil = this.getReducedForm(0, this.getNCol() - 2);
@@ -703,7 +704,7 @@ public class Matrix {
     /**
      * 
      * @return Mengembalikan nilai determinan matriks dengan metode segitiga atas
-     * @throws Errors.InvalidMatrixSquareException
+     * @throws InvalidMatrixSquareException ketika matriks masukan bukanlah marix persegi
      */
     public double getDeterminantTriangle() throws Errors.InvalidMatrixSquareException {
         // KAMUS
