@@ -203,7 +203,6 @@ public class CoreFunctionality {
             Matrix polinom = IOLib.chooseToReadFromFile() ? FromFile.pointsInput(
                     "Masukkan nama file berisi matriks dengan 2 kolom yang ingin dicari interpolasi polinomialnya :")
                     : FromKeyboard.Points("jumlah titik");
-
             // matrix polinom sudah pasti berukuran n x 2
             try {
                 Matrix polFunc = polinom.getPolinomialFunction();
@@ -226,7 +225,7 @@ public class CoreFunctionality {
                 // meminta input nilai yang ingin diestimasikan
                 while (true) {
                     double x = FromKeyboard.readDouble("point untuk diestimasi");
-                    System.out.printf("Nilai dari p%d(%.4f) = %.4f\n", polinom.getNRow() - 1, x,
+                    System.out.printf("Nilai dari p%d(%.4f) ≈ %.4f\n\n", polinom.getNRow() - 1, x,
                             polFunc.getValuePolinomial(x));
                     if (!FromKeyboard.readString("Apakah ingin melanjutkan estimasi (y/n)? ").toLowerCase().equals("y"))
                         break;

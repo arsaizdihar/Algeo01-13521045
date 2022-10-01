@@ -369,7 +369,7 @@ public class Matrix {
                 continue;
             } else {
                 hasil.swapRow(rowIdx, rowNonZeroIdx);
-                multiplier *= hasil.getElmt(rowIdx, colIdx);
+                multiplier *= hasil.getElmt(rowIdx, colIdx) * (-1);
                 hasil.multiplyRowScalar(rowIdx, 1 / hasil.getElmt(rowIdx, colIdx));
                 hasil.makeColumnZero(rowIdx, rowIdx + 1, hasil.getNRow() - 1, colIdx);
                 rowIdx++;
@@ -846,7 +846,7 @@ public class Matrix {
         }
 
         try {
-            det = square.getDeterminantCofactor();
+            det = square.getDeterminantTriangle();
         } catch (InvalidMatrixSquareException e) {
             throw new RuntimeException(e);
         }
@@ -867,7 +867,7 @@ public class Matrix {
                 }
             }
             try {
-                res.setElmt(i, 0, temp.getDeterminantCofactor() / det);
+                res.setElmt(i, 0, temp.getDeterminantTriangle() / det);
             } catch (InvalidMatrixSquareException e) {
                 throw new RuntimeException(e);
             }
