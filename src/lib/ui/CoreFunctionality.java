@@ -57,6 +57,7 @@ public class CoreFunctionality {
                 ToKeyboard.printMessage("SPL tidak punya solusi!");
             }
         }
+
         /**
          * Prosedur yang menerima masukan SPL dari pengguna lalu mencetak
          * solusinya. Solusi didapatkan dari metode matriks balikan.
@@ -72,7 +73,8 @@ public class CoreFunctionality {
                     IOLib.SPLSolution.printUnique(solution);
                 }
             } catch (NoInverseException e) {
-                ToKeyboard.printMessage("SPL tidak dapat diselesaikan dengan metode ini karena tidak mempunyai inverse ! Berikut solusinya dengan eliminasi Gauss-Jordan :");
+                ToKeyboard.printMessage(
+                        "SPL tidak dapat diselesaikan dengan metode ini karena tidak mempunyai inverse ! Berikut solusinya dengan eliminasi Gauss-Jordan :");
                 try {
                     Matrix solution = matrix.getSolGJ();
                     if (IOLib.chooseToWriteToFile()) {
@@ -210,7 +212,7 @@ public class CoreFunctionality {
                 System.out.println("Hasil interpolasi polinomial:");
                 System.out.printf("p%d(x) =", polinom.getNRow() - 1);
                 for (int i = polFunc.getNRow() - 1; i >= 0; i--) {
-                    System.out.printf(" %f", polFunc.getElmt(i, 0));
+                    System.out.printf(" %.4f", polFunc.getElmt(i, 0));
                     if (i != 0) {
                         System.out.print("x");
                         if (i > 1) {
@@ -224,7 +226,7 @@ public class CoreFunctionality {
                 // meminta input nilai yang ingin diestimasikan
                 while (true) {
                     double x = FromKeyboard.readDouble("point untuk diestimasi");
-                    System.out.printf("Nilai dari p%d(%f) = %f\n", polinom.getNRow() - 1, x,
+                    System.out.printf("Nilai dari p%d(%.4f) = %.4f\n", polinom.getNRow() - 1, x,
                             polFunc.getValuePolinomial(x));
                     if (!FromKeyboard.readString("Apakah ingin melanjutkan estimasi (y/n)? ").toLowerCase().equals("y"))
                         break;
@@ -244,11 +246,11 @@ public class CoreFunctionality {
                 for (int j = 0; j <= 3; j++) {
                     fourXFourMatrix.setElmt(i, j, combinedMatrix.getElmt(i, j));
                 }
-            } 
+            }
             double a = combinedMatrix.getElmt(4, 0);
             double b = combinedMatrix.getElmt(4, 1);
             double hasil = fourXFourMatrix.getValueBicubicSpecific(a, b);
-            System.out.printf("Didapat\nf(%f,%f) = %f\n", a, b, hasil);
+            System.out.printf("Didapat\nf(%.4f,%.4f) = %.4f\n", a, b, hasil);
         }
 
         static public void imageScaling() {
@@ -318,7 +320,7 @@ public class CoreFunctionality {
         }
     }
 
-        // Take input of matrice and do stuff with it accordingly
+    // Take input of matrice and do stuff with it accordingly
 
     static public class MLR {
         static private List<Double> betaProducer(Matrix data) {
