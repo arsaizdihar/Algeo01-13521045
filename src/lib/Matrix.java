@@ -675,7 +675,7 @@ public class Matrix {
         try {
             determinant = getDeterminantCofactor();
         } catch (InvalidMatrixSquareException e) {
-            throw new RuntimeException(e);
+            throw new Errors.NoInverseException();
         }
 
         if (determinant == 0) {
