@@ -482,8 +482,8 @@ public class Matrix {
          * x3 = 1
          * x4 = t
          */
-        for (int i = 0; i < hasil.getNRow() - 1; i++) {
-            for (int j = i + 1; j < hasil.getNCol() - 1; j++) {
+        for (int i = 0; i < solusi.getNRow() - 1; i++) {
+            for (int j = i + 1; j < solusi.getNCol() - 2; j++) {
                 double variableConstant = solusi.getElmt(i, j);
 
                 // jika nilai variabel -0 atau variabel merupakan variabel parametrik, tidak
