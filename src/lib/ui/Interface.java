@@ -33,6 +33,12 @@ public class Interface {
                 "Kembali ke main menu",
         };
 
+        private static final String[] determinant = new String[] {
+                "Metode ekspansi kofaktor",
+                "Metode segitiga atas",
+                "Keluar"
+    };
+
     }
 
     /**
@@ -64,7 +70,7 @@ public class Interface {
                 CoreFunctionality.solveSPL.gaussJordan();
                 break;
             case 3:
-                // Solve with inverted matrix and display the result
+                CoreFunctionality.solveSPL.inverseMatrix();
                 break;
             case 4:
                 CoreFunctionality.solveSPL.cramer();
@@ -82,13 +88,29 @@ public class Interface {
      */
     static public void menuInverse() {
         printMenu(MenuText.inverse);
-        int userChoiceSubMenu = FromKeyboard.readInt("pilihan sub menu", 1, 5);
+        int userChoiceSubMenu = FromKeyboard.readInt("pilihan sub menu", 1, 3);
         switch (userChoiceSubMenu) {
             case 1:
                 CoreFunctionality.Inverse.obe();
                 break;
             case 2:
                 CoreFunctionality.Inverse.adjoin();
+                break;
+            case 3:
+                break;
+
+        }
+    }
+
+    static public void menuDeterminant() {
+        printMenu(MenuText.determinant);
+        int userChoiceSubMenu = FromKeyboard.readInt("pilihan sub menu", 1, 3);
+        switch (userChoiceSubMenu) {
+            case 1:
+                CoreFunctionality.Determinant.ekspansiKofaktor();
+                break;
+            case 2:
+                CoreFunctionality.Determinant.segitigaAtas();
                 break;
             case 3:
                 break;
@@ -120,16 +142,19 @@ public class Interface {
                 case "mainEntered":
                     switch (userChoice) {
                         case 1:
+                            ToKeyboard.clearConsole();
                             menuSPL();
                             FromKeyboard.EnterToContinue();
                             programState = "main";
                             break;
                         case 2:
-                            CoreFunctionality.computeDeterminant();
+                            ToKeyboard.clearConsole();
+                            menuDeterminant();
                             FromKeyboard.EnterToContinue();
                             programState = "main";
                             break;
                         case 3:
+                            ToKeyboard.clearConsole();
                             menuInverse();
                             FromKeyboard.EnterToContinue();
                             programState = "main";
@@ -146,11 +171,13 @@ public class Interface {
                             programState = "main";
                             break;
                         case 6:
+                            ToKeyboard.clearConsole();
                             CoreFunctionality.MLR.compute();
                             FromKeyboard.EnterToContinue();
                             programState = "main";
                             break;
                         case 7:
+                            ToKeyboard.clearConsole();
                             CoreFunctionality.Interpolation.imageScaling();
                             FromKeyboard.EnterToContinue();
                             programState = "main";

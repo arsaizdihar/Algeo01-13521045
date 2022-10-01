@@ -57,6 +57,34 @@ public class CoreFunctionality {
                 ToKeyboard.printMessage("SPL tidak punya solusi!");
             }
         }
+        /**
+         * Prosedur yang menerima masukan SPL dari pengguna lalu mencetak
+         * solusinya. Solusi didapatkan dari metode matriks balikan.
+         */
+        static public void inverseMatrix() {
+            Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.SPL()
+                    : FromKeyboard.SPL();
+            try {
+                Matrix solution = matrix.getSolInverse();
+                if (IOLib.chooseToWriteToFile()) {
+                    ToFile.SPL(solution);
+                } else {
+                    IOLib.SPLSolution.printUnique(solution);
+                }
+            } catch (NoInverseException e) {
+                ToKeyboard.printMessage("SPL tidak dapat diselesaikan dengan metode ini karena tidak mempunyai inverse ! Berikut solusinya dengan eliminasi Gauss-Jordan :");
+                try {
+                    Matrix solution = matrix.getSolGJ();
+                    if (IOLib.chooseToWriteToFile()) {
+                        ToFile.SPL(solution);
+                    } else {
+                        IOLib.SPLSolution.print(solution);
+                    }
+                } catch (NoSolutionException e2) {
+                    ToKeyboard.printMessage("Matriks tidak punya solusi.");
+                }
+            }
+        }
 
         /**
          * Prosedur yang menerima masukan SPL dari pengguna lalu mencetak
@@ -246,28 +274,51 @@ public class CoreFunctionality {
         }
     }
 
-    /**
-     * Prosedur yang menerima masukan matriks dari pengguna lalu mencetak
-     * determinannya.
-     */
-    static public void computeDeterminant() {
-        Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.matrixToDetermine()
-                : FromKeyboard.MatrixSquare();
-        try {
-            double determinant = matrix.getDeterminantCofactor();
-            if (IOLib.chooseToWriteToFile()) {
-                ToFile.determinant(determinant);
-            } else {
-                ToKeyboard.printNumber(determinant, "Determinan matriksnya adalah : ");
-                ToKeyboard.printMessage("\n");
-            }
+    static public class Determinant {
+        /**
+         * Prosedur yang menerima masukan matriks dari pengguna lalu mencetak
+         * determinannya.
+         */
+        static public void ekspansiKofaktor() {
+            Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.matrixToDetermine()
+                    : FromKeyboard.MatrixSquare();
+            try {
+                double determinant = matrix.getDeterminantCofactor();
+                if (IOLib.chooseToWriteToFile()) {
+                    ToFile.determinant(determinant);
+                } else {
+                    ToKeyboard.printNumber(determinant, "Determinan matriksnya adalah : ");
+                    ToKeyboard.printMessage("\n");
+                }
 
-        } catch (InvalidMatrixSquareException e) {
-            throw new RuntimeException();
+            } catch (InvalidMatrixSquareException e) {
+                throw new RuntimeException();
+            }
         }
 
-        // Take input of matrice and do stuff with it accordingly
+        /**
+         * Prosedur yang menerima masukan matriks dari pengguna lalu mencetak
+         * determinannya.
+         */
+        static public void segitigaAtas() {
+            Matrix matrix = IOLib.chooseToReadFromFile() ? FromFile.matrixToDetermine()
+                    : FromKeyboard.MatrixSquare();
+            try {
+                double determinant = matrix.getDeterminantTriangle();
+                if (IOLib.chooseToWriteToFile()) {
+                    ToFile.determinant(determinant);
+                } else {
+                    ToKeyboard.printNumber(determinant, "Determinan matriksnya adalah : ");
+                    ToKeyboard.printMessage("\n");
+                }
+
+            } catch (InvalidMatrixSquareException e) {
+                throw new RuntimeException();
+            }
+        }
     }
+
+        // Take input of matrice and do stuff with it accordingly
 
     static public class MLR {
         static private List<Double> betaProducer(Matrix data) {
