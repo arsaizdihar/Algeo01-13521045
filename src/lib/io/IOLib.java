@@ -256,10 +256,8 @@ public class IOLib {
                     for (int j = 0; j < solution.getNCol() - 2; j++) {
                         double examinedCoefficient = solution.getElmt(i, j);
                         // TODO @Fatih20 woi ini apaan
-                        ToKeyboard.printNumber(examinedCoefficient);
                         String addedString = "";
                         if (examinedCoefficient != 0 && parameter.containsKey(j)) {
-                            ToKeyboard.printMessage("Test");
                             addedString += String.format("%s%s",
                                     (examinedCoefficient == 1 ? "" : numberFormatter.format(examinedCoefficient)),
                                     parameter.get(j));
