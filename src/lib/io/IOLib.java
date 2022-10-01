@@ -292,7 +292,7 @@ public class IOLib {
          *         masing-masingnya punya contoh format x1 = -3+6d
          */
         static public String[] createSolutionTexts(Matrix solution, String variableSymbol) {
-            return createSolutionTexts(solution, variableSymbol, 2);
+            return createSolutionTexts(solution, variableSymbol, 4);
         }
 
         /**

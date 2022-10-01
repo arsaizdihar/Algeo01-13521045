@@ -98,7 +98,7 @@ public class CoreFunctionality {
                 if (IOLib.chooseToWriteToFile()) {
                     ToFile.SPL(solution);
                 } else {
-                    IOLib.SPLSolution.print(solution);
+                    IOLib.SPLSolution.printUnique(solution);
                 }
             } catch (NoInverseException e) {
                 ToKeyboard.printMessage("Matriks ini singular. Tidak punya inverse");
