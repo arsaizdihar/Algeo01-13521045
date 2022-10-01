@@ -262,7 +262,7 @@ public class IOLib {
                                     parameter.get(j));
                         }
 
-                        if ((variableValuesString.get(i) == "" && examinedCoefficient > 0)) {
+                        if ((variableValuesString.get(i) != "" && examinedCoefficient > 0)) {
                             addedString = "+" + addedString;
                         }
 
