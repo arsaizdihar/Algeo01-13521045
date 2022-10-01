@@ -123,7 +123,7 @@ public class CoreFunctionality {
                 }
             } catch (NoSolutionException e) {
                 ToKeyboard.printMessage(
-                        "Solusi SPL tidak unik. Tidak bisa diselesaikan dengan kaidah cramer! Berikut solusinya dengan eliminasi Gauss-Jordan :");
+                        "SPL tidak bisa diselesaikan dengan kaidah cramer! Berikut solusinya dengan eliminasi Gauss-Jordan :");
                 try {
                     Matrix solution = matrix.getSolGJ();
                     if (IOLib.chooseToWriteToFile()) {

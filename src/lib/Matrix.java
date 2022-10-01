@@ -831,12 +831,8 @@ public class Matrix {
         double det;
 
         // ALGORITMA
-        if (!this.isSPL()) {
+        if (!this.isSPL() || this.getNRow() >= this.getNCol()) {
             throw new Errors.NoSolutionException();
-        }
-
-        if (this.getNRow() >= this.getNCol()) {
-            throw new RuntimeException();
         }
 
         // ALGORITMA
