@@ -1,7 +1,5 @@
 package lib;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -12,6 +10,12 @@ import lib.io.ToKeyboard;
 public class Image {
   private Matrix rMat, gMat, bMat, aMat;
 
+  /**
+   * Membuat image dari file.
+   * 
+   * @param file file yang ingin dibaca
+   * @throws IOException jika file bukan merupakan gambar.
+   */
   public Image(File file) throws IOException {
     BufferedImage img = ImageIO.read(file);
     if (img == null) {
@@ -20,10 +24,16 @@ public class Image {
     setMatrixFromImage(img);
   }
 
-  public int getPixelSize() {
-    return rMat.getNCol() * rMat.getNRow();
-  }
-
+  /**
+   * Membuat image dari matrix r,g,b,a
+   * <p>
+   * Prekondisi: semua matrix memiliki ukuran yang sama
+   * 
+   * @param rMat
+   * @param gMat
+   * @param bMat
+   * @param aMat
+   */
   public Image(Matrix rMat, Matrix gMat, Matrix bMat, Matrix aMat) {
     this.rMat = rMat;
     this.gMat = gMat;
@@ -31,6 +41,21 @@ public class Image {
     this.aMat = aMat;
   }
 
+  /**
+   * 
+   * @return banyak total pixel pada gambar
+   */
+  public int getPixelSize() {
+    return rMat.getNCol() * rMat.getNRow();
+  }
+
+  /**
+   * I.S: image bisa terdefinisi atau tidak
+   * <p>
+   * F.S: r,g,b,a image terisi dari bufferedimage yang diberikan
+   * 
+   * @param img bufferedimage yang akan diambil datanya
+   */
   private void setMatrixFromImage(BufferedImage img) {
     int width = img.getWidth();
     int height = img.getHeight();
@@ -53,6 +78,10 @@ public class Image {
     }
   }
 
+  /**
+   * 
+   * @return bufferedimage berdasarkan matriks r,g,b,a image
+   */
   public BufferedImage getBufferedImage() {
     BufferedImage img = new BufferedImage(rMat.getNCol(), rMat.getNRow(), BufferedImage.TYPE_INT_ARGB);
     for (int i = 0; i < rMat.getNRow(); i++) {
@@ -69,6 +98,11 @@ public class Image {
     return img;
   }
 
+  /**
+   * 
+   * @param color
+   * @return color jika berada di range 0-255, 0 jika kurang dari 0, 255 jika lebih dari 255
+    */
   private static int onColorRange(int color) {
     if (color < 0) {
       return 0;
@@ -79,6 +113,12 @@ public class Image {
     }
   }
 
+  /**
+   * I.S. image terdefinisi
+   * <p>
+   * F.S. image diperbesar sebanyak scalingFactor kali
+   * @param scalingFactor
+    */
   public void scale(int scalingFactor) {
     rMat = rMat.getNTimesSizeMatrix(scalingFactor);
     ToKeyboard.printMessage("25% done");

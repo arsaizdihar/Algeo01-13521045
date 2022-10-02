@@ -19,12 +19,6 @@ public class Errors {
     }
   }
 
-  static public class SolutionNotUniqueException extends Exception {
-    public SolutionNotUniqueException() {
-      super("Solution is not unique");
-    }
-  }
-
   static public class InvalidMatrixSizeException extends Exception {
     public InvalidMatrixSizeException() {
       super("Matrix size is invalid");

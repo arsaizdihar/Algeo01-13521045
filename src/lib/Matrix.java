@@ -2,13 +2,11 @@ package lib;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
 import lib.Errors.NoInverseException;
 import lib.Errors.NoSolutionException;
-import lib.io.ToKeyboard;
 
 public class Matrix {
     private double[][] contents;
@@ -18,6 +16,8 @@ public class Matrix {
 
     /**
      * Matriks konstruktor. Menginisiasi matriks dengan ukuran baris x kolom.
+     * <p>
+     * Prekondisi: nRow, nCol >= 1
      * 
      * @param nRow jumlah baris
      * @param nCol jumlah kolom
@@ -59,7 +59,9 @@ public class Matrix {
     }
 
     /**
-     * Mengubah baris indeks ke-rowIdx dengan baris baru
+     * Mengubah baris indeks ke-rowIdx dengan baris baru.
+     * <p>
+     * Prekondisi: baris baru memiliki jumlah kolom sama dengan matriks.
      * <p>
      * I.S. matriks terdefinisi
      * <p>
@@ -99,6 +101,8 @@ public class Matrix {
 
     /**
      * Mengubah keseluruhan matriks
+     * <p>
+     * Prekondisi: contents merupakan array dengan panjang >= 1 yang seluruh elemennya merupakan array dengan panjang sama dan >= 1.
      * <p>
      * I.S. matriks terdefinisi
      * <p>
@@ -228,8 +232,14 @@ public class Matrix {
         contents = temp;
     }
 
+    /**
+     * Mengisi seluruh elemen pada matriks dengan nol
+     * <p>
+     * I.S. matriks terdefinisi
+     * <p>
+     * F.S. seluruh elemen pada matriks menjadi nol
+     */
     public void fillZero() {
-        // TODO make documentation
         for (int i = 0; i < getNRow(); i++) {
             for (int j = 0; j < getNCol(); j++) {
                 setElmt(i, j, 0);
@@ -274,11 +284,11 @@ public class Matrix {
     /*** OPERATOR LAINNYA ***/
 
     /**
+     * Prekondisi: startColIdx dan endColIdx merupakan indeks kolom yang valid dan endColIdx > startColdIdx
      * 
      * @param startColIdx indeks kolom awal yang ingin di salin
      * @param endColIdx   indeks kolom akhir yang ingin di salin
-     * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam
-     *         satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
+     * @return matriks baru yang merupakan salinan matriks dari kolom startColIdx sampai kolom endColIdx
      */
     public Matrix getCopyMatrixByColumn(int startColIdx, int endColIdx) {
         // KAMUS LOKAL
@@ -296,7 +306,8 @@ public class Matrix {
     }
 
     /**
-     * 
+     * Prekondisi: startRowIdx dan endRowIdx merupakan indeks baris yang valid dan endRowIdx > startRowIdx. colIdx merupakan 
+     * indeks kolom yang valid
      * @param startRowIdx index baris awal yang ingin dicari
      * @param endRowIdx   index baris akhir yang ingin dicari
      * @param colIdx      index kolom ingin dicari
@@ -347,12 +358,12 @@ public class Matrix {
         }
     }
     /**
-     * 
+     * Prekondisi: startColIdx dan endColIdx merupakan indeks kolom yang valid dan endColIdx > startColdIdx
      * @param startColIdx index baris awal yang ingin dibuat sebagai leading one
      * @param endColIdx   index baris terakhir yang ingin diubah menjadi bentuk
      *                    echelon
-     * @return mengembalikan idx baris ditemukan pertama kali yang tidak nol dalam
-     *         satu kolom. Jika tidak ditemukan, akan mengembalikan (-1)
+     * @return pair berisi bentuk matriks eselon dari startColIdx hingga
+     * endColIdx dan total perkalian yang dilakukan
      */
     public Pair<Matrix, Double> getEchelonForm(int startColIdx, int endColIdx) {
         // KAMUS LOKAL
@@ -380,6 +391,7 @@ public class Matrix {
         return new Pair<Matrix, Double>(hasil, multiplier);
     }
     /**
+     * Prekondisi: startColIdx dan endColIdx merupakan indeks kolom yang valid dan endColIdx > startColdIdx
      * 
      * @param startColIdx Index kolom awal dari matriks yang ingin direduksi
      * @param endColIdx Index kolom akhir dari matriks yang ingin direduksi
@@ -406,9 +418,11 @@ public class Matrix {
     }
 
     /**
+     * Prekondisi: jumlah kolom matriks >= 2
      * 
      * @return Matriks dengan matriks format solusi yang dapat ditampilkan, termasuk
      *         dengan variabel parametrik
+     * @throws NoSolutionException ketika matriks SPL tidak memiliki solusi
      */
     public Matrix getSolG() throws NoSolutionException {
         Matrix hasil = this.getEchelonForm(0, this.getNCol() - 2).first;
@@ -504,9 +518,11 @@ public class Matrix {
     }
 
     /**
+     * Prekondisi: jumlah kolom matriks >= 2
      * 
      * @return Matriks dengan matriks format solusi yang dapat ditampilkan, termasuk
      *         dengan variabel parametrik
+     * @throws NoSolutionException ketika matriks SPL tidak memiliki solusi
      */
     public Matrix getSolGJ() throws NoSolutionException {
         Matrix hasil = this.getReducedForm(0, this.getNCol() - 2);
@@ -578,9 +594,10 @@ public class Matrix {
     }
 
     /**
+     * Prekondisi: jumlah kolom matriks >= 2
      * 
      * @return Matriks solusi SPL dengan metode pengalian dengan inverse (kolom 1)
-     * 
+     * @throws NoSolutionException ketika matriks variabel pada SPL tidak memiliki inverse
      */
     public Matrix getSolInverse() throws NoInverseException {
         Matrix inversedMatrix, rightMostColumnMatrix, solutionMatrix;
@@ -633,7 +650,7 @@ public class Matrix {
     /**
      * 
      * @return mengembalikan invers matriks dengan metode OBE
-     * @throws NoInverseException
+     * @throws NoInverseException jka matriks tidak memiliki inverse
      */
     public Matrix getInverseOBE() throws NoInverseException {
         // KAMUS LOKAL
@@ -667,6 +684,7 @@ public class Matrix {
     /**
      * 
      * @return mengembalikan invers matriks dengan metode adjoin
+     * @throws NoInverseException jka matriks tidak memiliki inverse
      */
     public Matrix getInverseAdjoin() throws NoInverseException {
         // KAMUS
@@ -707,9 +725,9 @@ public class Matrix {
     /**
      * 
      * @return Mengembalikan nilai determinan matriks dengan metode segitiga atas
-     * @throws InvalidMatrixSquareException ketika matriks masukan bukanlah marix persegi
+     * @throws InvalidMatrixSquareException ketika matriks masukan bukanlah matrix persegi
      */
-    public double getDeterminantTriangle() throws Errors.InvalidMatrixSquareException {
+    public double getDeterminantTriangle() throws InvalidMatrixSquareException {
         // KAMUS
         Matrix echelonMatrix;
         double multiplier, diagonalProduct, determinant;
@@ -731,7 +749,7 @@ public class Matrix {
     }
 
     /**
-     * 
+     * Prekondisi: (rowIdx, colIdx) merupakan indeks yang valid
      * @param rowIdx
      * @param colIdx
      * @return matriks dengan baris ke rowIdx dan kolom ke colIdx dihilangkan
@@ -794,7 +812,7 @@ public class Matrix {
      * matriks persegi
      * 
      * @return determinan matriks
-     * @throws InvalidMatrixSquareException
+     * @throws InvalidMatrixSquareException jika bukan matriks persegi
      */
     public double getDeterminantCofactor() throws InvalidMatrixSquareException {
         // KAMUS LOKAL
@@ -824,9 +842,8 @@ public class Matrix {
     /**
      * Mencari solusi SPL dengan metode cramer
      * 
-     * @return matriks solusi SPL (kolom berjumlah 1)
-     * @throws InvalidMatrixSizeException
-     * @throws NoSolutionException
+     * @return matriks solusi SPL unik (kolom berjumlah 1)
+     * @throws NoSolutionException jika SPL tidak memiliki solusi yang unik
      */
     public Matrix getSolCramer() throws Errors.NoSolutionException {
         // KAMUS LOKAL
@@ -886,7 +903,7 @@ public class Matrix {
      * 
      * @return matriks solusi interpolasi polinomial derajat n yaitu matriks (n+1) x
      *         1
-     * @throws NoSolutionException
+     * @throws NoSolutionException jika SPL dari polinom tidak memiliki solusi yang unik
      */
     public Matrix getPolinomialFunction() throws NoSolutionException {
         Matrix polinomSPL = new Matrix(this.getNRow(), this.getNRow() + 1);
@@ -1025,6 +1042,18 @@ public class Matrix {
         return result;
     }
 
+    /** 
+     * Fungsi untuk mendapatkan solusi dari interpolasi bilinear
+     * <p>
+     * 
+     * @param rowStart baris awal dari matriks solusi bilinear
+     * @param colStart kolom awal dari matriks solusi bilinear
+     * @param a parameter a dari nilai f(a,b) yang ingin dicari interpolasinya di
+     *          titik tersebut
+     * @param b parameter b dari nilai f(a,b) yang ingin dicari interpolasinya di
+     *          titik tersebut
+     * @return nilai f(a,b) yang telah di interpolasi
+     */
     public double getValueBilinear(int rowStart, int colStart, double a, double b) {
         Matrix coefficientMatrix, pointValueMatrix, functionCoefficientMatrix;
         int i, j, x, y, rowIdx, colIdx;
@@ -1079,7 +1108,7 @@ public class Matrix {
      * @param scalingFactor berapa kali lipat perbesaran dengan scalingFactor
      *                      merupakan bilangan bulat positif
      * @return Matriks yang sudah diperbesar scalingFactor kali dengan interpolasi
-     *         bicubic dan interpolasi bilinier pada edges nya
+     *         bicubic dan interpolasi bilinier pada edges nya (digunakan untuk memperbesar gambar)
      */
     public Matrix getNTimesSizeMatrix(int scalingFactor) {
         Matrix resultMatrix;
@@ -1133,7 +1162,7 @@ public class Matrix {
     }
 
     /**
-     * Menghasilkan panjang dari angka paling panjang dalam matriks stelah diformat
+     * Menghasilkan panjang dari angka paling panjang dalam matriks setelah diformat
      * 
      * @param digitAfterComma berapa angka di belakang koma yang diperlukan
      * @return panjang dari angka paling panjang dalam matriks setelah diformat
@@ -1159,7 +1188,7 @@ public class Matrix {
      * Menghasilkan panjang dari angka paling panjang dalam matriks setelah diformat
      * 
      * @return panjang dari angka paling panjang dalam matriks setelah diformat
-     *         dengan 2 angka di belakang komas
+     *         dengan 2 angka di belakang koma
      */
     public int getMostDigit() {
         return getMostDigit(2);
@@ -1167,6 +1196,8 @@ public class Matrix {
 
     /**
      * Mencari rata-rata dari sebuah bagian matriks. Index inklusif.
+     * <p>
+     * Prekondisi: 0 <= rowStart <= rowEnd < getNRow() && 0 <= colStart <= colEnd < getNCol()
      * 
      * @param startRowIdx baris awal pencarian rata-rata
      * @param endRowIdx   baris akhir pencarian rata-rata
@@ -1189,6 +1220,7 @@ public class Matrix {
     /**
      * Mencari rata-rata dari sebagian matriks dari kolom sekian sampai kolom
      * sekian. Baris yang dihitung adalah seluruh baris. Index inklusif.
+     * Prekondisi: 0 <= colStart <= colEnd < getNCol()
      * 
      * @param startColIdx kolom awal pencarian rata-rata
      * @param endColIdx   kolom akhir pencarian rata-rata
@@ -1200,6 +1232,7 @@ public class Matrix {
 
     /**
      * Mencari rata-rata dari salah satu kolom pada matrix.
+     * Prekondisi: colIdx merupakan index kolom yang valid
      * 
      * @param colIdx kolom yang ingin dicari rata-ratanya
      * @return rata-rata dari nilai sel pada kolom yang diberikan
@@ -1211,6 +1244,7 @@ public class Matrix {
     /**
      * Mencari rata-rata dari sebagian matriks dari baris sekian sampai baris
      * sekian. Kolom yang dihitung adalah seluruh kolom. Index inklusif.
+     * Prekondisi: 0 <= startRowIdx <= endRowIdx < getNRow()
      * 
      * @param startRowIdx baris awal pencarian rata-rata
      * @param endRowIdx   baris akhir pencarian rata-rata
@@ -1222,6 +1256,7 @@ public class Matrix {
 
     /**
      * Mencari rata-rata dari salah satu baris pada matrix.
+     * Prekondisi: rowIdx merupakan index baris yang valid
      * 
      * @param rowIdx baris yang ingin dicari rata-ratanya
      * @return rata-rata dari nilai sel pada baris yang diberikan
@@ -1234,7 +1269,7 @@ public class Matrix {
      * Mengecek apakah dua matriks memiliki jumlah kolom yang sama
      * 
      * @param matriks1 matriks pertama yang ingin dicek
-     * @param matriks1 matriks kedua yang ingin dicek
+     * @param matriks2 matriks kedua yang ingin dicek
      * @return apakah kedua matriks memiliki jumlah kolom yang sama.
      */
     public static boolean isNColumnSame(Matrix matriks1, Matrix matriks2) {
@@ -1245,7 +1280,7 @@ public class Matrix {
      * Mengecek apakah dua matriks memiliki jumlah baris yang sama.
      * 
      * @param matriks1 matriks pertama yang ingin dicek
-     * @param matriks1 matriks kedua yang ingin dicek
+     * @param matriks2 matriks kedua yang ingin dicek
      * @return apakah kedua matriks memiliki jumlah baris yang sama.
      */
     public static boolean isNRowSame(Matrix matriks1, Matrix matriks2) {
@@ -1256,7 +1291,7 @@ public class Matrix {
      * Mengecek apakah dua matriks memiliki dimensi yang sama
      * 
      * @param matriks1 matriks pertama yang ingin dicek
-     * @param matriks1 matriks kedua yang ingin dicek
+     * @param matriks2 matriks kedua yang ingin dicek
      * @return apakah kedua matriks memiliki dimensi yang sama.
      */
     public static boolean isDimensionSame(Matrix matriks1, Matrix matriks2) {
@@ -1267,7 +1302,7 @@ public class Matrix {
      * Mengecek apakah dua matriks dapat dikalikan
      * 
      * @param matriks1 matriks pertama yang ingin dicek
-     * @param matriks1 matriks kedua yang ingin dicek
+     * @param matriks2 matriks kedua yang ingin dicek
      * @return apakah matriks pertama punya jumlah kolom sebanyak matriks kedua.
      */
     public static boolean isMultipliable(Matrix matriks1, Matrix matriks2) {
@@ -1276,14 +1311,12 @@ public class Matrix {
 
     /**
      * Mengalikan 2 buah matriks
-     * Fungsi akan throw error jika matriks yang diberikan tidak memiliki jumlah
-     * kolom yang sama
      * 
      * @param matriks1 matriks pertama yang ingin dikalikan
-     * @param matriks1 matriks kedua yang ingin dikalikan
+     * @param matriks2 matriks kedua yang ingin dikalikan
      * @return matriks baru yang merupakan hasil perkalian kedua matriks yang
      *         diberikan
-     * @throws InvalidMatrixSizeException
+     * @throws InvalidMatrixSizeException ketika kedua matriks tidak multipliable
      */
     public static Matrix multiply(Matrix matriks1, Matrix matriks2) throws InvalidMatrixSizeException {
         // ALGORITMA
@@ -1308,14 +1341,11 @@ public class Matrix {
 
     /**
      * Menjumlahkan 2 buah matriks
-     * Fungsi akan throw error jika matriks yang diberikan tidak memiliki dimensi
-     * yang sama
-     * 
      * 
      * @param matriks1 matriks pertama yang ingin dijumlahkan
-     * @param matriks1 matriks kedua yang ingin dijumlahkan
+     * @param matriks2 matriks kedua yang ingin dijumlahkan
      * @return matriks baru yang merupakan hasil penjumlahan dua buah matriks
-     * @throws InvalidMatrixSizeException
+     * @throws InvalidMatrixSizeException ketika kedua matriks tidak memiliki dimensi yang sama
      * 
      */
     public static Matrix add(Matrix matriks1, Matrix matriks2) throws InvalidMatrixSizeException {
@@ -1338,14 +1368,12 @@ public class Matrix {
 
     /**
      * Mengurangkan 2 buah matriks. Matriks pertama dikurangi matriks kedua.
-     * Fungsi akan throw error jika matriks yang diberikan tidak memiliki dimensi
-     * yang sama
      * 
      * @param matriks1 matriks pertama yang ingin dikurangkan
-     * @param matriks1 matriks kedua yang akan mengurangkan
+     * @param matriks2 matriks kedua yang akan mengurangkan
      * @return matriks baru yang merupakan hasil pengurangan matriks pertama oleh
      *         matriks kedua
-     * @throws InvalidMatrixSizeException
+     * @throws InvalidMatrixSizeException ketika kedua matriks tidak memiliki dimensi yang sama
      * 
      */
     public static Matrix subtract(Matrix matriks1, Matrix matriks2) throws InvalidMatrixSizeException {
@@ -1366,6 +1394,10 @@ public class Matrix {
 
     }
 
+    /**
+     * 
+     * @return matriks yang merupakan hasil inverse dari koefisien bicubic
+      */
     private static Matrix getInverseBicubicCoefficient() {
         Matrix coefficientMatrix = new Matrix(16, 16);
 
