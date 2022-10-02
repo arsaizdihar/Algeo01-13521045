@@ -162,6 +162,7 @@ public class Interface {
                         case 4:
                             ToKeyboard.clearConsole();
                             CoreFunctionality.Interpolation.polinomial();
+                            FromKeyboard.EnterToContinue();
                             programState = "main";
                             break;
                         case 5:

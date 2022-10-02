@@ -2,11 +2,13 @@ package lib;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import lib.Errors.InvalidMatrixSizeException;
 import lib.Errors.InvalidMatrixSquareException;
 import lib.Errors.NoInverseException;
 import lib.Errors.NoSolutionException;
+import lib.io.ToKeyboard;
 
 public class Matrix {
     private double[][] contents;
@@ -554,7 +556,8 @@ public class Matrix {
         for (int i = 0; i < hasil.getNRow(); i++) {
             int leadingOneIdx = -1;
             for (int j = i; j < hasil.getNCol() - 1 && leadingOneIdx == -1; j++) {
-                if (hasil.getElmt(i, j) == 1.0) {
+                // hampir = 1
+                if (Math.abs(hasil.getElmt(i, j) - 1.0) < 1E-6) {
                     leadingOneIdx = j;
                 }
             }
@@ -894,8 +897,17 @@ public class Matrix {
             }
             polinomSPL.setElmt(i, polinomSPL.getNCol() - 1, this.getElmt(i, 1));
         }
+        Matrix solution = polinomSPL.getSolGJ();
+        Matrix res = new Matrix(solution.getNRow(), 1);
 
-        return polinomSPL.getSolCramer();
+        for (int i = 0; i < solution.getNRow(); i++) {
+            if (solution.getElmt(i, solution.getNCol() - 1) == 0) {
+                throw new NoSolutionException();
+            }
+            res.setElmt(i, 0, solution.getElmt(i, solution.getNCol() - 2));
+        }
+    
+        return res;
     }
 
     /**
