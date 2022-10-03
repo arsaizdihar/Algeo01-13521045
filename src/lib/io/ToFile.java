@@ -151,7 +151,7 @@ public class ToFile {
     public static void inverse(Matrix invertedMatrix) {
         ToKeyboard
                 .printMessage("Masukkan nama file yang ingin diisi dengan invers dari matriks yang telah dimasukkan :");
-        writeToFile(matrixToRowString(invertedMatrix));
+        writeToFile(matrixToRowString(invertedMatrix, 4));
     }
 
     public static void MLR(List<Double> betaList, Matrix predictedData) {

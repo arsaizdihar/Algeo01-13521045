@@ -948,41 +948,20 @@ public class Matrix {
      * <p>
      * Prekondisi: matriks berupa matriks point yaitu dengan kolom berjumlah 2
      * 
-     * @param a parameter a dari nilai f(a,b) yang ingin dicari interpolasinya di
+     * @param y parameter y dari nilai f(x,y) yang ingin dicari interpolasinya di
      *          titik tersebut
-     * @param b parameter b dari nilai f(a,b) yang ingin dicari interpolasinya di
+     * @param x parameter x dari nilai f(x,y) yang ingin dicari interpolasinya di
      *          titik tersebut
-     * @return nilai f(a,b) yang telah di interpolasi
+     * 
+     * @return nilai f(x,y) yang telah di interpolasi
      */
-    public double getValueBicubicSpecific(double a, double b) {
-        Matrix pointValueMatrix, functionCoefficientMatrix;
-        int i, j, rowIdx;
+    public double getValueBicubicSpecific(double y, double x) {
+        Matrix functionCoefficientMatrix;
         double result;
 
-        pointValueMatrix = new Matrix(16, 1);
-        rowIdx = 0;
-        for (i = 0; i <= 3; i++) {
-            for (j = 0; j <= 3; j++) {
-                pointValueMatrix.setElmt(rowIdx, 0, this.getElmt(i, j));
-                rowIdx++;
-            }
-        }
+        functionCoefficientMatrix = this.getBicubicFunction(0, 0);
 
-        functionCoefficientMatrix = new Matrix(16, 1);
-        try {
-            functionCoefficientMatrix = multiply(inverseBicubicCoefficientMatrix, pointValueMatrix);
-        } catch (InvalidMatrixSizeException e) {
-            throw new RuntimeException(e);
-        }
-
-        rowIdx = 0;
-        result = 0;
-        for (i = 0; i <= 3; i++) {
-            for (j = 0; j <= 3; j++) {
-                result += functionCoefficientMatrix.getElmt(rowIdx, 0) * Math.pow(a, i) * Math.pow(b, j);
-                rowIdx++;
-            }
-        }
+        result = functionCoefficientMatrix.getValueBicubic(x, y, 0, 0);
         return result;
     }
 
@@ -1028,7 +1007,7 @@ public class Matrix {
      *                 interpolasinya
      * @param startRow baris awal dari matriks solusi bicubic
      * @param startCol kolom awal dari matriks solusi bicubic
-     * @return nilai f(a,b) yang telah di interpolasi
+     * @return nilai f(a, b) yang telah di interpolasi
      */
     public double getValueBicubic(double a, double b, int startRow, int startCol) {
         int rowIdx = 0;
