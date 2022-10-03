@@ -1,5 +1,7 @@
 package lib;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -101,8 +103,9 @@ public class Image {
   /**
    * 
    * @param color
-   * @return color jika berada di range 0-255, 0 jika kurang dari 0, 255 jika lebih dari 255
-    */
+   * @return color jika berada di range 0-255, 0 jika kurang dari 0, 255 jika
+   *         lebih dari 255
+   */
   private static int onColorRange(int color) {
     if (color < 0) {
       return 0;
@@ -117,8 +120,9 @@ public class Image {
    * I.S. image terdefinisi
    * <p>
    * F.S. image diperbesar sebanyak scalingFactor kali
+   * 
    * @param scalingFactor
-    */
+   */
   public void scale(int scalingFactor) {
     rMat = rMat.getNTimesSizeMatrix(scalingFactor);
     ToKeyboard.printMessage("25% done");
