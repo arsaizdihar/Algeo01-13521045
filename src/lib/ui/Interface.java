@@ -37,7 +37,7 @@ public class Interface {
                 "Metode ekspansi kofaktor",
                 "Metode segitiga atas",
                 "Keluar"
-    };
+        };
 
     }
 
@@ -102,6 +102,9 @@ public class Interface {
         }
     }
 
+    /**
+     * Prosedur untuk mengatasi menu-menu penghitungan determinan
+     */
     static public void menuDeterminant() {
         printMenu(MenuText.determinant);
         int userChoiceSubMenu = FromKeyboard.readInt("pilihan sub menu", 1, 3);
