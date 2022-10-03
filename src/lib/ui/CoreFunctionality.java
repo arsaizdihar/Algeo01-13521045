@@ -156,7 +156,7 @@ public class CoreFunctionality {
                 if (IOLib.chooseToWriteToFile()) {
                     ToFile.inverse(inverse);
                 } else {
-                    ToKeyboard.printMatrix(inverse);
+                    ToKeyboard.printMatrix(inverse, 4);
                 }
 
             } catch (NoInverseException e) {
@@ -181,7 +181,7 @@ public class CoreFunctionality {
                 if (IOLib.chooseToWriteToFile()) {
                     ToFile.inverse(inverse);
                 } else {
-                    ToKeyboard.printMatrix(inverse);
+                    ToKeyboard.printMatrix(inverse, 4);
                 }
 
             } catch (NoInverseException e) {
