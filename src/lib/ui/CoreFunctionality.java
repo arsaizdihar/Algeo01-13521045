@@ -141,8 +141,6 @@ public class CoreFunctionality {
     }
 
     static public class Inverse {
-        // This is not functional yet because the determinantFinder doesn't throw an
-        // error yet.
         /**
          * Prosedur yang menerima masukan matriks dari pengguna lalu mencetak
          * inverse-nya. Jika matriks singular maka error ditangkap dan dikeluarkan ke
@@ -163,11 +161,8 @@ public class CoreFunctionality {
                 ToKeyboard.printMessage("Matriks adalah singular. Tidak punya inverse");
             }
 
-            // Take input of matrice and do stuff with it accordingly
         }
 
-        // This is not functional yet because the determinantFinder doesn't throw an
-        // error yet.
         /**
          * Prosedur yang menerima masukan matriks dari pengguna lalu mencetak
          * inverse-nya. Jika matriks singular maka error ditangkap dan dikeluarkan ke
@@ -188,7 +183,6 @@ public class CoreFunctionality {
                 ToKeyboard.printMessage("Matriks adalah singular. Tidak punya inverse");
             }
 
-            // Take input of matrice and do stuff with it accordingly
         }
 
     }
