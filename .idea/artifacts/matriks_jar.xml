@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="matriks:jar">
-    <output-path>$PROJECT_DIR$/bin</output-path>
-    <root id="archive" name="matriks.jar">
-      <element id="module-output" name="matriks" />
-    </root>
-  </artifact>
-</component>
