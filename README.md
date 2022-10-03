@@ -5,7 +5,7 @@
 - <a href="#how-to-run">Cara Menggunakan Program</a>
 
 <h2 id="description">Deskripsi</h2>
-Tugas besar ini berisi program dalam bahasa Java yang berisi fungsi-fungsi eliminasi Gauss, eliminasi Gauss-Jordan, menentukan balikan matriks, menghitung determinan, kaidah Cramer (kaidah Cramer khusus untuk SPL dengan n peubah dan n persamaan), interpolasi polinomial, interpolasi bicubic, dan regresi linier berganda. Detail terkait program ini bisa dilihat di <a href="docs/Algeo01-13521045.pdf">file laporan</a>.
+Tugas besar ini berisi program dalam bahasa Java yang berisi fungsi-fungsi eliminasi Gauss, eliminasi Gauss-Jordan, menentukan balikan matriks, menghitung determinan, kaidah Cramer (kaidah Cramer khusus untuk SPL dengan n peubah dan n persamaan), interpolasi polinomial, interpolasi bicubic, dan regresi linier berganda. Detail terkait program ini bisa dilihat di <a href="doc/Algeo01-13521045.pdf">file laporan</a>.
 
 <h2 id="how-to-run">Cara Menggunakan Program</h2>
 
